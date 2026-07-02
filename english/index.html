@@ -437,19 +437,6 @@
       
       updateStats();
     }
-        feedback.innerHTML = '<h3>❌ 答错了</h3><p>你的答案：' + userInput + '</p><p>正确答案：' + correctAnswer + '</p>';
-        scenario.mastery.status = 'learning';
-        scenario.mastery.errorCount++;
-      }
-      
-      // 保存状态
-      StateManager.setMastery(scenario.id, scenario.mastery.status);
-      
-      // 显示下一题按钮
-      document.getElementById('btn-next-practice').style.display = 'inline-block';
-      
-      updateStats();
-    }
 
     // === 下一题 ===
     function nextPractice() {
