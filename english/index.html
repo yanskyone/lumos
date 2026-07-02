@@ -126,11 +126,23 @@
     let practiceResults = [];
 
     // === 初始化 ===
-    document.addEventListener('DOMContentLoaded', async () => {
-      await loadEnglishData();
-      renderScenarioList();
-      updateStats();
-    });
+    async function initEnglishApp() {
+      try {
+        await loadEnglishData();
+        renderScenarioList();
+        updateStats();
+      } catch (e) {
+        console.error('[english] 初始化失败:', e);
+      }
+    }
+
+    // 兼容 DOMContentLoaded 可能已经触发的情况
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initEnglishApp);
+    } else {
+      // DOM 已经就绪，直接初始化
+      initEnglishApp();
+    }
 
     // === 数据加载 ===
     async function loadEnglishData() {
