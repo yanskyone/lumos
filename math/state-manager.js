@@ -7,16 +7,19 @@ const StateManager = (() => {
   // ========== 常量 ==========
   const VERSION = 1;
 
-  // localStorage key（保持现有 key 名，向后兼容）
+  // localStorage key（带命名空间，防止多模块冲突）
   const KEYS = {
-    USER_ID:     'lumos-user-id',
-    MASTERY:     'learning-map-mastery',
-    WEAK:        'learning-map-weak',
-    PRACTICE:    'learning-map-practice',
-    WRONG:       'learning-map-wrong',
-    EVENTS:      'learning-map-events',
-    LAST_EXPORT: 'lumos-last-export',
-    PRACTICE_HISTORY: 'lumos-practice-history',  // 新增：练习历史记录
+    USER_ID:     'lumos:user-id',
+    MASTERY:     'lumos:math:mastery',
+    WEAK:        'lumos:math:weak',
+    PRACTICE:    'lumos:math:practice',
+    WRONG:       'lumos:math:wrong',
+    EVENTS:      'lumos:math:events',
+    LAST_EXPORT: 'lumos:last-export',
+    PRACTICE_HISTORY: 'lumos:math:practice-history',
+    // 英语模块预留命名空间（不可用，仅文档）
+    // ENGLISH_MASTERY: 'lumos:english:mastery',
+    // ENGLISH_EVENTS:  'lumos:english:events',
   };
 
   // error_type 枚举（内部用英文，显示时映射）
@@ -36,6 +39,43 @@ const StateManager = (() => {
     'method_error':              '方法选择错误',
     'application_context_error': '适用场景错误',
   };
+
+  // ========== Key 迁移（v0.6：旧 key → 新命名空间）==========
+
+  // 旧 key 映射表（用于迁移）
+  const LEGACY_KEY_MAP = {
+    'lumos-user-id':          KEYS.USER_ID,
+    'learning-map-mastery':   KEYS.MASTERY,
+    'learning-map-weak':       KEYS.WEAK,
+    'learning-map-practice':   KEYS.PRACTICE,
+    'learning-map-wrong':      KEYS.WRONG,
+    'learning-map-events':     KEYS.EVENTS,
+    'lumos-last-export':      KEYS.LAST_EXPORT,
+    'lumos-practice-history': KEYS.PRACTICE_HISTORY,
+  };
+
+  // 执行一次性迁移
+  function migrateLegacyKeys() {
+    let migrated = 0;
+    Object.entries(LEGACY_KEY_MAP).forEach(([oldKey, newKey]) => {
+      const value = localStorage.getItem(oldKey);
+      if (value !== null && localStorage.getItem(newKey) === null) {
+        localStorage.setItem(newKey, value);
+        migrated++;
+        console.log(`[StateManager] 迁移 key: ${oldKey} → ${newKey}`);
+      }
+      // 迁移完成后删除旧 key（避免重复）
+      if (localStorage.getItem(newKey) !== null) {
+        localStorage.removeItem(oldKey);
+      }
+    });
+    if (migrated > 0) {
+      console.log(`[StateManager] 迁移完成，共 ${migrated} 个 key`);
+    }
+  }
+
+  // 模块加载时立即执行迁移
+  migrateLegacyKeys();
 
   // ========== 内部工具函数 ==========
 

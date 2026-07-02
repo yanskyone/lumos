@@ -340,21 +340,46 @@
       document.getElementById('btn-next-practice').style.display = 'none';
     }
 
+    // === 文本标准化（加强版）===
+    function normalizeText(str) {
+      if (!str) return '';
+      return str
+        .toLowerCase()
+        // 去掉所有标点（保留字母、数字、空格）
+        .replace(/[^a-z0-9\s]/g, ' ')
+        // 去掉常见无意义词（冠词、助动词等）
+        .replace(/\b(a|an|the|did|does|is|are|was|were)\b/g, '')
+        // 基本词干提取（去掉常见后缀）
+        .replace(/\b(\w+)(ing|ed|es|s)\b/g, '$1')
+        // 压缩多余空格
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
     // === 检查答案（智能匹配）===
     function checkAnswer() {
       const scenario = scenarios[currentScenarioIndex];
       const userInput = document.getElementById('practice-input').value.trim();
       const correctAnswer = scenario.practice.cloze[0].answer;
       
+      if (!userInput) {
+        alert('请先输入答案！');
+        return;
+      }
+
       // 标准化处理
-      const normalize = (str) => str.toLowerCase().replace(/[?.!,\s]+/g, ' ').trim();
-      const normalizedUser = normalize(userInput);
-      const normalizedCorrect = normalize(correctAnswer);
+      const normalizedUser = normalizeText(userInput);
+      const normalizedCorrect = normalizeText(correctAnswer);
       
-      // 完全匹配
+      // 1. 完全匹配
       let isCorrect = normalizedUser === normalizedCorrect;
       
-      // 关键字匹配（允许小错误，如拼写、标点）
+      // 2. 包含匹配（用户答案包含正确答案，或反之）
+      if (!isCorrect) {
+        isCorrect = normalizedUser.includes(normalizedCorrect) || normalizedCorrect.includes(normalizedUser);
+      }
+      
+      // 3. 关键词匹配（允许小错误，如拼写、标点）
       if (!isCorrect) {
         const userWords = normalizedUser.split(' ').filter(w => w.length > 0);
         const correctWords = normalizedCorrect.split(' ').filter(w => w.length > 0);
@@ -366,6 +391,13 @@
         }
       }
       
+      // 4. 逐词相似度检查（处理词序不同的情况）
+      if (!isCorrect) {
+        const userWords = normalizedUser.split(' ').sort().join(' ');
+        const correctWords = normalizedCorrect.split(' ').sort().join(' ');
+        isCorrect = userWords === correctWords;
+      }
+      
       // 显示反馈
       const feedback = document.getElementById('practice-feedback');
       feedback.classList.remove('hidden', 'correct', 'incorrect');
@@ -375,8 +407,24 @@
         feedback.innerHTML = '<h3>✅ 答对了！</h3><p>正确答案：' + correctAnswer + '</p>';
         scenario.mastery.status = 'mastered';
         scenario.mastery.consecutiveCorrect++;
+        scenario.mastery.lastReviewed = new Date().toISOString();
+        
+        // 保存状态
+        StateManager.setMastery(scenario.id, 'mastered').catch(e => console.error(e));
+        
+        // 显示"下一题"按钮
+        document.getElementById('btn-next-practice').style.display = 'inline-block';
       } else {
         feedback.classList.add('incorrect');
+        feedback.innerHTML = '<h3>❌ 答错了</h3><p>正确答案：<strong>' + correctAnswer + '</strong></p><p style="margin-top:8px;color:#666;">💡 提示：注意时态、固定搭配和语序哦！</p>';
+        scenario.mastery.status = 'learning';
+        scenario.mastery.consecutiveCorrect = 0;
+        
+        StateManager.setMastery(scenario.id, 'learning').catch(e => console.error(e));
+      }
+      
+      updateStats();
+    }
         feedback.innerHTML = '<h3>❌ 答错了</h3><p>你的答案：' + userInput + '</p><p>正确答案：' + correctAnswer + '</p>';
         scenario.mastery.status = 'learning';
         scenario.mastery.errorCount++;

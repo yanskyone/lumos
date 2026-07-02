@@ -14,26 +14,38 @@ const state = {
 };
 
 // === Init ===
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadMastery();
-  await loadKnowledge();
-  setupNavigation();
-  setupSearch();
-  setupGlobalDelegation();
-  updateStats();
-  // 自动导出提醒检查（延迟 3 秒显示，避免干扰初始使用）
-  setTimeout(() => {
-    StateManager.shouldRemindExport().then(shouldRemind => {
-      if (shouldRemind) {
-        if (confirm('您已 7 天未导出数据，建议现在导出备份吗？')) {
-          exportData();
+function initApp() {
+  loadMastery().then(() => {
+    return loadKnowledge();
+  }).then(() => {
+    setupNavigation();
+    setupSearch();
+    setupGlobalDelegation();
+    updateStats();
+    // 自动导出提醒检查（延迟 3 秒显示，避免干扰初始使用）
+    setTimeout(() => {
+      StateManager.shouldRemindExport().then(shouldRemind => {
+        if (shouldRemind) {
+          if (confirm('您已 7 天未导出数据，建议现在导出备份吗？')) {
+            exportData();
+          }
         }
-      }
-    }).catch(e => {
-      console.error('[app.js] shouldRemindExport failed:', e);
-    });
-  }, 3000);
-});
+      }).catch(e => {
+        console.error('[app.js] shouldRemindExport failed:', e);
+      });
+    }, 3000);
+  }).catch(e => {
+    console.error('[app.js] 初始化失败:', e);
+  });
+}
+
+// 兼容 DOMContentLoaded 可能已经触发的情况
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  // DOM 已经就绪，直接初始化
+  initApp();
+}
 
 async function loadKnowledge() {
   try {
