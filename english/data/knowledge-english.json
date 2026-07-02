@@ -1,0 +1,264 @@
+{
+  "meta": {
+    "schemaVersion": "0.1",
+    "subject": "英语",
+    "grade": 8,
+    "term": "下",
+    "version": "人教版",
+    "totalScenarios": 5,
+    "currentUnit": 7,
+    "unitTopic": "活动与演讲"
+  },
+  "assets": [
+    {
+      "id": "8B-U7-S1",
+      "type": "dialogue",
+      "unit": 7,
+      "topic": "活动与演讲",
+      "scenario": "谈论今天早上的活动",
+      "keyWords": ["speech", "attend", "morning"],
+      "keySentences": [
+        "What did you do this morning?",
+        "I attended a speech."
+      ],
+      "content": {
+        "dialogue": [
+          {"speaker": "A", "text": "What did you do this morning?"},
+          {"speaker": "B", "text": "I attended a speech."}
+        ]
+      },
+      "practice": {
+        "cloze": [
+          {
+            "question": "A: _______________ this morning?\nB: I attended a speech.",
+            "answer": "What did you do"
+          }
+        ]
+      },
+      "memoryTechniques": [
+        {
+          "type": "scenario",
+          "title": "场景联想",
+          "description": "想象你早上去了学校，妈妈问你：'What did you do this morning?'（你今天早上做了什么？），你回答：'I attended a speech.'（我参加了一个演讲。）"
+        },
+        {
+          "type": "keyword",
+          "title": "关键词记忆",
+          "description": "attend = 参加（不是'出席'，而是'去参加某个活动'）\nspeech = 演讲（注意不是speak，speak是'说话'，speech是'演讲'）"
+        },
+        {
+          "type": "grammar",
+          "title": "语法提示",
+          "description": "What did you do...? = 过去时态的疑问句\n助动词did + 动词原形do\n回答时用过去时态：I attended（attend的过去式）"
+        }
+      ],
+      "mastery": {
+        "status": "unseen",
+        "lastReviewed": null,
+        "errorCount": 0,
+        "retrievalStrength": 0.0,
+        "consecutiveCorrect": 0
+      }
+    },
+    {
+      "id": "8B-U7-S2",
+      "type": "dialogue",
+      "unit": 7,
+      "topic": "活动与演讲",
+      "scenario": "请求建议",
+      "keyWords": ["advice", "sure", "no problem"],
+      "keySentences": [
+        "Can you give me some advice?",
+        "Sure/No problem."
+      ],
+      "content": {
+        "dialogue": [
+          {"speaker": "A", "text": "Can you give me some advice?"},
+          {"speaker": "B", "text": "Sure/No problem."}
+        ]
+      },
+      "practice": {
+        "cloze": [
+          {
+            "question": "A: Can you give me some advice?\nB: _______________.",
+            "answer": "Sure"
+          }
+        ]
+      },
+      "memoryTechniques": [
+        {
+          "type": "scenario",
+          "title": "场景联想",
+          "description": "想象你在做作业时遇到难题，问同学：'Can you give me some advice?'（你能给我一些建议吗？），同学回答：'Sure/No problem.'（当然可以/没问题。）"
+        },
+        {
+          "type": "keyword",
+          "title": "关键词记忆",
+          "description": "advice = 建议（不可数名词，不能说an advice）\ngive advice = 给建议\nask for advice = 寻求建议"
+        },
+        {
+          "type": "expression",
+          "title": "常用表达",
+          "description": "Sure = 当然（最简单的肯定回答）\nNo problem = 没问题（表示愿意帮忙）\n还可以说：Of course. / Certainly."
+        }
+      ],
+      "mastery": {
+        "status": "unseen",
+        "lastReviewed": null,
+        "errorCount": 0,
+        "retrievalStrength": 0.0,
+        "consecutiveCorrect": 0
+      }
+    },
+    {
+      "id": "8B-U7-S3",
+      "type": "dialogue",
+      "unit": 7,
+      "topic": "活动与演讲",
+      "scenario": "谈论学习困难",
+      "keyWords": ["difficulty", "hardly", "remember", "new words"],
+      "keySentences": [
+        "What difficulty do you have in your learning?",
+        "I can hardly remember any new words."
+      ],
+      "content": {
+        "dialogue": [
+          {"speaker": "A", "text": "What difficulty do you have in your learning?"},
+          {"speaker": "B", "text": "I can hardly remember any new words."}
+        ]
+      },
+      "practice": {
+        "cloze": [
+          {
+            "question": "A: ______________________ in your learning?\nB: I can hardly remember any new words.",
+            "answer": "What difficulty do you have"
+          }
+        ]
+      },
+      "memoryTechniques": [
+        {
+          "type": "scenario",
+          "title": "场景联想",
+          "description": "想象你在英语考试前，朋友问你：'What difficulty do you have in your learning?'（你在学习方面有什么困难？），你诚实回答：'I can hardly remember any new words.'（我几乎记不住任何新单词。）"
+        },
+        {
+          "type": "keyword",
+          "title": "关键词记忆",
+          "description": "difficulty = 困难（have difficulty in doing sth = 做某事有困难）\nhardly = 几乎不（否定词，不是'困难'的意思）\nremember = 记住（re + member = 再次成为成员 = 记住）"
+        },
+        {
+          "type": "grammar",
+          "title": "语法提示",
+          "description": "have difficulty in (doing) sth = 在某事上有困难\nhardly = 几乎不（表示否定，如：I can hardly... = 我几乎不能...）\nany new words = 任何新单词（any用于否定句和疑问句）"
+        }
+      ],
+      "mastery": {
+        "status": "unseen",
+        "lastReviewed": null,
+        "errorCount": 0,
+        "retrievalStrength": 0.0,
+        "consecutiveCorrect": 0
+      }
+    },
+    {
+      "id": "8B-U7-S4",
+      "type": "dialogue",
+      "unit": 7,
+      "topic": "活动与演讲",
+      "scenario": "约定通知",
+      "keyWords": ["tell", "as soon as", "finish", "homework", "call"],
+      "keySentences": [
+        "Please tell me as soon as you finish your homework.",
+        "No problem. Before I leave home, I will call you."
+      ],
+      "content": {
+        "dialogue": [
+          {"speaker": "A", "text": "Please tell me as soon as you finish your homework."},
+          {"speaker": "B", "text": "No problem. Before I leave home, I will call you."}
+        ]
+      },
+      "practice": {
+        "cloze": [
+          {
+            "question": "A: Please tell me as soon as you finish your homework.\nB: _______________. Before I leave home, I will call you.",
+            "answer": "No problem"
+          }
+        ]
+      },
+      "memoryTechniques": [
+        {
+          "type": "scenario",
+          "title": "场景联想",
+          "description": "想象你和朋友约好一起玩游戏，你告诉他：'Please tell me as soon as you finish your homework.'（你一做完作业就告诉我。）朋友回答：'No problem. Before I leave home, I will call you.'（没问题。在我离开家之前，我会打电话给你。）"
+        },
+        {
+          "type": "keyword",
+          "title": "关键词记忆",
+          "description": "as soon as = 一...就...（引导时间状语从句）\nfinish = 完成（finish doing sth = 完成某事）\nBefore... = 在...之前（引导时间状语从句）"
+        },
+        {
+          "type": "grammar",
+          "title": "语法提示",
+          "description": "as soon as + 句子 = 一...就...\n时态：主将从现（主句用将来时，从句用现在时）\n例：I will call you as soon as I finish my homework."
+        }
+      ],
+      "mastery": {
+        "status": "unseen",
+        "lastReviewed": null,
+        "errorCount": 0,
+        "retrievalStrength": 0.0,
+        "consecutiveCorrect": 0
+      }
+    },
+    {
+      "id": "8B-U7-S5",
+      "type": "dialogue",
+      "unit": 7,
+      "topic": "活动与演讲",
+      "scenario": "谈论正在做的事情",
+      "keyWords": ["making", "mind map", "sports"],
+      "keySentences": [
+        "What are you doing?",
+        "I'm making a mind map about sports."
+      ],
+      "content": {
+        "dialogue": [
+          {"speaker": "A", "text": "What are you doing?"},
+          {"speaker": "B", "text": "I'm making a mind map about sports."}
+        ]
+      },
+      "practice": {
+        "cloze": [
+          {
+            "question": "A: _______________?\nB: I'm making a mind map about sports.",
+            "answer": "What are you doing"
+          }
+        ]
+      },
+      "memoryTechniques": [
+        {
+          "type": "scenario",
+          "title": "场景联想",
+          "description": "想象你在图书馆，朋友走过来问：'What are you doing?'（你在做什么？），你展示你的笔记本：'I'm making a mind map about sports.'（我正在制作一个关于体育的思维导图。）"
+        },
+        {
+          "type": "keyword",
+          "title": "关键词记忆",
+          "description": "make a mind map = 制作思维导图（make不是'做'，是'制作'）\nmind map = 思维导图（帮助记忆和整理思路的工具）\nabout sports = 关于体育（about = 关于）"
+        },
+        {
+          "type": "grammar",
+          "title": "语法提示",
+          "description": "What are you doing? = 现在进行时疑问句\nbe动词(am/is/are) + 主语 + 动词ing\n回答：I'm (动词ing)... = 我正在..."
+        }
+      ],
+      "mastery": {
+        "status": "unseen",
+        "lastReviewed": null,
+        "errorCount": 0,
+        "retrievalStrength": 0.0,
+        "consecutiveCorrect": 0
+      }
+    }
+  ]
+}

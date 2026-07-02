@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lumos - 英语学习模块（MVP）</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    h1 { color: #333; margin-bottom: 20px; font-size: 24px; }
+    h2 { color: #555; margin-top: 30px; margin-bottom: 15px; font-size: 20px; }
+    .scenario-list { display: grid; gap: 15px; }
+    .scenario-card { background: #f9f9f9; border: 2px solid #e0e0e0; border-radius: 8px; padding: 15px; cursor: pointer; transition: all 0.2s; }
+    .scenario-card:hover { border-color: #4CAF50; background: #f0f8f0; }
+    .scenario-card.mastered { border-color: #4CAF50; background: #e8f5e9; }
+    .scenario-card.learning { border-color: #ff9800; background: #fff3e0; }
+    .scenario-title { font-weight: bold; color: #333; margin-bottom: 8px; }
+    .scenario-context { color: #666; font-size: 14px; margin-bottom: 8px; }
+    .scenario-status { font-size: 12px; padding: 4px 8px; border-radius: 4px; display: inline-block; }
+    .status-unseen { background: #e0e0e0; color: #666; }
+    .status-learning { background: #fff3e0; color: #ff9800; }
+    .status-mastered { background: #e8f5e9; color: #4CAF50; }
+    .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin: 5px; }
+    .btn-primary { background: #4CAF50; color: white; }
+    .btn-primary:hover { background: #45a049; }
+    .btn-secondary { background: #2196F3; color: white; }
+    .btn-secondary:hover { background: #1976D2; }
+    .btn-warning { background: #ff9800; color: white; }
+    .btn-warning:hover { background: #f57c00; }
+    .mode-selector { display: flex; gap: 10px; margin-bottom: 20px; }
+    .mode-btn { flex: 1; padding: 15px; border: 2px solid #e0e0e0; background: white; border-radius: 8px; cursor: pointer; font-size: 16px; transition: all 0.2s; }
+    .mode-btn.active { border-color: #4CAF50; background: #f0f8f0; }
+    .dialogue { background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; }
+    .dialogue-line { margin: 10px 0; padding: 10px; background: white; border-radius: 4px; }
+    .speaker { font-weight: bold; color: #4CAF50; }
+    .practice-question { background: #fff3e0; padding: 20px; border-radius: 8px; margin: 20px 0; }
+    .practice-input { width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 4px; font-size: 16px; margin: 10px 0; }
+    .practice-input:focus { border-color: #4CAF50; outline: none; }
+    .feedback { padding: 15px; border-radius: 8px; margin: 20px 0; }
+    .feedback.correct { background: #e8f5e9; border: 2px solid #4CAF50; }
+    .feedback.incorrect { background: #ffebee; border: 2px solid #f44336; }
+    .memory-tips { background: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0; }
+    .memory-tip { margin: 15px 0; padding: 15px; background: white; border-radius: 4px; }
+    .memory-tip h4 { color: #1976D2; margin-bottom: 8px; }
+    .progress-bar { background: #e0e0e0; height: 20px; border-radius: 10px; overflow: hidden; margin: 20px 0; }
+    .progress-fill { background: #4CAF50; height: 100%; transition: width 0.3s; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+    .stat-card { background: #f9f9f9; padding: 15px; border-radius: 8px; text-align: center; }
+    .stat-number { font-size: 24px; font-weight: bold; color: #4CAF50; }
+    .stat-label { color: #666; font-size: 14px; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h1 style="margin-bottom:0;">📚 Lumos 英语学习模块（MVP）</h1>
+      <a href="../index.html" style="font-size:14px; color:#4CAF50; text-decoration:none; white-space:nowrap;">🏠 返回主页</a>
+    </div>
+    <p style="color: #666; margin-bottom: 20px;">八年级下册 - Unit 7 活动与演讲</p>
+
+    <!-- 进度统计 -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-number" id="stat-total">5</div>
+        <div class="stat-label">总场景数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-mastered">0</div>
+        <div class="stat-label">已掌握</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-learning">0</div>
+        <div class="stat-label">学习中</div>
+      </div>
+    </div>
+
+    <!-- 进度条 -->
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+    </div>
+
+    <!-- 模式选择 -->
+    <div class="mode-selector">
+      <button class="mode-btn active" onclick="switchMode('list')">📋 场景列表</button>
+      <button class="mode-btn" onclick="switchMode('memorize')">📖 背诵模式</button>
+      <button class="mode-btn" onclick="switchMode('practice')">✏️ 练习模式</button>
+    </div>
+
+    <!-- 场景列表视图 -->
+    <div id="list-view">
+      <h2>📋 Unit 7 - 活动与演讲（共5个场景）</h2>
+      <div class="scenario-list" id="scenario-list"></div>
+    </div>
+
+    <!-- 背诵视图 -->
+    <div id="memorize-view" class="hidden">
+      <button class="btn btn-secondary" onclick="switchMode('list')">← 返回列表</button>
+      <h2 id="memorize-title"></h2>
+      <div class="dialogue" id="memorize-dialogue"></div>
+      <button class="btn btn-warning" id="btn-show-tips" onclick="showMemoryTips()">💡 记忆技巧</button>
+      <div class="memory-tips hidden" id="memory-tips"></div>
+      <button class="btn btn-primary" onclick="markAsMastered()">✅ 标记为已掌握</button>
+      <button class="btn btn-secondary" onclick="goToPractice()">➡️ 去练习</button>
+    </div>
+
+    <!-- 练习视图 -->
+    <div id="practice-view" class="hidden">
+      <button class="btn btn-secondary" onclick="switchMode('list')">← 返回列表</button>
+      <h2 id="practice-title"></h2>
+      <div class="practice-question" id="practice-question"></div>
+      <input type="text" class="practice-input" id="practice-input" placeholder="请输入你的答案..." onkeypress="if(event.key==='Enter') checkAnswer()">
+      <button class="btn btn-primary" onclick="checkAnswer()">提交答案</button>
+      <div class="feedback hidden" id="practice-feedback"></div>
+      <button class="btn btn-secondary" id="btn-next-practice" onclick="nextPractice()" style="display:none;">下一题 →</button>
+    </div>
+  </div>
+
+  <script src="state-manager.js"></script>
+  <script>
+    // === 状态管理 ===
+    let currentMode = 'list';
+    let currentScenarioIndex = 0;
+    let scenarios = [];
+    let practiceResults = [];
+
+    // === 初始化 ===
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadEnglishData();
+      renderScenarioList();
+      updateStats();
+    });
+
+    // === 数据加载 ===
+    async function loadEnglishData() {
+      try {
+        const resp = await fetch('data/knowledge-english.json');
+        const data = await resp.json();
+        scenarios = data.assets;
+        
+        // 加载掌握状态
+        for (let scenario of scenarios) {
+          const mastery = await StateManager.getMastery(scenario.id);
+          if (mastery) {
+            scenario.mastery.status = mastery.status;
+          }
+        }
+      } catch (e) {
+        console.error('Failed to load English data:', e);
+      }
+    }
+
+    // === 视图切换 ===
+    function switchMode(mode) {
+      const previousMode = currentMode;  // 保存之前的模式
+      currentMode = mode;
+      
+      // 更新按钮状态
+      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+      if (mode === 'list') {
+        document.querySelectorAll('.mode-btn')[0].classList.add('active');
+      } else if (mode === 'memorize') {
+        document.querySelectorAll('.mode-btn')[1].classList.add('active');
+      } else if (mode === 'practice') {
+        document.querySelectorAll('.mode-btn')[2].classList.add('active');
+      }
+      
+      // 切换视图
+      document.getElementById('list-view').classList.add('hidden');
+      document.getElementById('memorize-view').classList.add('hidden');
+      document.getElementById('practice-view').classList.add('hidden');
+      
+      if (mode === 'list') {
+        document.getElementById('list-view').classList.remove('hidden');
+        renderScenarioList();
+      } else if (mode === 'memorize') {
+        document.getElementById('memorize-view').classList.remove('hidden');
+        showMemorizeView(currentScenarioIndex);
+      } else if (mode === 'practice') {
+        document.getElementById('practice-view').classList.remove('hidden');
+        // 智能决定显示哪个练习
+        // 如果之前在背诵模式，则保持当前场景；否则从第一个开始
+        if (previousMode === 'memorize') {
+          showPracticeView(currentScenarioIndex);
+        } else {
+          showPracticeView(0);
+        }
+      }
+    }
+
+    // === 场景列表渲染 ===
+    function renderScenarioList() {
+      const list = document.getElementById('scenario-list');
+      list.innerHTML = '';
+      
+      scenarios.forEach((scenario, index) => {
+        const card = document.createElement('div');
+        card.className = `scenario-card ${scenario.mastery.status}`;
+        card.onclick = () => openScenario(index);
+        
+        const statusText = {
+          'unseen': '未学习',
+          'learning': '学习中',
+          'mastered': '已掌握'
+        };
+        
+        card.innerHTML = `
+          <div class="scenario-title">场景 ${index + 1}: ${scenario.scenario}</div>
+          <div class="scenario-context">${scenario.content.dialogue[0].text}</div>
+          <span class="scenario-status status-${scenario.mastery.status}">${statusText[scenario.mastery.status]}</span>
+        `;
+        
+        list.appendChild(card);
+      });
+    }
+
+    // === 打开场景 ===
+    function openScenario(index) {
+      console.log('[openScenario] Opening scenario index:', index);
+      currentScenarioIndex = index;
+      currentMode = 'memorize';  // 重要：更新当前模式
+      
+      try {
+        // 直接切换视图，不通过 switchMode（避免重置 index）
+        const listView = document.getElementById('list-view');
+        const memorizeView = document.getElementById('memorize-view');
+        const practiceView = document.getElementById('practice-view');
+        
+        if (!listView || !memorizeView || !practiceView) {
+          console.error('[openScenario] View elements not found');
+          return;
+        }
+        
+        listView.classList.add('hidden');
+        memorizeView.classList.remove('hidden');
+        practiceView.classList.add('hidden');
+        
+        // 更新按钮状态
+        const modeBtns = document.querySelectorAll('.mode-btn');
+        modeBtns.forEach(btn => btn.classList.remove('active'));
+        if (modeBtns[1]) modeBtns[1].classList.add('active');
+        
+        showMemorizeView(index);
+        console.log('[openScenario] Successfully opened scenario', index);
+      } catch (e) {
+        console.error('[openScenario] Error:', e);
+        alert('打开场景时出错：' + e.message);
+      }
+    }
+
+    // === 背诵模式 ===
+    function showMemorizeView(index) {
+      currentScenarioIndex = index;
+      const scenario = scenarios[index];
+      
+      document.getElementById('memorize-title').textContent = `📖 场景 ${index + 1}: ${scenario.scenario}`;
+      
+      // 渲染对话
+      const dialogue = document.getElementById('memorize-dialogue');
+      dialogue.innerHTML = '<h3>完整对话</h3>';
+      scenario.content.dialogue.forEach(line => {
+        const div = document.createElement('div');
+        div.className = 'dialogue-line';
+        div.innerHTML = `<span class="speaker">${line.speaker}:</span> ${line.text}`;
+        dialogue.appendChild(div);
+      });
+      
+      // 隐藏记忆技巧
+      document.getElementById('memory-tips').classList.add('hidden');
+      document.getElementById('btn-show-tips').style.display = 'inline-block';
+    }
+
+    // === 显示记忆技巧 ===
+    function showMemoryTips() {
+      const scenario = scenarios[currentScenarioIndex];
+      const tipsDiv = document.getElementById('memory-tips');
+      
+      tipsDiv.innerHTML = '<h3>💡 记忆技巧</h3>';
+      scenario.memoryTechniques.forEach(tip => {
+        const tipEl = document.createElement('div');
+        tipEl.className = 'memory-tip';
+        tipEl.innerHTML = `
+          <h4>${tip.title}（${tip.type}）</h4>
+          <p>${tip.description}</p>
+        `;
+        tipsDiv.appendChild(tipEl);
+      });
+      
+      tipsDiv.classList.remove('hidden');
+      document.getElementById('btn-show-tips').style.display = 'none';
+    }
+
+    // === 标记为已掌握 ===
+    async function markAsMastered() {
+      const scenario = scenarios[currentScenarioIndex];
+      scenario.mastery.status = 'mastered';
+      scenario.mastery.lastReviewed = new Date().toISOString();
+      
+      await StateManager.setMastery(scenario.id, 'mastered');
+      
+      alert('✅ 已标记为掌握！');
+      updateStats();
+      
+      // 自动跳到下一个
+      if (currentScenarioIndex < scenarios.length - 1) {
+        showMemorizeView(currentScenarioIndex + 1);
+      }
+    }
+
+    // === 跳转到练习模式（保持当前场景）===
+    function goToPractice() {
+      // 直接切换视图，保持 currentScenarioIndex
+      document.getElementById('list-view').classList.add('hidden');
+      document.getElementById('memorize-view').classList.add('hidden');
+      document.getElementById('practice-view').classList.remove('hidden');
+      
+      // 更新按钮状态
+      const modeBtns = document.querySelectorAll('.mode-btn');
+      modeBtns.forEach(btn => btn.classList.remove('active'));
+      if (modeBtns[2]) modeBtns[2].classList.add('active');
+      
+      showPracticeView(currentScenarioIndex);
+    }
+    
+    // === 练习模式 ===
+    function showPracticeView(index) {
+      currentScenarioIndex = index;
+      const scenario = scenarios[index];
+      
+      document.getElementById('practice-title').textContent = `✏️ 练习 ${index + 1}: ${scenario.scenario}`;
+      
+      // 渲染练习题
+      const question = document.getElementById('practice-question');
+      question.innerHTML = `<h3>请填空：</h3><p style="font-size: 18px; line-height: 1.8;">${scenario.practice.cloze[0].question.replace(/_____________________/g, '___________')}</p>`;
+      
+      // 清空输入和反馈
+      document.getElementById('practice-input').value = '';
+      document.getElementById('practice-feedback').classList.add('hidden');
+      document.getElementById('btn-next-practice').style.display = 'none';
+    }
+
+    // === 检查答案（智能匹配）===
+    function checkAnswer() {
+      const scenario = scenarios[currentScenarioIndex];
+      const userInput = document.getElementById('practice-input').value.trim();
+      const correctAnswer = scenario.practice.cloze[0].answer;
+      
+      // 标准化处理
+      const normalize = (str) => str.toLowerCase().replace(/[?.!,\s]+/g, ' ').trim();
+      const normalizedUser = normalize(userInput);
+      const normalizedCorrect = normalize(correctAnswer);
+      
+      // 完全匹配
+      let isCorrect = normalizedUser === normalizedCorrect;
+      
+      // 关键字匹配（允许小错误，如拼写、标点）
+      if (!isCorrect) {
+        const userWords = normalizedUser.split(' ').filter(w => w.length > 0);
+        const correctWords = normalizedCorrect.split(' ').filter(w => w.length > 0);
+        const matchedCount = userWords.filter(w => correctWords.includes(w)).length;
+        
+        // 如果匹配了80%以上的关键词，算对
+        if (correctWords.length > 0 && (matchedCount / correctWords.length) >= 0.8) {
+          isCorrect = true;
+        }
+      }
+      
+      // 显示反馈
+      const feedback = document.getElementById('practice-feedback');
+      feedback.classList.remove('hidden', 'correct', 'incorrect');
+      
+      if (isCorrect) {
+        feedback.classList.add('correct');
+        feedback.innerHTML = '<h3>✅ 答对了！</h3><p>正确答案：' + correctAnswer + '</p>';
+        scenario.mastery.status = 'mastered';
+        scenario.mastery.consecutiveCorrect++;
+      } else {
+        feedback.classList.add('incorrect');
+        feedback.innerHTML = '<h3>❌ 答错了</h3><p>你的答案：' + userInput + '</p><p>正确答案：' + correctAnswer + '</p>';
+        scenario.mastery.status = 'learning';
+        scenario.mastery.errorCount++;
+      }
+      
+      // 保存状态
+      StateManager.setMastery(scenario.id, scenario.mastery.status);
+      
+      // 显示下一题按钮
+      document.getElementById('btn-next-practice').style.display = 'inline-block';
+      
+      updateStats();
+    }
+
+    // === 下一题 ===
+    function nextPractice() {
+      if (currentScenarioIndex < scenarios.length - 1) {
+        showPracticeView(currentScenarioIndex + 1);
+      } else {
+        alert('🎉 恭喜！已完成所有练习！');
+        switchMode('list');
+      }
+    }
+
+    // === 更新统计 ===
+    function updateStats() {
+      const total = scenarios.length;
+      const mastered = scenarios.filter(s => s.mastery.status === 'mastered').length;
+      const learning = scenarios.filter(s => s.mastery.status === 'learning').length;
+      
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-mastered').textContent = mastered;
+      document.getElementById('stat-learning').textContent = learning;
+      
+      const progress = (mastered / total) * 100;
+      document.getElementById('progress-fill').style.width = progress + '%';
+    }
+  </script>
+</body>
+</html>
