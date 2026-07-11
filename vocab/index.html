@@ -733,7 +733,29 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
                inputmode="text"
                enterkeyhint="send">
 
-        <button class="btn btn-primary" onclick="checkAnswer()">
+        <!-- 从零学词专用输入区域 -->
+        <div id="syllable-area" class="hidden" style="margin: 20px 0;">
+          <div id="syllable-hint" style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;"></div>
+          <div id="syllable-progress-bar" class="progress-bar" style="margin: 12px 0;">
+            <div class="progress-fill" id="syllable-progress" style="width: 0%"></div>
+          </div>
+          <div id="syllable-completed" style="font-size: 14px; color: var(--text-secondary); margin: 12px 0; text-align: center;"></div>
+          <div id="syllable-current" style="font-size: 16px; text-align: center; margin: 16px 0;"></div>
+          <input type="text" id="syllable-input"
+                 class="answer-input"
+                 placeholder="输入音节..."
+                 autocomplete="off"
+                 autocorrect="off"
+                 autocapitalize="none"
+                 spellcheck="false"
+                 inputmode="text">
+          <div id="syllable-buttons" style="margin-top: 12px;">
+            <button id="btn-confirm-syllable" class="btn btn-primary">确认</button>
+            <button id="btn-skip-syllable" class="btn btn-ghost" style="margin-top: 8px; width: 100%;">跳过这个音节 →</button>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="btn-submit-answer" onclick="checkAnswer()">
           提交答案
         </button>
 
@@ -1257,23 +1279,18 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
 
       if (step >= syllables.length) {
         // 当前词完成，进入下一个
-        // 标记为已掌握
         VocabStateManager.markCorrect(word.id, 'from_zero');
         trainingState.sessionCorrect++;
         trainingState.sessionTotal++;
 
-        // 显示完成动画
         showFromZeroWordComplete(word);
 
-        // 重置步骤，准备下一个词
         trainingState.fromZeroStep = 0;
         trainingState.fromZeroIndex++;
         return;
       }
 
-      // 显示当前音节
-      const hint = syllables[step];
-
+      // 更新显示内容
       document.getElementById('word-meaning').innerHTML = `
         <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">
           ${word.meaning}
@@ -1284,98 +1301,39 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       `;
       document.getElementById('word-phonetic').textContent = word.phonetic ? `/${word.phonetic}/` : '';
 
-      // 创建音节输入区域
-      let syllableEl = document.getElementById('from-zero-syllable-area');
-      if (!syllableEl) {
-        syllableEl = document.createElement('div');
-        syllableEl.id = 'from-zero-syllable-area';
-        const trainingCard = document.querySelector('.training-card');
-        trainingCard.insertBefore(syllableEl, document.getElementById('feedback-area'));
-      }
-
       // 构建已完成的音节展示
       let completedSyllablesHtml = '';
       for (let i = 0; i < step; i++) {
         completedSyllablesHtml += `<span style="color: var(--primary); font-weight: bold; font-size: 18px;">${syllables[i]}</span> `;
       }
 
-      syllableEl.innerHTML = `
-        <div style="margin: 20px 0;">
-          <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">
-            完整单词：${'_'.repeat(word.word.length)} (${word.word.length} 个字母)
-          </div>
-          <div class="progress-bar" style="margin: 12px 0;">
-            <div class="progress-fill" id="from-zero-progress" style="width: ${(step / syllables.length) * 100}%"></div>
-          </div>
-          <div style="text-align: center; margin: 16px 0;">
-            <div style="font-size: 14px; color: var(--text-secondary);">已完成：${completedSyllablesHtml || '(空)'}</div>
-          </div>
-          <div style="font-size: 16px; text-align: center; margin: 16px 0;">
-            第 ${step + 1}/${syllables.length} 音节：请输入 <span style="color: var(--primary); font-weight: bold; font-size: 20px;">${hint}</span>
-          </div>
-          <input type="text" id="syllable-input"
-                 class="answer-input"
-                 placeholder="输入音节..."
-                 autocomplete="off"
-                 autocorrect="off"
-                 autocapitalize="none"
-                 spellcheck="false"
-                 inputmode="text"
-                 style="margin: 12px 0;">
-          <button id="syllable-submit-btn" class="btn btn-primary" style="margin-top: 12px;">
-            确认
-          </button>
-          <div style="text-align: center; margin-top: 12px;">
-            <button id="syllable-skip-btn" class="btn btn-ghost" style="margin: 4px; font-size: 13px;">
-              跳过这个音节 →
-            </button>
-          </div>
-        </div>
-      `;
-      syllableEl.style.display = 'block';
+      // 更新固定元素内容
+      document.getElementById('syllable-hint').textContent = `完整单词：${'_'.repeat(word.word.length)} (${word.word.length} 个字母)`;
+      document.getElementById('syllable-progress').style.width = `${(step / syllables.length) * 100}%`;
+      document.getElementById('syllable-completed').innerHTML = `已完成：${completedSyllablesHtml || '(空)'}`;
+      document.getElementById('syllable-current').innerHTML = `第 ${step + 1}/${syllables.length} 音节：请输入 <span style="color: var(--primary); font-weight: bold; font-size: 20px;">${syllables[step]}</span>`;
 
-      // 使用事件监听器而非 onclick（移动端更可靠）
-      const submitBtn = document.getElementById('syllable-submit-btn');
-      const skipBtn = document.getElementById('syllable-skip-btn');
-      const inputEl = document.getElementById('syllable-input');
-
-      submitBtn.addEventListener('click', checkSyllableAnswer);
-      submitBtn.addEventListener('touchend', function(e) {
-        e.preventDefault();
-        checkSyllableAnswer();
-      });
-      skipBtn.addEventListener('click', skipFromZeroSyllable);
-      skipBtn.addEventListener('touchend', function(e) {
-        e.preventDefault();
-        skipFromZeroSyllable();
-      });
-      inputEl.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          checkSyllableAnswer();
-        }
-      });
-
-      // 隐藏普通输入框和提交按钮
+      // 显示音节区域，隐藏普通输入
+      document.getElementById('syllable-area').classList.remove('hidden');
       document.getElementById('answer-input').style.display = 'none';
-      document.querySelector('.btn-primary[onclick="checkAnswer()"]').style.display = 'none';
-
-      // 隐藏反馈
+      document.getElementById('btn-submit-answer').style.display = 'none';
       document.getElementById('feedback-area').classList.add('hidden');
+
+      // 清空并聚焦输入框
+      document.getElementById('syllable-input').value = '';
+      setTimeout(() => document.getElementById('syllable-input').focus(), 100);
 
       // 更新进度
       document.getElementById('training-progress').textContent =
         `词汇 ${wordIndex + 1}/${words.length} · 音节 ${step + 1}/${syllables.length}`;
-
-      // 聚焦到输入框
-      setTimeout(() => {
-        const input = document.getElementById('syllable-input');
-        if (input) input.focus();
-      }, 100);
     }
 
     function checkSyllableAnswer() {
       const input = document.getElementById('syllable-input');
-      if (!input) return;
+      if (!input) {
+        alert('输入框未找到');
+        return;
+      }
 
       const userAnswer = input.value.trim().toLowerCase();
       const words = trainingState.fromZeroWords;
@@ -1385,11 +1343,9 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       const correctSyllable = syllables[step].toLowerCase();
 
       if (userAnswer === correctSyllable) {
-        // 正确！进入下一个音节
         trainingState.fromZeroStep++;
         showFromZeroStep();
       } else {
-        // 错误，显示鼓励反馈
         const feedbackEl = document.getElementById('feedback-area');
         feedbackEl.classList.remove('hidden');
         feedbackEl.innerHTML = `
@@ -1398,30 +1354,17 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
             <div class="feedback-text">${getRandomFeedback('wrong')}</div>
             <div class="correct-answer">提示：这个音节是 "${correctSyllable}"</div>
           </div>
-          <button id="retry-btn" class="btn btn-primary">再试一次</button>
+          <button class="btn btn-primary" onclick="nextFromZeroSyllableAttempt()">再试一次</button>
         `;
-        // 添加事件监听
-        setTimeout(() => {
-          const retryBtn = document.getElementById('retry-btn');
-          if (retryBtn) {
-            retryBtn.addEventListener('click', nextFromZeroSyllableAttempt);
-            retryBtn.addEventListener('touchend', function(e) {
-              e.preventDefault();
-              nextFromZeroSyllableAttempt();
-            });
-          }
-        }, 50);
       }
     }
 
     function nextFromZeroSyllableAttempt() {
-      // 清空输入框并重新聚焦
       const input = document.getElementById('syllable-input');
       if (input) {
         input.value = '';
         input.focus();
       }
-      // 隐藏反馈
       document.getElementById('feedback-area').classList.add('hidden');
     }
 
@@ -1433,7 +1376,6 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       trainingState.fromZeroStep++;
 
       if (trainingState.fromZeroStep >= syllables.length) {
-        // 当前词完成
         VocabStateManager.markCorrect(word.id, 'from_zero');
         trainingState.sessionCorrect++;
         trainingState.sessionTotal++;
@@ -1460,20 +1402,12 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       `;
 
       // 隐藏音节区域
-      const syllableEl = document.getElementById('from-zero-syllable-area');
-      if (syllableEl) syllableEl.style.display = 'none';
+      document.getElementById('syllable-area').classList.add('hidden');
 
-      // 添加事件监听
-      setTimeout(() => {
-        const nextBtn = document.getElementById('next-word-btn');
-        if (nextBtn) {
-          nextBtn.addEventListener('click', nextFromZeroWord);
-          nextBtn.addEventListener('touchend', function(e) {
-            e.preventDefault();
-            nextFromZeroWord();
-          });
-        }
-      }, 50);
+      // 绑定事件
+      document.getElementById('next-word-btn').onclick = function() {
+        nextFromZeroWord();
+      };
     }
 
     function nextFromZeroWord() {
@@ -1923,12 +1857,10 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       const optionsEl = document.getElementById('confusion-options-area');
       if (optionsEl) optionsEl.style.display = 'none';
       // 清理从零学词语义节区域
-      const syllableEl = document.getElementById('from-zero-syllable-area');
-      if (syllableEl) syllableEl.style.display = 'none';
+      document.getElementById('syllable-area').classList.add('hidden');
       // 恢复输入框和提交按钮
       document.getElementById('answer-input').style.display = 'block';
-      const submitBtn = document.querySelector('.btn-primary[onclick="checkAnswer()"]');
-      if (submitBtn) submitBtn.style.display = 'block';
+      document.getElementById('btn-submit-answer').style.display = 'block';
     }
 
     // ========== Toast ==========
@@ -1957,6 +1889,19 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
         console.warn('[Lumos Vocab] 数据加载失败，stats.total 为 0');
       }
     }
+
+    // ========== 绑定从零学词按钮事件 ==========
+    document.getElementById('btn-confirm-syllable').addEventListener('click', function() {
+      checkSyllableAnswer();
+    });
+    document.getElementById('btn-skip-syllable').addEventListener('click', function() {
+      skipFromZeroSyllable();
+    });
+    document.getElementById('syllable-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        checkSyllableAnswer();
+      }
+    });
 
     init();
   </script>
