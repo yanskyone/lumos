@@ -526,9 +526,45 @@ const VocabStateManager = (() => {
       result.push(word.substring(start));
     }
 
-    // 如果分割失败或太短，返回整个单词作为单个音节
-    if (result.length <= 1) {
-      return [word];
+    // 如果只有一个音节但单词较长（>4个字母），尝试按字母拆分
+    if (result.length === 1 && word.length > 4) {
+      // 尝试按辅音簇分割
+      const parts = [];
+      let part = '';
+      let lastWasVowel = false;
+
+      for (let i = 0; i < word.length; i++) {
+        const char = word[i];
+        const isVowel = vowels.includes(char);
+
+        if (part.length > 0 && isVowel !== lastWasVowel && part.length >= 1) {
+          parts.push(part);
+          part = char;
+        } else {
+          part += char;
+        }
+        lastWasVowel = isVowel;
+      }
+      if (part) parts.push(part);
+
+      // 如果分割成2个或更多部分，使用它
+      if (parts.length > 1) {
+        return parts;
+      }
+    }
+
+    // 如果只有一个音节，对于短单词，按2-3个字母一组拆分
+    if (result.length === 1 && word.length > 2) {
+      const parts = [];
+      for (let i = 0; i < word.length; i += 2) {
+        parts.push(word.substring(i, Math.min(i + 2, word.length)));
+      }
+      return parts;
+    }
+
+    // 如果单词太短（<=2个字母），每个字母作为一组
+    if (result.length === 1 && word.length <= 2) {
+      return word.split('');
     }
 
     return result;
