@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lumos 英语词汇训练</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #4CAF50;
+      --primary-dark: #45a049;
+      --secondary: #2196F3;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --bg: #f5f5f5;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --text-secondary: #666666;
+      --border: #e0e0e0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      color: var(--primary);
+    }
+
+    .back-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .stat-number.warning { color: var(--warning); }
+    .stat-number.mastered { color: var(--secondary); }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Progress Bar */
+    .progress-section {
+      margin: 20px 0;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .progress-bar {
+      background: var(--border);
+      height: 12px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, var(--primary), #81C784);
+      height: 100%;
+      transition: width 0.3s ease;
+      border-radius: 6px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      color: var(--text);
+      border: 2px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .btn-group .btn {
+      flex: 1;
+    }
+
+    /* Mode Cards */
+    .mode-card {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mode-card:hover {
+      border-color: var(--primary);
+      transform: translateX(4px);
+    }
+
+    .mode-card.active {
+      border-color: var(--primary);
+      background: #f0f8f0;
+    }
+
+    .mode-icon {
+      font-size: 32px;
+      margin-right: 16px;
+    }
+
+    .mode-info {
+      flex: 1;
+    }
+
+    .mode-title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .mode-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* Tab Navigation */
+    .tabs {
+      display: flex;
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Error List */
+    .error-item {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .error-word {
+      flex: 1;
+    }
+
+    .error-word-text {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .error-meaning {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .error-status {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-pending {
+      background: #fff3e0;
+      color: var(--warning);
+    }
+
+    .status-practicing {
+      background: #e3f2fd;
+      color: var(--secondary);
+    }
+
+    .status-mastered {
+      background: #e8f5e9;
+      color: var(--primary);
+    }
+
+    /* Import Area */
+    .import-area {
+      background: var(--card-bg);
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .import-area textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      resize: vertical;
+      margin-bottom: 12px;
+    }
+
+    .import-area textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .import-hint {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    /* Training View */
+    .training-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .training-timer {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .training-timer.warning {
+      color: var(--warning);
+    }
+
+    .training-progress {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 16px;
+    }
+
+    .word-display {
+      margin: 24px 0;
+    }
+
+    .word-meaning {
+      font-size: 20px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .word-phonetic {
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+
+    .answer-input {
+      width: 100%;
+      padding: 16px;
+      font-size: 20px;
+      text-align: center;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      margin: 20px 0;
+    }
+
+    .answer-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    /* Feedback */
+    .feedback {
+      padding: 20px;
+      border-radius: 12px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .feedback.correct {
+      background: #e8f5e9;
+      border: 2px solid var(--primary);
+    }
+
+    .feedback.incorrect {
+      background: #fff3e0;
+      border: 2px solid var(--warning);
+    }
+
+    .feedback-emoji {
+      font-size: 48px;
+      margin-bottom: 8px;
+    }
+
+    .feedback-text {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .correct-answer {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 24px;
+      max-width: 360px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .modal-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-secondary);
+    }
+
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #333;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 24px;
+      font-size: 14px;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 1001;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Hidden */
+    .hidden { display: none !important; }
+
+    /* Settings */
+    .settings-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .settings-item:last-child {
+      border-bottom: none;
+    }
+
+    .settings-label {
+      font-size: 15px;
+    }
+
+    .settings-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <a href="../index.html" class="back-link">← 返回主页</a>
+      <h1>📚 词汇训练</h1>
+    </div>
+
+    <!-- Main View -->
+    <div id="main-view">
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="stat-total">0</div>
+          <div class="stat-label">总词汇</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number mastered" id="stat-mastered">0</div>
+          <div class="stat-label">已掌握</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number warning" id="stat-pending">0</div>
+          <div class="stat-label">待复习</div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="card progress-section">
+        <div class="progress-label">
+          <span>掌握进度</span>
+          <span id="progress-percent">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Today's Training -->
+      <div class="card" id="today-stats-card">
+        <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">
+          🌸 今日训练
+        </div>
+        <div style="display: flex; justify-content: space-around; text-align: center;">
+          <div>
+            <div style="font-size: 24px; font-weight: bold; color: var(--primary);" id="today-total">0</div>
+            <div style="font-size: 12px; color: var(--text-secondary);">训练次数</div>
+          </div>
+          <div>
+            <div style="font-size: 24px; font-weight: bold; color: var(--secondary);" id="today-accuracy">0%</div>
+            <div style="font-size: 12px; color: var(--text-secondary);">正确率</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <button class="btn btn-primary" id="btn-start-training" onclick="startTraining()">
+        ⚡ 开始训练
+      </button>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="showView('list')">
+          📋 错词本
+        </button>
+        <button class="btn btn-secondary" onclick="showView('import')">
+          📥 导入
+        </button>
+      </div>
+
+      <!-- Weekly Progress -->
+      <div class="card" style="margin-top: 16px;">
+        <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">
+          📈 本周进步
+        </div>
+        <div style="font-size: 16px;">
+          本周新掌握 <span id="weekly-count" style="color: var(--primary); font-weight: bold;">0</span> 个词
+        </div>
+      </div>
+    </div>
+
+    <!-- List View -->
+    <div id="list-view" class="hidden">
+      <div class="header">
+        <button class="btn btn-ghost" onclick="showView('main')" style="width: auto;">← 返回</button>
+        <h1 style="font-size: 20px;">📋 错词本</h1>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="tabs">
+        <button class="tab active" data-filter="all" onclick="filterErrors('all')">全部</button>
+        <button class="tab" data-filter="pending" onclick="filterErrors('pending')">待复习</button>
+        <button class="tab" data-filter="mastered" onclick="filterErrors('mastered')">已掌握</button>
+      </div>
+
+      <div id="error-list"></div>
+      <div id="error-list-empty" class="empty-state hidden">
+        <div class="empty-icon">📭</div>
+        <p>暂无数据</p>
+        <p style="font-size: 13px; margin-top: 8px;">先去导入一些错题吧~</p>
+      </div>
+    </div>
+
+    <!-- Import View -->
+    <div id="import-view" class="hidden">
+      <div class="header">
+        <button class="btn btn-ghost" onclick="showView('main')" style="width: auto;">← 返回</button>
+        <h1 style="font-size: 20px;">📥 导入错题</h1>
+      </div>
+
+      <div class="import-area">
+        <p style="margin-bottom: 12px; color: var(--text-secondary);">
+          从 Excel 复制数据，粘贴到下方：
+        </p>
+        <textarea id="import-textarea" placeholder="单词	音标	中文	错误版本	错误分析
+Wednesday	ˈwenzdeɪ	星期三	wesneday	漏字母 d
+colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
+..."></textarea>
+        <button class="btn btn-primary" onclick="importErrors()">导入数据</button>
+        <p class="import-hint">
+          💡 支持从 Excel/WPS 复制粘贴，字段用 Tab 分隔
+        </p>
+      </div>
+
+      <div class="card" style="margin-top: 16px;">
+        <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">📊 当前数据</div>
+        <div style="font-size: 13px; color: var(--text-secondary);">
+          <div>已导入 <span id="imported-count">0</span> 条错题</div>
+          <div style="margin-top: 4px;">来自 <span id="imported-batches">0</span> 个批次</div>
+        </div>
+      </div>
+
+      <button class="btn btn-secondary" style="margin-top: 16px;" onclick="exportData()">
+        📤 导出备份
+      </button>
+    </div>
+
+    <!-- Training View -->
+    <div id="training-view" class="hidden">
+      <div class="training-card">
+        <div class="training-timer" id="training-timer">
+          ⏱️ 训练时长: 0:00
+        </div>
+
+        <div class="training-progress" id="training-progress">
+          进度: 0/0
+        </div>
+
+        <div class="word-display" id="word-display">
+          <div class="word-meaning" id="word-meaning">星期三</div>
+          <div class="word-phonetic" id="word-phonetic">/ˈwenzdeɪ/</div>
+        </div>
+
+        <input type="text" class="answer-input" id="answer-input"
+               placeholder="输入单词..." autocomplete="off" autocapitalize="off">
+
+        <button class="btn btn-primary" onclick="checkAnswer()">
+          提交答案
+        </button>
+
+        <!-- Feedback Area -->
+        <div id="feedback-area" class="hidden"></div>
+
+        <div class="btn-group" style="margin-top: 20px;">
+          <button class="btn btn-secondary" onclick="endTraining()">结束训练</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Completion View -->
+    <div id="completion-view" class="hidden">
+      <div class="card" style="text-align: center; padding: 40px 20px;">
+        <div style="font-size: 64px; margin-bottom: 16px;">🎉</div>
+        <div style="font-size: 24px; font-weight: bold; margin-bottom: 8px;">太棒了！</div>
+        <div style="color: var(--text-secondary); margin-bottom: 24px;">
+          所有词汇都已掌握啦~
+        </div>
+        <button class="btn btn-primary" onclick="showView('main')">
+          返回主页
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Time Limit Modal -->
+  <div class="modal" id="time-limit-modal">
+    <div class="modal-content">
+      <div style="font-size: 48px; margin-bottom: 12px;">🌸</div>
+      <div class="modal-title">今天的训练时间到啦~</div>
+      <div class="modal-text">
+        你今天已经练习了 10 分钟，要不要休息一下？
+        <br>明天再继续也很好哦~
+      </div>
+      <button class="btn btn-primary" onclick="closeTimeLimitModal()">
+        好的，明天见
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="state-manager.js"></script>
+  <script>
+    // ========== 状态 ==========
+    let currentView = 'main';
+    let currentFilter = 'all';
+    let trainingState = {
+      active: false,
+      startTime: null,
+      timerInterval: null,
+      sessionCorrect: 0,
+      sessionTotal: 0,
+      currentError: null,
+    };
+
+    // ========== 鼓励式反馈语料库 ==========
+    const FEEDBACKS = {
+      correct: [
+        "🌟 你又认识一个词！加油！",
+        "💪 和这个词已经成为朋友啦！",
+        "🎉 继续加油！",
+        "✨ 太棒了！",
+        "🌈 你真厉害！",
+      ],
+      wrong: [
+        "😊 没关系，下次记住就好~",
+        "🤔 这个词确实有点难呢~",
+        "🌸 加油，我们一起慢慢来~",
+        "💝 没关系，再试一次~",
+      ],
+      mastered: [
+        "🎊 又掌握了一个词！你真棒！",
+        "🏆 已经成为好朋友啦！",
+        "🌟 词汇量在悄悄变多~",
+        "🎉 太厉害了！又学会一个！",
+      ],
+    };
+
+    function getRandomFeedback(type) {
+      const pool = FEEDBACKS[type] || FEEDBACKS.correct;
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    // ========== 视图切换 ==========
+    function showView(view) {
+      document.getElementById('main-view').classList.add('hidden');
+      document.getElementById('list-view').classList.add('hidden');
+      document.getElementById('import-view').classList.add('hidden');
+      document.getElementById('training-view').classList.add('hidden');
+      document.getElementById('completion-view').classList.add('hidden');
+
+      document.getElementById(view + '-view').classList.remove('hidden');
+      currentView = view;
+
+      // 刷新视图数据
+      if (view === 'main') {
+        updateMainStats();
+      } else if (view === 'list') {
+        renderErrorList();
+      } else if (view === 'import') {
+        updateImportStats();
+      }
+    }
+
+    // ========== 主页统计更新 ==========
+    function updateMainStats() {
+      const stats = VocabStateManager.getStats();
+      const weekly = VocabStateManager.getWeeklyProgress();
+      const today = VocabStateManager.getTodayStats();
+
+      document.getElementById('stat-total').textContent = stats.total;
+      document.getElementById('stat-mastered').textContent = stats.mastered;
+      document.getElementById('stat-pending').textContent = stats.pending + stats.practicing;
+
+      const progress = stats.total > 0 ? Math.round(stats.mastered / stats.total * 100) : 0;
+      document.getElementById('progress-percent').textContent = progress + '%';
+      document.getElementById('progress-fill').style.width = progress + '%';
+
+      document.getElementById('today-total').textContent = today.total;
+      document.getElementById('today-accuracy').textContent = today.accuracy + '%';
+
+      document.getElementById('weekly-count').textContent = weekly.masteredThisWeek;
+
+      // 更新开始训练按钮状态
+      const btn = document.getElementById('btn-start-training');
+      if (stats.total === 0) {
+        btn.textContent = '📥 先导入错题';
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+        btn.onclick = () => showView('import');
+      } else if (stats.pending + stats.practicing === 0) {
+        btn.textContent = '🎉 全部掌握！';
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+      } else {
+        btn.textContent = '⚡ 开始训练';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.onclick = startTraining;
+      }
+    }
+
+    // ========== 错题列表 ==========
+    function filterErrors(filter) {
+      currentFilter = filter;
+
+      // 更新 Tab 状态
+      document.querySelectorAll('.tabs .tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.dataset.filter === filter) {
+          tab.classList.add('active');
+        }
+      });
+
+      renderErrorList();
+    }
+
+    function renderErrorList() {
+      const listEl = document.getElementById('error-list');
+      const emptyEl = document.getElementById('error-list-empty');
+
+      let errors = VocabStateManager.getAllErrors();
+
+      // 筛选
+      if (currentFilter === 'pending') {
+        errors = errors.filter(e => e.status !== 'mastered');
+      } else if (currentFilter === 'mastered') {
+        errors = errors.filter(e => e.status === 'mastered');
+      }
+
+      if (errors.length === 0) {
+        listEl.innerHTML = '';
+        emptyEl.classList.remove('hidden');
+        return;
+      }
+
+      emptyEl.classList.add('hidden');
+
+      listEl.innerHTML = errors.map(error => {
+        const statusMap = {
+          pending: '待复习',
+          practicing: '练习中',
+          mastered: '已掌握',
+        };
+        return `
+          <div class="error-item">
+            <div class="error-word">
+              <div class="error-word-text">${error.word}</div>
+              <div class="error-meaning">${error.meaning}</div>
+            </div>
+            <span class="error-status status-${error.status}">${statusMap[error.status]}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ========== 导入 ==========
+    function updateImportStats() {
+      const stats = VocabStateManager.getStats();
+      const batches = VocabStateManager.getAllBatches();
+
+      document.getElementById('imported-count').textContent = stats.total;
+      document.getElementById('imported-batches').textContent = batches.length;
+    }
+
+    async function importErrors() {
+      const textarea = document.getElementById('import-textarea');
+      const text = textarea.value.trim();
+
+      if (!text) {
+        showToast('请先粘贴数据~');
+        return;
+      }
+
+      console.log('[importErrors] 开始导入，原始数据长度:', text.length);
+
+      try {
+        const result = await VocabStateManager.importData(text);
+        console.log('[importErrors] 导入结果:', result);
+
+        if (result.success && result.addedCount > 0) {
+          showToast(`成功导入 ${result.addedCount} 条！`);
+          textarea.value = '';
+          updateImportStats();
+          updateMainStats();
+        } else if (result.success && result.addedCount === 0) {
+          showToast('所有词都已导入过了~');
+        } else {
+          showToast(result.message || '导入失败');
+        }
+      } catch (e) {
+        console.error('[importErrors] 导入出错:', e);
+        showToast('导入出错: ' + e.message);
+      }
+    }
+
+    function exportData() {
+      VocabStateManager.downloadExport();
+      showToast('数据已导出~');
+    }
+
+    // ========== 训练 ==========
+    function startTraining() {
+      const pending = VocabStateManager.getPendingErrors();
+
+      if (pending.length === 0) {
+        showView('completion');
+        return;
+      }
+
+      // 重置训练状态
+      trainingState = {
+        active: true,
+        startTime: Date.now(),
+        timerInterval: null,
+        sessionCorrect: 0,
+        sessionTotal: 0,
+        currentError: null,
+      };
+
+      showView('training');
+
+      // 启动计时器
+      trainingState.timerInterval = setInterval(updateTimer, 1000);
+
+      // 获取第一个词
+      nextWord();
+    }
+
+    function updateTimer() {
+      if (!trainingState.active || !trainingState.startTime) return;
+
+      const elapsed = Math.floor((Date.now() - trainingState.startTime) / 1000);
+      const minutes = Math.floor(elapsed / 60);
+      const seconds = elapsed % 60;
+
+      const timerEl = document.getElementById('training-timer');
+      timerEl.textContent = `⏱️ 训练时长: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+      // 10分钟硬上限
+      if (elapsed >= 600) {
+        showTimeLimitModal();
+      }
+
+      // 警告（8分钟后）
+      if (elapsed >= 480) {
+        timerEl.classList.add('warning');
+      }
+    }
+
+    function showTimeLimitModal() {
+      document.getElementById('time-limit-modal').classList.add('show');
+      trainingState.active = false;
+      if (trainingState.timerInterval) {
+        clearInterval(trainingState.timerInterval);
+      }
+    }
+
+    function closeTimeLimitModal() {
+      document.getElementById('time-limit-modal').classList.remove('show');
+      showView('main');
+    }
+
+    function nextWord() {
+      const error = VocabStateManager.getRandomPendingError();
+
+      if (!error) {
+        // 全部掌握
+        endTraining();
+        showView('completion');
+        return;
+      }
+
+      trainingState.currentError = error;
+
+      // 更新界面
+      document.getElementById('word-meaning').textContent = error.meaning;
+      document.getElementById('word-phonetic').textContent = error.phonetic ? `/${error.phonetic}/` : '';
+      document.getElementById('answer-input').value = '';
+      document.getElementById('answer-input').focus();
+
+      // 隐藏反馈
+      document.getElementById('feedback-area').classList.add('hidden');
+
+      // 更新进度
+      const stats = VocabStateManager.getStats();
+      const practiced = stats.total - (stats.pending + stats.practicing);
+      document.getElementById('training-progress').textContent =
+        `进度: ${practiced}/${stats.total}`;
+    }
+
+    function checkAnswer() {
+      if (!trainingState.active || !trainingState.currentError) return;
+
+      const input = document.getElementById('answer-input');
+      const userAnswer = input.value.trim();
+
+      if (!userAnswer) {
+        showToast('请输入答案~');
+        return;
+      }
+
+      const error = trainingState.currentError;
+      const isCorrect = normalizeAndCompare(userAnswer, error.word);
+
+      // 记录训练
+      VocabStateManager.saveTrainingRecord({
+        errorId: error.id,
+        mode: 'flash_war',
+        isCorrect,
+        responseTime: Date.now() - trainingState.startTime,
+      });
+
+      trainingState.sessionTotal++;
+
+      // 显示反馈
+      const feedbackEl = document.getElementById('feedback-area');
+      feedbackEl.classList.remove('hidden');
+
+      if (isCorrect) {
+        // 答对
+        trainingState.sessionCorrect++;
+        VocabStateManager.markCorrect(error.id);
+
+        const newError = VocabStateManager.getError(error.id);
+        if (newError && newError.status === 'mastered') {
+          feedbackEl.innerHTML = `
+            <div class="feedback correct">
+              <div class="feedback-emoji">🎉</div>
+              <div class="feedback-text">${getRandomFeedback('mastered')}</div>
+              <div class="correct-answer">掌握度: ${newError.correctCount}/3 ✓</div>
+            </div>
+            <button class="btn btn-primary" onclick="nextWord()">下一题 →</button>
+          `;
+        } else {
+          feedbackEl.innerHTML = `
+            <div class="feedback correct">
+              <div class="feedback-emoji">🌟</div>
+              <div class="feedback-text">${getRandomFeedback('correct')}</div>
+              <div class="correct-answer">掌握度: ${newError ? newError.correctCount : 1}/3</div>
+            </div>
+            <button class="btn btn-primary" onclick="nextWord()">下一题 →</button>
+          `;
+        }
+      } else {
+        // 答错
+        VocabStateManager.markIncorrect(error.id);
+
+        feedbackEl.innerHTML = `
+          <div class="feedback incorrect">
+            <div class="feedback-emoji">😊</div>
+            <div class="feedback-text">${getRandomFeedback('wrong')}</div>
+            <div class="correct-answer">正确答案: ${error.word}</div>
+          </div>
+          <button class="btn btn-primary" onclick="nextWord()">继续 →</button>
+        `;
+      }
+    }
+
+    function normalizeAndCompare(user, correct) {
+      const normalize = (s) => s.toLowerCase()
+        .replace(/\s+/g, '')
+        .replace(/['']/g, '');
+
+      return normalize(user) === normalize(correct);
+    }
+
+    function endTraining() {
+      trainingState.active = false;
+      if (trainingState.timerInterval) {
+        clearInterval(trainingState.timerInterval);
+      }
+      showView('main');
+    }
+
+    // ========== Toast ==========
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    // ========== 初始化 ==========
+    function init() {
+      updateMainStats();
+      console.log('[Lumos Vocab] Initialized');
+    }
+
+    init();
+  </script>
+</body>
+</html>

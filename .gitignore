@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Node (如果有)
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+
+# 临时文件
+*.tmp
+*.log
