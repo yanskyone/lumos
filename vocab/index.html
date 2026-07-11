@@ -657,6 +657,11 @@
         <button class="tab" data-filter="mastered" onclick="filterErrors('mastered')">已掌握</button>
       </div>
 
+      <!-- Reset Button -->
+      <button class="btn btn-secondary" onclick="resetMasteredWords()" style="margin-bottom: 16px; font-size: 14px;">
+        🔄 重置已掌握
+      </button>
+
       <div id="error-list"></div>
       <div id="error-list-empty" class="empty-state hidden">
         <div class="empty-icon">📭</div>
@@ -919,6 +924,40 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       });
 
       renderErrorList();
+    }
+
+    function resetMasteredWords() {
+      const errors = VocabStateManager.getAllErrors();
+      const masteredCount = errors.filter(e => e.status === 'mastered').length;
+
+      if (masteredCount === 0) {
+        showToast('目前没有已掌握的词汇~');
+        return;
+      }
+
+      if (!confirm(`确定要将 ${masteredCount} 个已掌握词汇重置为待复习吗？`)) {
+        return;
+      }
+
+      // 重置所有已掌握的词
+      const updated = errors.map(e => {
+        if (e.status === 'mastered') {
+          return {
+            ...e,
+            status: 'pending',
+            correctCount: 0,
+            masteredModes: [],
+          };
+        }
+        return e;
+      });
+
+      // 保存到 localStorage
+      localStorage.setItem('lumos:vocab:errors', JSON.stringify(updated));
+
+      showToast(`已将 ${masteredCount} 个词重置为待复习~`);
+      renderErrorList();
+      updateMainStats();
     }
 
     function renderErrorList() {
