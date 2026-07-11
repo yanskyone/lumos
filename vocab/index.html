@@ -1276,11 +1276,17 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       }
 
       const word = words[wordIndex];
-      const syllables = VocabStateManager.getSyllableHint(word.word);
+      let syllables = VocabStateManager.getSyllableHint(word.word);
       const step = trainingState.fromZeroStep;
 
       console.log('[showFromZeroStep] word:', word.word, 'syllables:', syllables, 'step:', step);
 
+      // 安全检查：确保 syllables 是有效数组
+      if (!syllables || !Array.isArray(syllables) || syllables.length === 0) {
+        syllables = [word.word];
+      }
+
+      // 如果当前步骤已经超过音节数，说明是最后一个，直接标记完成
       if (step >= syllables.length) {
         // 当前词完成，进入下一个
         VocabStateManager.markCorrect(word.id, 'from_zero');

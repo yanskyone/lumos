@@ -496,34 +496,42 @@ const VocabStateManager = (() => {
 
   // 获取单词的音节提示
   function getSyllableHint(word) {
-    // 简单的音节分割启发式算法
+    // 简单的音节分割
+    // 规则：元音+辅音+元音 = 可以分割
     const vowels = 'aeiouAEIOU';
-    const syllables = [];
-    let current = '';
+    const result = [];
+    let start = 0;
 
-    for (let i = 0; i < word.length; i++) {
-      const char = word[i];
-      current += char;
+    for (let i = 0; i < word.length - 1; i++) {
+      const curr = word[i];
+      const next = word[i + 1];
 
-      // 如果是元音，检查是否需要分割
-      if (vowels.includes(char)) {
-        // 查看后面是否有辅音+元音组合，可能是下一个音节
-        if (i + 1 < word.length && !vowels.includes(word[i + 1])) {
-          // 继续看下一个
-          if (i + 2 < word.length && vowels.includes(word[i + 2])) {
-            // 辅音+元音组合，可以分割
-            syllables.push(current);
-            current = '';
+      // 找到元音后，看后面是否有辅音+元音（可分割点）
+      if (vowels.includes(curr) && !vowels.includes(next)) {
+        // 继续找后面的元音
+        for (let j = i + 1; j < word.length; j++) {
+          if (vowels.includes(word[j])) {
+            // 在 curr(元音) + next(辅音) + word[j](元音) 处分割
+            result.push(word.substring(start, j));
+            start = j;
+            i = j - 1; // 调整外层循环位置
+            break;
           }
         }
       }
     }
 
-    if (current) {
-      syllables.push(current);
+    // 添加剩余部分
+    if (start < word.length) {
+      result.push(word.substring(start));
     }
 
-    return syllables.length > 1 ? syllables : [word];
+    // 如果分割失败或太短，返回整个单词作为单个音节
+    if (result.length <= 1) {
+      return [word];
+    }
+
+    return result;
   }
 
   // 答对错题（答对1次就标记为已掌握，记录通过的模式）
