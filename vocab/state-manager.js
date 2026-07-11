@@ -331,25 +331,33 @@ const VocabStateManager = (() => {
 
   // 按关卡分组拼写错题（每关 5-10 个）
   function getSpellingLevels() {
-    const pending = getPendingSpellingErrors();
-    const mastered = getMasteredErrors().filter(e => e.category === CATEGORIES.SPELLING);
+    const allSpelling = getSpellingErrors();
+    const mastered = allSpelling.filter(e => e.status === STATUS.MASTERED);
+    const pending = allSpelling.filter(e => e.status !== STATUS.MASTERED);
 
     const LEVEL_SIZE = 5; // 每关 5 个词
 
-    // 计算当前关卡
+    // 计算当前关卡（基于已掌握数量）
     const currentLevel = Math.floor(mastered.length / LEVEL_SIZE) + 1;
 
     // 获取当前关卡需要练习的词
     const startIndex = mastered.length;
-    const levelWords = pending.slice(startIndex, startIndex + LEVEL_SIZE);
+    const levelWords = pending.slice(0, LEVEL_SIZE);
+
+    // 判断是否还有待练习的词
+    const hasMoreLevels = pending.length > 0;
+    const isLevelComplete = levelWords.length === 0 && pending.length > 0;
+    const isCompleted = pending.length === 0; // 没有更多词了
 
     return {
       currentLevel,
-      totalWords: getSpellingErrors().length,
+      totalWords: allSpelling.length,
       masteredCount: mastered.length,
+      pendingCount: pending.length,
       levelWords,      // 当前关卡的词
-      isCompleted: levelWords.length === 0 && pending.length === 0, // 全部通关
-      isLevelComplete: levelWords.length === 0 && pending.length > 0, // 当前关卡完成，等待下一关
+      isCompleted,     // 全部通关
+      isLevelComplete, // 当前关卡完成，等待下一关
+      hasMoreLevels,   // 还有更多关卡
     };
   }
 

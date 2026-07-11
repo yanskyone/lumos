@@ -1152,13 +1152,30 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
         modal.classList.remove('show');
         // 重置状态，开始下一关
         const nextLevel = VocabStateManager.getSpellingLevels();
-        trainingState.levelWords = nextLevel.levelWords;
-        trainingState.levelTotal = nextLevel.levelWords.length;
-        trainingState.levelIndex = 0;
-        trainingState.levelCorrect = 0;
-        if (nextLevel.isCompleted) {
+        console.log('[过关] nextLevel:', nextLevel);
+
+        if (!nextLevel.hasMoreLevels || nextLevel.levelWords.length === 0) {
+          // 没有更多关卡了
           showView('completion');
         } else {
+          // 开始下一关
+          trainingState.levelWords = nextLevel.levelWords;
+          trainingState.levelTotal = nextLevel.levelWords.length;
+          trainingState.levelIndex = 0;
+          trainingState.levelCorrect = 0;
+          trainingState.active = true;
+          // 重启计时器
+          if (trainingState.timerInterval) {
+            clearInterval(trainingState.timerInterval);
+          }
+          trainingState.timerInterval = setInterval(updateTimer, 1000);
+          // 更新模式名称
+          document.getElementById('training-timer').textContent =
+            `🎯 拼写特训营 第${nextLevel.currentLevel}关`;
+          // 清空输入框并重新出题
+          document.getElementById('feedback-area').classList.add('hidden');
+          document.getElementById('answer-input').value = '';
+          document.getElementById('answer-input').focus();
           nextWord();
         }
       };
