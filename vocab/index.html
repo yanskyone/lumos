@@ -1154,7 +1154,7 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
         // 混淆词大作战
         const allPairs = VocabStateManager.getAllConfusionPairs();
         console.log('[confusion] allPairs:', allPairs);
-        const questions = VocabStateManager.getConfusionQuestions(10);
+        const questions = VocabStateManager.getConfusionQuestions();
         console.log('[confusion] questions:', questions);
         if (questions.length === 0) {
           showToast('暂无混淆词数据，请先添加易混词对~');

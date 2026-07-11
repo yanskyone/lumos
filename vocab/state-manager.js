@@ -463,10 +463,14 @@ const VocabStateManager = (() => {
   }
 
   // 获取混淆词对练习题目（随机打乱）
-  function getConfusionQuestions(count = 10) {
+  function getConfusionQuestions(count = null) {
     const pairs = getAllConfusionPairs();
-    // 随机选择
+    // 随机打乱
     const shuffled = [...pairs].sort(() => Math.random() - 0.5);
+    // 如果没有指定数量，返回全部
+    if (count === null) {
+      return shuffled;
+    }
     return shuffled.slice(0, Math.min(count, shuffled.length));
   }
 
