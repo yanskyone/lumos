@@ -155,6 +155,8 @@ const VocabStateManager = (() => {
           tip: e.tip || '',
           unit: e.unit || '',
           status: STATUS.PENDING,
+          masteredModes: [],  // 记录通过哪些模式掌握了此词
+          confusedWith: [],   // 易混词列表（用于混淆词大作战）
           correctCount: 0,
           createdAt: new Date().toISOString(),
           lastPracticedAt: null,
@@ -367,16 +369,29 @@ const VocabStateManager = (() => {
     return passRate >= 0.8;
   }
 
-  // 答对错题（答对1次就标记为已掌握）
-  function markCorrect(id) {
+  // 答对错题（答对1次就标记为已掌握，记录通过的模式）
+  function markCorrect(id, mode) {
     const error = getError(id);
     if (!error) return null;
 
+    // 记录通过的模式
+    if (mode && !error.masteredModes.includes(mode)) {
+      error.masteredModes.push(mode);
+    }
+
+    // 标记为已掌握
     error.correctCount = 1;
     error.status = STATUS.MASTERED;
     error.lastPracticedAt = new Date().toISOString();
 
     return updateError(id, error);
+  }
+
+  // 获取词通过的模式列表
+  function getMasteredModes(id) {
+    const error = getError(id);
+    if (!error) return [];
+    return error.masteredModes || [];
   }
 
   // 答错错题（重置正确次数）

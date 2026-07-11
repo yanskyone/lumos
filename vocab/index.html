@@ -1237,9 +1237,9 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       feedbackEl.classList.remove('hidden');
 
       if (isCorrect) {
-        // 答对 - 标记掌握
+        // 答对 - 标记掌握（记录通过的模式）
         trainingState.sessionCorrect++;
-        VocabStateManager.markCorrect(error.id);
+        VocabStateManager.markCorrect(error.id, trainingState.mode);
 
         // 追踪已正确回答的词，避免本次训练中重复出现
         if (trainingState.mode === 'flash_war') {
