@@ -749,9 +749,9 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
                  autocapitalize="none"
                  spellcheck="false"
                  inputmode="text">
-          <div id="syllable-buttons" style="margin-top: 12px; -webkit-tap-highlight-color: transparent;">
-            <button id="btn-confirm-syllable" class="btn btn-primary" style="touch-action: manipulation; min-height: 48px;">确认</button>
-            <button id="btn-skip-syllable" class="btn btn-ghost" style="touch-action: manipulation; min-height: 48px; margin-top: 8px; width: 100%;">跳过这个音节 →</button>
+          <div id="syllable-buttons" style="margin-top: 16px; margin-bottom: 80px; -webkit-tap-highlight-color: transparent;">
+            <button id="btn-confirm-syllable" class="btn btn-primary" style="touch-action: manipulation; min-height: 56px; font-size: 18px; width: 100%;" onclick="javascript:checkSyllableAnswer();">确认 ✓</button>
+            <button id="btn-skip-syllable" class="btn btn-ghost" style="touch-action: manipulation; min-height: 48px; margin-top: 12px; width: 100%; font-size: 14px;" onclick="javascript:skipFromZeroSyllable();">跳过这个音节 →</button>
           </div>
         </div>
 
@@ -1775,7 +1775,11 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
     }
 
     function checkAnswer() {
-      if (!trainingState.active || !trainingState.currentError) return;
+      console.log('[checkAnswer] called, active:', trainingState.active, 'currentError:', trainingState.currentError);
+      if (!trainingState.active || !trainingState.currentError) {
+        showToast('训练未激活，请刷新重试');
+        return;
+      }
 
       const input = document.getElementById('answer-input');
       const userAnswer = input.value.trim();
