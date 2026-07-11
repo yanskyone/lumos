@@ -618,14 +618,6 @@
             </div>
           </div>
 
-          <div class="mode-card" onclick="startTraining('from_zero')">
-            <div class="mode-icon">🧱</div>
-            <div class="mode-info">
-              <div class="mode-title">从零学词</div>
-              <div class="mode-desc">分音节引导，逐步建立单词记忆</div>
-            </div>
-          </div>
-
           <button class="btn btn-ghost" onclick="hideTrainingModeSelect()" style="margin-top: 8px;">
             取消
           </button>
@@ -732,28 +724,6 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
                spellcheck="false"
                inputmode="text"
                enterkeyhint="send">
-
-        <!-- 从零学词专用输入区域 -->
-        <div id="syllable-area" class="hidden" style="margin: 20px 0;">
-          <div id="syllable-hint" style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;"></div>
-          <div id="syllable-progress-bar" class="progress-bar" style="margin: 12px 0;">
-            <div class="progress-fill" id="syllable-progress" style="width: 0%"></div>
-          </div>
-          <div id="syllable-completed" style="font-size: 14px; color: var(--text-secondary); margin: 12px 0; text-align: center;"></div>
-          <div id="syllable-current" style="font-size: 16px; text-align: center; margin: 16px 0;"></div>
-          <input type="text" id="syllable-input"
-                 class="answer-input"
-                 placeholder="输入音节..."
-                 autocomplete="off"
-                 autocorrect="off"
-                 autocapitalize="none"
-                 spellcheck="false"
-                 inputmode="text">
-          <div id="syllable-buttons" style="margin-top: 16px; margin-bottom: 80px; -webkit-tap-highlight-color: transparent;">
-            <button id="btn-confirm-syllable" class="btn btn-primary" style="touch-action: manipulation; min-height: 56px; font-size: 18px; width: 100%;" onclick="javascript:checkSyllableAnswer();">确认 ✓</button>
-            <button id="btn-skip-syllable" class="btn btn-ghost" style="touch-action: manipulation; min-height: 48px; margin-top: 12px; width: 100%; font-size: 14px;" onclick="javascript:skipFromZeroSyllable();">跳过这个音节 →</button>
-          </div>
-        </div>
 
         <button class="btn btn-primary" id="btn-submit-answer" onclick="checkAnswer()">
           提交答案
@@ -1198,35 +1168,6 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
         document.getElementById('training-timer').textContent = '🔀 混淆词大作战';
         showConfusionQuestion();
         return;
-      } else if (mode === 'from_zero') {
-        // 从零学词
-        const allErrors = VocabStateManager.getAllErrors();
-        console.log('[from_zero] allErrors count:', allErrors.length);
-        const mastered = allErrors.filter(e => e.status === 'mastered').length;
-        console.log('[from_zero] mastered count:', mastered);
-        const words = VocabStateManager.getFromZeroWords();
-        console.log('[from_zero] words:', words);
-        if (words.length === 0) {
-          showToast('太棒了！所有词汇都已掌握~');
-          return;
-        }
-        trainingState = {
-          active: true,
-          mode: 'from_zero',
-          startTime: Date.now(),
-          timerInterval: null,
-          sessionCorrect: 0,
-          sessionTotal: 0,
-          currentError: null,
-          fromZeroWords: words,
-          fromZeroIndex: 0,
-          fromZeroStep: 0,
-        };
-        showView('training');
-        trainingState.timerInterval = setInterval(updateTimer, 1000);
-        document.getElementById('training-timer').textContent = '🧱 从零学词';
-        showFromZeroStep();
-        return;
       }
 
       if (errors.length === 0) {
@@ -1260,202 +1201,6 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
 
       // 获取第一个词
       nextWord();
-    }
-
-    // ========== 从零学词 ==========
-    function showFromZeroStep() {
-      const words = trainingState.fromZeroWords;
-      const wordIndex = trainingState.fromZeroIndex;
-
-      console.log('[showFromZeroStep] words.length:', words.length, 'wordIndex:', wordIndex);
-
-      if (wordIndex >= words.length) {
-        // 全部完成
-        showFromZeroComplete();
-        return;
-      }
-
-      const word = words[wordIndex];
-      let syllables = VocabStateManager.getSyllableHint(word.word);
-      const step = trainingState.fromZeroStep;
-
-      console.log('[showFromZeroStep] word:', word.word, 'syllables:', syllables, 'step:', step);
-
-      // 安全检查：确保 syllables 是有效数组
-      if (!syllables || !Array.isArray(syllables) || syllables.length === 0) {
-        syllables = [word.word];
-      }
-
-      console.log('[showFromZeroStep] after safety check - syllables:', syllables, 'length:', syllables.length, 'step:', step);
-
-      // 如果当前步骤已经超过音节数，说明是最后一个，直接标记完成
-      if (step >= syllables.length) {
-        // 当前词完成，进入下一个
-        VocabStateManager.markCorrect(word.id, 'from_zero');
-        trainingState.sessionCorrect++;
-        trainingState.sessionTotal++;
-
-        showFromZeroWordComplete(word);
-
-        trainingState.fromZeroStep = 0;
-        trainingState.fromZeroIndex++;
-        console.log('[showFromZeroStep] Word complete, next index:', trainingState.fromZeroIndex);
-        return;
-      }
-
-      // 更新显示内容
-      document.getElementById('word-meaning').innerHTML = `
-        <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">
-          ${word.meaning}
-        </div>
-        <div style="font-size: 18px; margin: 16px 0;">
-          单词 "${word.word}" 共 ${syllables.length} 个音节
-        </div>
-      `;
-      document.getElementById('word-phonetic').textContent = word.phonetic ? `/${word.phonetic}/` : '';
-
-      // 构建已完成的音节展示
-      let completedSyllablesHtml = '';
-      for (let i = 0; i < step; i++) {
-        completedSyllablesHtml += `<span style="color: var(--primary); font-weight: bold; font-size: 18px;">${syllables[i]}</span> `;
-      }
-
-      // 更新固定元素内容
-      document.getElementById('syllable-hint').textContent = `完整单词：${'_'.repeat(word.word.length)} (${word.word.length} 个字母)`;
-      document.getElementById('syllable-progress').style.width = `${(step / syllables.length) * 100}%`;
-      document.getElementById('syllable-completed').innerHTML = `已完成：${completedSyllablesHtml || '(空)'}`;
-      document.getElementById('syllable-current').innerHTML = `第 ${step + 1}/${syllables.length} 音节：请输入 <span style="color: var(--primary); font-weight: bold; font-size: 20px;">${syllables[step]}</span>`;
-
-      // 显示音节区域，隐藏普通输入
-      document.getElementById('syllable-area').classList.remove('hidden');
-      document.getElementById('answer-input').classList.add('hidden');
-      document.getElementById('btn-submit-answer').classList.add('hidden');
-      document.getElementById('feedback-area').classList.add('hidden');
-
-      // 清空并聚焦输入框
-      document.getElementById('syllable-input').value = '';
-      setTimeout(() => {
-        const inp = document.getElementById('syllable-input');
-        if (inp) inp.focus();
-      }, 150);
-
-      // 更新进度
-      document.getElementById('training-progress').textContent =
-        `词汇 ${wordIndex + 1}/${words.length} · 音节 ${step + 1}/${syllables.length}`;
-    }
-
-    function checkSyllableAnswer() {
-      console.log('[checkSyllableAnswer] called');
-      console.log('[checkSyllableAnswer] trainingState:', trainingState);
-
-      const input = document.getElementById('syllable-input');
-      if (!input) {
-        alert('输入框未找到，请刷新重试');
-        return;
-      }
-
-      const userAnswer = input.value.trim().toLowerCase();
-      const words = trainingState.fromZeroWords;
-      const word = words[trainingState.fromZeroIndex];
-      const syllables = VocabStateManager.getSyllableHint(word.word);
-      const step = trainingState.fromZeroStep;
-      const correctSyllable = syllables[step].toLowerCase();
-
-      if (userAnswer === correctSyllable) {
-        console.log('[checkSyllableAnswer] correct!');
-        trainingState.fromZeroStep++;
-        showFromZeroStep();
-      } else {
-        console.log('[checkSyllableAnswer] wrong, expected:', correctSyllable, 'got:', userAnswer);
-        const feedbackEl = document.getElementById('feedback-area');
-        feedbackEl.classList.remove('hidden');
-        feedbackEl.innerHTML = `
-          <div class="feedback incorrect">
-            <div class="feedback-emoji">😊</div>
-            <div class="feedback-text">${getRandomFeedback('wrong')}</div>
-            <div class="correct-answer">提示：这个音节是 "${correctSyllable}"</div>
-          </div>
-          <button class="btn btn-primary" onclick="nextFromZeroSyllableAttempt()">再试一次</button>
-        `;
-      }
-    }
-
-    function nextFromZeroSyllableAttempt() {
-      const input = document.getElementById('syllable-input');
-      if (input) {
-        input.value = '';
-        input.focus();
-      }
-      document.getElementById('feedback-area').classList.add('hidden');
-    }
-
-    function skipFromZeroSyllable() {
-      console.log('[skipFromZeroSyllable] called');
-      const words = trainingState.fromZeroWords;
-      const word = words[trainingState.fromZeroIndex];
-      const syllables = VocabStateManager.getSyllableHint(word.word);
-
-      trainingState.fromZeroStep++;
-
-      if (trainingState.fromZeroStep >= syllables.length) {
-        console.log('[skipFromZeroSyllable] word complete:', word.word);
-        VocabStateManager.markCorrect(word.id, 'from_zero');
-        trainingState.sessionCorrect++;
-        trainingState.sessionTotal++;
-        showFromZeroWordComplete(word);
-        trainingState.fromZeroStep = 0;
-        trainingState.fromZeroIndex++;
-      } else {
-        console.log('[skipFromZeroSyllable] next step:', trainingState.fromZeroStep);
-        showFromZeroStep();
-      }
-    }
-
-    function showFromZeroWordComplete(word) {
-      console.log('[showFromZeroWordComplete] word:', word.word);
-      const feedbackEl = document.getElementById('feedback-area');
-      feedbackEl.classList.remove('hidden');
-      feedbackEl.innerHTML = `
-        <div class="feedback correct">
-          <div class="feedback-emoji">🎉</div>
-          <div style="font-size: 24px; font-weight: bold; margin: 12px 0;">
-            ${word.word}
-          </div>
-          <div class="feedback-text">又认识一个新词！</div>
-        </div>
-        <button id="next-word-btn" class="btn btn-primary">下一个词 →</button>
-      `;
-
-      // 隐藏音节区域
-      document.getElementById('syllable-area').classList.add('hidden');
-
-      // 绑定事件
-      document.getElementById('next-word-btn').onclick = function() {
-        nextFromZeroWord();
-      };
-    }
-
-    function nextFromZeroWord() {
-      showFromZeroStep();
-    }
-
-    function showFromZeroComplete() {
-      trainingState.active = false;
-      if (trainingState.timerInterval) {
-        clearInterval(trainingState.timerInterval);
-      }
-
-      const modal = document.getElementById('time-limit-modal');
-      modal.querySelector('.modal-title').textContent = '🎉 从零学词完成！';
-      modal.querySelector('.modal-text').innerHTML =
-        `学会了 <strong>${trainingState.sessionCorrect}</strong> 个新词！<br><br>` +
-        `太棒了！词汇量又增加了~`;
-      modal.querySelector('.btn-primary').textContent = '返回主页';
-      modal.querySelector('.btn-primary').onclick = () => {
-        modal.classList.remove('show');
-        showView('main');
-      };
-      modal.classList.add('show');
     }
 
     // ========== 混淆词大作战 ==========
@@ -1775,9 +1520,8 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
     }
 
     function checkAnswer() {
-      console.log('[checkAnswer] called, active:', trainingState.active, 'currentError:', trainingState.currentError);
       if (!trainingState.active || !trainingState.currentError) {
-        showToast('训练未激活，请刷新重试');
+        showToast('请先开始训练~');
         return;
       }
 
@@ -1885,8 +1629,6 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       // 清理混淆词选项区域
       const optionsEl = document.getElementById('confusion-options-area');
       if (optionsEl) optionsEl.style.display = 'none';
-      // 清理从零学词语义节区域
-      document.getElementById('syllable-area').classList.add('hidden');
       // 恢复输入框和提交按钮
       document.getElementById('answer-input').classList.remove('hidden');
       document.getElementById('btn-submit-answer').classList.remove('hidden');
@@ -1918,39 +1660,6 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
         console.warn('[Lumos Vocab] 数据加载失败，stats.total 为 0');
       }
     }
-
-    // ========== 绑定从零学词按钮事件 ==========
-    // 使用 window 函数让 onclick 可以调用
-    window._checkSyllable = function() {
-      checkSyllableAnswer();
-    };
-    window._skipSyllable = function() {
-      skipFromZeroSyllable();
-    };
-
-    // 绑定确认按钮
-    var confirmBtn = document.getElementById('btn-confirm-syllable');
-    confirmBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      checkSyllableAnswer();
-    }, false);
-
-    // 绑定跳过按钮
-    var skipBtn = document.getElementById('btn-skip-syllable');
-    skipBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      skipFromZeroSyllable();
-    }, false);
-
-    // 输入框回车事件
-    document.getElementById('syllable-input').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        checkSyllableAnswer();
-      }
-    });
 
     init();
   </script>
