@@ -1221,6 +1221,7 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       // 随机决定显示哪个词作为题目
       const showFirst = Math.random() > 0.5;
       trainingState.showConfusedWord = showFirst;
+      trainingState.currentConfusionPair = pair;
 
       const mainWord = showFirst ? pair.word : pair.confused;
       const mainMeaning = showFirst ? pair.meaning : pair.confusedMeaning;
@@ -1301,15 +1302,19 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       const feedbackEl = document.getElementById('feedback-area');
       feedbackEl.classList.remove('hidden');
 
-      const mainWord = trainingState.showConfusedWord ? pair.word : pair.confused;
-      const confusedWord = trainingState.showConfusedWord ? pair.confused : pair.word;
+      const pair = trainingState.currentConfusionPair;
+      const showFirst = trainingState.showConfusedWord;
+      const mainWord = showFirst ? pair.word : pair.confused;
+      const mainMeaning = showFirst ? pair.meaning : pair.confusedMeaning;
+      const confusedWord = showFirst ? pair.confused : pair.word;
+      const confusedMeaning = showFirst ? pair.confusedMeaning : pair.meaning;
 
       if (isCorrect) {
         feedbackEl.innerHTML = `
           <div class="feedback correct">
             <div class="feedback-emoji">🌟</div>
-            <div class="feedback-text">选对啦！${mainWord} 是"${pair.meaning}"</div>
-            <div class="correct-answer">${confusedWord} = ${trainingState.showConfusedWord ? pair.confusedMeaning : pair.meaning}</div>
+            <div class="feedback-text">选对啦！${mainWord} 是"${mainMeaning}"</div>
+            <div class="correct-answer">${confusedWord} = ${confusedMeaning}</div>
           </div>
           <button class="btn btn-primary" onclick="nextConfusionQuestion()">下一题 →</button>
         `;
@@ -1318,8 +1323,8 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
           <div class="feedback incorrect">
             <div class="feedback-emoji">😊</div>
             <div class="feedback-text">这两个词确实很容易混~</div>
-            <div class="correct-answer">${mainWord} = ${pair.meaning}</div>
-            <div class="correct-answer" style="color: var(--text-secondary);">${confusedWord} = ${pair.confusedMeaning}</div>
+            <div class="correct-answer">${mainWord} = ${mainMeaning}</div>
+            <div class="correct-answer" style="color: var(--text-secondary);">${confusedWord} = ${confusedMeaning}</div>
           </div>
           <button class="btn btn-primary" onclick="nextConfusionQuestion()">继续 →</button>
         `;
