@@ -369,11 +369,23 @@
       border: 2px solid var(--border);
       border-radius: 12px;
       margin: 20px 0;
+      /* 禁用浏览器自动补全和预测 */
+      autocomplete: off;
+      autocorrect: off;
+      autocapitalize: off;
+      spellcheck: false;
+      -webkit-autofill: none;
+      background-image: none;
     }
 
     .answer-input:focus {
       outline: none;
       border-color: var(--primary);
+    }
+
+    /* 禁用 Safari 的自动补全背景 */
+    input:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 1000px white inset !important;
     }
 
     /* Feedback */
@@ -688,7 +700,13 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
         </div>
 
         <input type="text" class="answer-input" id="answer-input"
-               placeholder="输入单词..." autocomplete="off" autocapitalize="off">
+               placeholder="输入单词..."
+               autocomplete="off"
+               autocorrect="off"
+               autocapitalize="none"
+               spellcheck="false"
+               inputmode="text"
+               enterkeyhint="send">
 
         <button class="btn btn-primary" onclick="checkAnswer()">
           提交答案
@@ -741,13 +759,17 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
     // ========== 状态 ==========
     let currentView = 'main';
     let currentFilter = 'all';
+    let initialized = false;
     let trainingState = {
       active: false,
+      mode: null,
       startTime: null,
       timerInterval: null,
       sessionCorrect: 0,
       sessionTotal: 0,
       currentError: null,
+      // 追踪本次训练中已正确回答的词 ID，避免重复出现
+      correctWordIds: [],
     };
 
     // ========== 鼓励式反馈语料库 ==========
@@ -1005,6 +1027,7 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
         sessionCorrect: 0,
         sessionTotal: 0,
         currentError: null,
+        correctWordIds: [],  // 追踪本次已正确回答的词
         levelWords: errors,  // 拼写特训营专用：当前关卡的词
         levelCorrect: 0,     // 拼写特训营专用：当前关正确数
         levelTotal: errors.length, // 拼写特训营专用：当前关总数
@@ -1061,8 +1084,8 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       let error = null;
 
       if (trainingState.mode === 'flash_war') {
-        // 词汇闪电战：随机获取待复习词
-        error = VocabStateManager.getRandomPendingError();
+        // 词汇闪电战：获取待复习词，排除本次已正确回答的词
+        error = VocabStateManager.getNextPendingError(trainingState.correctWordIds);
       } else if (trainingState.mode === 'spelling') {
         // 拼写特训营：按顺序获取当前关卡的词
         if (trainingState.levelIndex >= trainingState.levelWords.length) {
@@ -1199,6 +1222,11 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
         trainingState.sessionCorrect++;
         VocabStateManager.markCorrect(error.id);
 
+        // 追踪已正确回答的词，避免本次训练中重复出现
+        if (trainingState.mode === 'flash_war') {
+          trainingState.correctWordIds.push(error.id);
+        }
+
         // 拼写特训营模式下，增加关卡进度
         if (trainingState.mode === 'spelling') {
           trainingState.levelIndex++;
@@ -1273,7 +1301,10 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
     }
 
     // ========== 初始化 ==========
-    function init() {
+    async function init() {
+      // 确保数据已加载（首次从本地 JSON 初始化）
+      await VocabStateManager.ensureInitialized();
+      initialized = true;
       updateMainStats();
       console.log('[Lumos Vocab] Initialized');
     }

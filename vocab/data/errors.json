@@ -1,0 +1,2160 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "generatedAt": "2026-07-11",
+    "sourceFile": "英语错题-答案版.xlsx",
+    "totalCount": 215
+  },
+  "errors": [
+    {
+      "word": "he",
+      "phonetic": "hiː; hi",
+      "meaning": "*pron*.他",
+      "wrongAnswer": "him",
+      "errorNote": "主/宾格混淆",
+      "tip": "he是主语him是宾语",
+      "category": "spelling",
+      "unit": ""
+    },
+    {
+      "word": "she",
+      "phonetic": "ʃiː; ʃi",
+      "meaning": "*pron*.她",
+      "wrongAnswer": "her",
+      "errorNote": "主/宾格混淆",
+      "tip": "she是主语her是宾语",
+      "category": "spelling",
+      "unit": ""
+    },
+    {
+      "word": "the",
+      "phonetic": "ðə",
+      "meaning": "*art*.(用以泛指)；(解说时用)",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": ""
+    },
+    {
+      "word": "such",
+      "phonetic": "sʌtʃ",
+      "meaning": "*det*.,*pron*.这样;这样的,那样的",
+      "wrongAnswer": "something",
+      "errorNote": "词义混淆",
+      "tip": "such=这样/那样的",
+      "category": "spelling",
+      "unit": "七上 Unit 1 Dev"
+    },
+    {
+      "word": "swim",
+      "phonetic": "swɪm",
+      "meaning": "*v*.游泳;游动",
+      "wrongAnswer": "swiming",
+      "errorNote": "加了ing",
+      "tip": "原形不加ing; swimming才是ing",
+      "category": "spelling",
+      "unit": "七上 Unit 1 Dev"
+    },
+    {
+      "word": "cousin",
+      "phonetic": "ˈkʌzn",
+      "meaning": "*n*. 同辈表亲",
+      "wrongAnswer": "cosin",
+      "errorNote": "漏字母u",
+      "tip": "cousin=cou+sin",
+      "category": "spelling",
+      "unit": "七上 Unit 2 Prep"
+    },
+    {
+      "word": "restaurant",
+      "phonetic": "ˈrestrɒnt",
+      "meaning": "*n*.餐馆；餐厅",
+      "wrongAnswer": "restrant",
+      "errorNote": "漏字母au",
+      "tip": "res-tau-rant",
+      "category": "spelling",
+      "unit": "七上 Unit 2 Prep"
+    },
+    {
+      "word": "factory",
+      "phonetic": "ˈfæktri; ˈfæktəri",
+      "meaning": "*n*.工厂",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 Prep"
+    },
+    {
+      "word": "of",
+      "phonetic": "əv; ɒv",
+      "meaning": "*prep*.属于…的;关于",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 Prep"
+    },
+    {
+      "word": "so",
+      "phonetic": "səʊ",
+      "meaning": "*adv*.如此，极;那么；这样 *conj*.所以",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 Prep"
+    },
+    {
+      "word": "wednesday",
+      "phonetic": "ˈwenzdeɪ",
+      "meaning": "*n*.星期三",
+      "wrongAnswer": "wesneday",
+      "errorNote": "漏字母d",
+      "tip": "Wed-nes-day拆三音节",
+      "category": "spelling",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "colourful",
+      "phonetic": "ˈkʌləf(ə)l",
+      "meaning": "*adj*.丰富多彩的;五彩缤纷的",
+      "wrongAnswer": "colorful",
+      "errorNote": "英/美拼写",
+      "tip": "教材用英式colourful",
+      "category": "spelling",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "raise",
+      "phonetic": "reɪz",
+      "meaning": "*v*.提升，举起;增加;筹募;抚养",
+      "wrongAnswer": "rise",
+      "errorNote": "近词混淆",
+      "tip": "raise及物（举起）,rise不及物（升起）",
+      "category": "spelling",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "country",
+      "phonetic": "ˈkʌntri",
+      "meaning": "*n*. 国家",
+      "wrongAnswer": "contry",
+      "errorNote": "漏字母u",
+      "tip": "coun-try",
+      "category": "spelling",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "juice",
+      "phonetic": "dʒuːs",
+      "meaning": "*n*.果汁;菜汁",
+      "wrongAnswer": "jugec",
+      "errorNote": "拼写逆序",
+      "tip": "ju-ice（果汁有ice）",
+      "category": "spelling",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "schoolbag",
+      "phonetic": "ˈskuːlbæɡ",
+      "meaning": "*n*.书包",
+      "wrongAnswer": "sholdbag",
+      "errorNote": "拼写错",
+      "tip": "school+bag",
+      "category": "spelling",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "colour",
+      "phonetic": "ˈkʌlə(r)",
+      "meaning": "*n*.颜色 *v*.为…着色",
+      "wrongAnswer": "color",
+      "errorNote": "英/美拼写",
+      "tip": "英式colour, 美式color",
+      "category": "spelling",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "web",
+      "phonetic": "web",
+      "meaning": "*n*.万维网",
+      "wrongAnswer": "weiber",
+      "errorNote": "完全写错",
+      "tip": "web=网, 记住we+b",
+      "category": "spelling",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "want",
+      "phonetic": "wɒnt",
+      "meaning": "*v*.想要;需要",
+      "wrongAnswer": "wand",
+      "errorNote": "多字母d",
+      "tip": "wan-t",
+      "category": "spelling",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "writer",
+      "phonetic": "ˈraɪtə(r)",
+      "meaning": "*n*.作家",
+      "wrongAnswer": "write",
+      "errorNote": "忘了+er",
+      "tip": "write+er=writer",
+      "category": "spelling",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "exercise",
+      "phonetic": "ˈeksəsaɪz",
+      "meaning": "*n*.锻炼；练习 *v*.锻炼",
+      "wrongAnswer": "exesrice",
+      "errorNote": "拼写混乱",
+      "tip": "ex-er-cise拆三段记",
+      "category": "spelling",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "clothes",
+      "phonetic": "kləʊðz",
+      "meaning": "*n*.衣服；服装",
+      "wrongAnswer": "close",
+      "errorNote": "漏th",
+      "tip": "clothes有th（衣服）",
+      "category": "spelling",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "ski",
+      "phonetic": "skiː",
+      "meaning": "*v*.滑雪",
+      "wrongAnswer": "sky",
+      "errorNote": "近音混淆",
+      "tip": "ski滑雪, sky天空",
+      "category": "spelling",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "biology",
+      "phonetic": "baɪˈɒlədʒi",
+      "meaning": "*n*.生物学",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "geography",
+      "phonetic": "dʒiˈɒɡrəfi",
+      "meaning": "*n*.地理",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "over",
+      "phonetic": "ˈəʊvə(r)",
+      "meaning": "*adv*.结束;穿过;又 *prep*.遍及;在…上面;穿越",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "subject",
+      "phonetic": "ˈsʌbdʒɪkt; ˈsʌbdʒekt",
+      "meaning": "*n*.科目",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "thursday",
+      "phonetic": "ˈθɜːzdeɪ",
+      "meaning": "*n*.星期四",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "by",
+      "phonetic": "baɪ",
+      "meaning": "*prep*.(表示方式)；在…旁边;在…之前",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "seldom",
+      "phonetic": "ˈseldəm",
+      "meaning": "*adv*.不常，很少",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "tidy",
+      "phonetic": "ˈtaɪdi",
+      "meaning": "*adj*.整洁的 *v*.使整洁",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "club",
+      "phonetic": "klʌb",
+      "meaning": "*n*.俱乐部；社团",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "tuesday",
+      "phonetic": "ˈtjuːzdeɪ",
+      "meaning": "*n*.星期二",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "question",
+      "phonetic": "ˈkwestʃən",
+      "meaning": "*n*. 问题",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "during",
+      "phonetic": "ˈdjʊərɪŋ",
+      "meaning": "*prep*.在…期间",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "badminton",
+      "phonetic": "ˈbædmɪntən",
+      "meaning": "*n*. 羽毛球运动",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "tai chi",
+      "phonetic": "ˌtʌɪ ˈtʃiː",
+      "meaning": "*n*.太极",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "survey",
+      "phonetic": "ˈsɜːveɪ",
+      "meaning": "*n*. 民意调查",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "shorts",
+      "phonetic": "ʃɔːts",
+      "meaning": "*n*.短裤",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "race",
+      "phonetic": "reɪs",
+      "meaning": "*n*.赛跑;速度竞赛",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "side",
+      "phonetic": "saɪd",
+      "meaning": "*n*.一边;一侧",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "even",
+      "phonetic": "ˈiːv(ə)n",
+      "meaning": "*adv*.甚至，连；更加",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 WU"
+    },
+    {
+      "word": "sometimes",
+      "phonetic": "ˈsʌmtaɪmz",
+      "meaning": "*adv*.有时",
+      "wrongAnswer": "sometime",
+      "errorNote": "漏末尾s",
+      "tip": "some-times",
+      "category": "spelling",
+      "unit": "七上 Unit 2 Dev"
+    },
+    {
+      "word": "text",
+      "phonetic": "tekst",
+      "meaning": "*n*.文章;文本，正文;课本",
+      "wrongAnswer": "test",
+      "errorNote": "近词混淆",
+      "tip": "text有x（课本）, test有t（考试）",
+      "category": "spelling",
+      "unit": "七上 Unit 2 Expl"
+    },
+    {
+      "word": "grandparent",
+      "phonetic": "ˈɡrænpeərənt",
+      "meaning": "*n*.祖父;祖母;外祖父;外祖母",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 Expl"
+    },
+    {
+      "word": "chore",
+      "phonetic": "tʃɔː(r)",
+      "meaning": "*n*. 日常事务;例行工作",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 Expl"
+    },
+    {
+      "word": "weekend",
+      "phonetic": "ˌwiːkˈend",
+      "meaning": "*n*.周末",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 Expl"
+    },
+    {
+      "word": "mrs",
+      "phonetic": "ˈmɪsɪz",
+      "meaning": "*abbr*.夫人",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 2 Expl"
+    },
+    {
+      "word": "mr",
+      "phonetic": "ˈmɪstə(r)",
+      "meaning": "*abbr*.先生",
+      "wrongAnswer": "mister",
+      "errorNote": "缩写格式",
+      "tip": "缩写Mr.不写全称",
+      "category": "unlearned",
+      "unit": "七上 Unit 1 WU"
+    },
+    {
+      "word": "climate",
+      "phonetic": "ˈklaɪmət",
+      "meaning": "*n*.气候",
+      "wrongAnswer": "cilmate",
+      "errorNote": "字母顺序",
+      "tip": "cli-mate",
+      "category": "spelling",
+      "unit": "七上 Unit 5 Prep"
+    },
+    {
+      "word": "may",
+      "phonetic": "/meɪ/",
+      "meaning": "modalv.可以;也许",
+      "wrongAnswer": "may",
+      "errorNote": "需大写",
+      "tip": "月份要大写May",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "sale",
+      "phonetic": "/seɪl/",
+      "meaning": "n.特价销售;出售",
+      "wrongAnswer": "sell",
+      "errorNote": "近音混淆（名/动）",
+      "tip": "sale是名词, sell是动词",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "plan",
+      "phonetic": "/plæn/",
+      "meaning": "v.计划,谋划;打算 n.计划;",
+      "wrongAnswer": "plane",
+      "errorNote": "多加了e",
+      "tip": "plan=计划, plane=飞机",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "piece",
+      "phonetic": "/piːs/",
+      "meaning": "n.片;块",
+      "wrongAnswer": "peace",
+      "errorNote": "近音混淆",
+      "tip": "piece=片/块, peace=和平",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "quick",
+      "phonetic": "/kwɪk/",
+      "meaning": "adj.快的;迅速的",
+      "wrongAnswer": "quite",
+      "errorNote": "近形混淆",
+      "tip": "quick=快的, quite=相当",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "litter",
+      "phonetic": "/'lɪtə(r)/",
+      "meaning": "v.乱扔 n.垃圾",
+      "wrongAnswer": "letter",
+      "errorNote": "i/e混淆",
+      "tip": "litter=垃圾, letter=信",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "throw",
+      "phonetic": "/θrəʊ/",
+      "meaning": "v.投;扔",
+      "wrongAnswer": "through",
+      "errorNote": "首字母",
+      "tip": "throw=扔, through=穿过",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "safe",
+      "phonetic": "/seɪf/",
+      "meaning": "adj.处境",
+      "wrongAnswer": "self",
+      "errorNote": "fa→lf",
+      "tip": "safe=安全的, self=自己",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "shake",
+      "phonetic": "/ʃeɪk/",
+      "meaning": "v.摇动;抖动",
+      "wrongAnswer": "shock",
+      "errorNote": "ea→o",
+      "tip": "shake=摇动, shock=震惊",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "arrive",
+      "phonetic": "/ə'raɪv/",
+      "meaning": "v.到达",
+      "wrongAnswer": "arriv",
+      "errorNote": "漏了e",
+      "tip": "arrive结尾有e",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "alone",
+      "phonetic": "/ə'ləʊn/",
+      "meaning": "adv.,adj.独自",
+      "wrongAnswer": "along",
+      "errorNote": "ne→ng",
+      "tip": "alone=独自, along=沿着",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "fair",
+      "phonetic": "/feə(r)/;/fer/",
+      "meaning": "adj.公正的;公道的",
+      "wrongAnswer": "fear",
+      "errorNote": "元音互换",
+      "tip": "fair=公平, fear=害怕",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "law",
+      "phonetic": "/lɔː/",
+      "meaning": "n.法律;法规",
+      "wrongAnswer": "low",
+      "errorNote": "a→o",
+      "tip": "law=法律, low=低",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "drama",
+      "phonetic": "/'drɑːmə/",
+      "meaning": "n.戏;剧",
+      "wrongAnswer": "dram",
+      "errorNote": "漏了a",
+      "tip": "drama结尾有a",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "kick",
+      "phonetic": "/kɪk/",
+      "meaning": "v.踢;射门得分 n.踢",
+      "wrongAnswer": "cick",
+      "errorNote": "k→c",
+      "tip": "kick以k开头",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "divide",
+      "phonetic": "/dɪ'vaɪd/",
+      "meaning": "v.(使)分开,分割, 分成",
+      "wrongAnswer": "deride",
+      "errorNote": "完全混淆",
+      "tip": "divide=除/分, deride=嘲笑",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "means",
+      "phonetic": "/miːnz/",
+      "meaning": "n.方式;方法;途径",
+      "wrongAnswer": "mines",
+      "errorNote": "近音混淆",
+      "tip": "mean+s, 不是mine+s",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "loss",
+      "phonetic": "/lɒs/;/lɔːs/",
+      "meaning": "n.丧失;损失",
+      "wrongAnswer": "lose",
+      "errorNote": "名/动混淆",
+      "tip": "loss是名词, lose是动词",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "salt",
+      "phonetic": "/sɔːlt;sɒlt/",
+      "meaning": "n.盐,食盐",
+      "wrongAnswer": "solt",
+      "errorNote": "a→o",
+      "tip": "salt拼写为s-a-l-t",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "cabbage",
+      "phonetic": "/'kæbɪdʒ/",
+      "meaning": "n.甘蓝;卷心菜",
+      "wrongAnswer": "cabage",
+      "errorNote": "漏了一个b",
+      "tip": "cabbage双b",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "same",
+      "phonetic": "/seɪm/",
+      "meaning": "adj.相同的",
+      "wrongAnswer": "silm",
+      "errorNote": "完全错误",
+      "tip": "same=s-a-m-e",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "beginning",
+      "phonetic": "/bɪ'ɡɪnɪŋ/",
+      "meaning": "n.开头;开端",
+      "wrongAnswer": "begining",
+      "errorNote": "漏了一个n",
+      "tip": "beginning双n",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "just",
+      "phonetic": "/dʒʌst/",
+      "meaning": "adv.仅仅;只是;刚好;刚才",
+      "wrongAnswer": "juge",
+      "errorNote": "完全错误",
+      "tip": "just=j-u-s-t",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "special",
+      "phonetic": "/'speʃl/",
+      "meaning": "adj.特殊的,特别的; 特设的 n.特别活动；特价",
+      "wrongAnswer": "speaci",
+      "errorNote": "完全错误",
+      "tip": "special=s-p-e-c-i-a-l",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "metre",
+      "phonetic": "/'miːtə(r)/",
+      "meaning": "meter",
+      "wrongAnswer": "英式→美式",
+      "errorNote": "英式-metre, 美式-meter",
+      "tip": "",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "collect",
+      "phonetic": "/kə'lekt/",
+      "meaning": "v.收集;采集",
+      "wrongAnswer": "cottet",
+      "errorNote": "完全错误",
+      "tip": "collect=c-o-l-l-e-c-t",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "knock",
+      "phonetic": "/nɒk/;/nɑːk/",
+      "meaning": "v.敲;击 n.敲击声; 敲门",
+      "wrongAnswer": "nock",
+      "errorNote": "漏了一个k",
+      "tip": "knock以kn开头",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "door",
+      "phonetic": "/dɔː(r)/",
+      "meaning": "n.门",
+      "wrongAnswer": "doll",
+      "errorNote": "完全错误",
+      "tip": "door=d-o-o-r",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "plastic",
+      "phonetic": "/'plæstɪk/",
+      "meaning": "adj.塑料的 n.塑料",
+      "wrongAnswer": "plastick",
+      "errorNote": "多了k",
+      "tip": "plastic以c结尾非ck",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "habit",
+      "phonetic": "/'hæbɪt/",
+      "meaning": "n.习惯",
+      "wrongAnswer": "habbit",
+      "errorNote": "多了一个b",
+      "tip": "habit单b",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "row",
+      "phonetic": "/rəʊ/",
+      "meaning": "v.划",
+      "wrongAnswer": "roaw",
+      "errorNote": "多了a",
+      "tip": "row=r-o-w",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "unforgettable",
+      "phonetic": "/ˌʌnfə'getəbl/;/ˌʌnfər'getəbl/",
+      "meaning": "adj.令人难忘的",
+      "wrongAnswer": "unforgetable",
+      "errorNote": "漏了一个t",
+      "tip": "unforgettable双t",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "famous",
+      "phonetic": "/'feɪməs/",
+      "meaning": "adj.著名的;出名的",
+      "wrongAnswer": "farmous",
+      "errorNote": "元音错",
+      "tip": "famous=f-a-m-o-u-s",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "title",
+      "phonetic": "/'taɪtl/",
+      "meaning": "n.标题,题目",
+      "wrongAnswer": "tittle",
+      "errorNote": "多了t",
+      "tip": "title=t-i-t-l-e单t",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "mine",
+      "phonetic": "/maɪn/",
+      "meaning": "pron.我的 n.矿;矿井",
+      "wrongAnswer": "main",
+      "errorNote": "近音混淆",
+      "tip": "mine=我的, main=主要的",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "website",
+      "phonetic": "/'websaɪt/",
+      "meaning": "n.网站",
+      "wrongAnswer": "webest",
+      "errorNote": "完全错误",
+      "tip": "website=web+site",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "office",
+      "phonetic": "/'ɒfɪs/;/'ɑːfɪs/",
+      "meaning": "n.办公室",
+      "wrongAnswer": "officer",
+      "errorNote": "加了r",
+      "tip": "office不加r, officer是警官",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "postoffice",
+      "phonetic": "/ˈpəʊstɒfɪs/",
+      "meaning": "n.邮局",
+      "wrongAnswer": "postofficer",
+      "errorNote": "加了r",
+      "tip": "postoffice不加r",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "centre",
+      "phonetic": "/'sentə(r)/",
+      "meaning": "center",
+      "wrongAnswer": "英式→美式",
+      "errorNote": "英式-centre, 美式-center",
+      "tip": "",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "elder",
+      "phonetic": "/'eldə(r)/",
+      "meaning": "n.长者;长辈",
+      "wrongAnswer": "older",
+      "errorNote": "混淆",
+      "tip": "elder=长辈的, older=更老的",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "advice",
+      "phonetic": "/əd'vaɪs/",
+      "meaning": "n.劝告;建议",
+      "wrongAnswer": "advices",
+      "errorNote": "加了s",
+      "tip": "advice不可数不加s",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "person",
+      "phonetic": "/'pɜːsn/;/'pɜːrsn/",
+      "meaning": "n.人;个人",
+      "wrongAnswer": "personal",
+      "errorNote": "加了al",
+      "tip": "person是名词, personal是形容词",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "business",
+      "phonetic": "/'bɪznəs/",
+      "meaning": "n.商业;生意",
+      "wrongAnswer": "bisines",
+      "errorNote": "拼写混乱",
+      "tip": "busi-ness",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "court",
+      "phonetic": "/kɔːt/;/kɔːrt/",
+      "meaning": "n.球场;法院",
+      "wrongAnswer": "cort",
+      "errorNote": "漏了u",
+      "tip": "court=c-o-u-r-t",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "swimmingpool",
+      "phonetic": "/ˈswɪmɪŋpuːl/",
+      "meaning": "n.游泳池;游泳馆",
+      "wrongAnswer": "swimming",
+      "errorNote": "只写了前半",
+      "tip": "swimming+pool",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "practice",
+      "phonetic": "/'præktɪs/",
+      "meaning": "v.训练;练习",
+      "wrongAnswer": "practies",
+      "errorNote": "ce→s",
+      "tip": "practice以ce结尾",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "hole",
+      "phonetic": "/həʊl/",
+      "meaning": "n.洞;孔;坑",
+      "wrongAnswer": "houl",
+      "errorNote": "ou代替o+e",
+      "tip": "hole=h-o-l-e",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "channel",
+      "phonetic": "/'tʃænl/",
+      "meaning": "n.水道;航道",
+      "wrongAnswer": "chanl",
+      "errorNote": "漏了一个n",
+      "tip": "channel双n",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "tunnel",
+      "phonetic": "/ˈtʌnl/",
+      "meaning": "n.地下通道;隧道",
+      "wrongAnswer": "tunle",
+      "errorNote": "字母顺序",
+      "tip": "tunnel双n",
+      "category": "spelling",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "spend",
+      "phonetic": "/spend/",
+      "meaning": "v.度过;用,花",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "strawberry",
+      "phonetic": "/'strɔ:bəri/;/'strɔːberi/",
+      "meaning": "n.草莓",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "trousers",
+      "phonetic": "/'traʊzəz/;/'traʊzərz/",
+      "meaning": "n.(pl.)裤子",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "example",
+      "phonetic": "/ɪg'zɑːmpl/;/ɪg'zæmpl/",
+      "meaning": "n.例子; 实例",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "sandwich",
+      "phonetic": "/'sænwɪtʃ;'sænwɪdʒ/",
+      "meaning": "n.三明治",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "scissors",
+      "phonetic": "/'sɪzəz/;/'sɪzərz/",
+      "meaning": "n.(pl.)剪刀",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "cycle",
+      "phonetic": "/'saɪkl/",
+      "meaning": "n.循环",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "off",
+      "phonetic": "/ɒf/;/ɔːf/",
+      "meaning": "adv.(用以表示除去了某物);休假；休息",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "reuse",
+      "phonetic": "/ˌriː'juːz/",
+      "meaning": "v.再次使用;重复使用",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "valuable",
+      "phonetic": "/'væljuəbl/",
+      "meaning": "adj.宝贵的",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "coastline",
+      "phonetic": "/ˈkəʊstlaɪn/",
+      "meaning": "n.海岸线;沿海地带",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "machine",
+      "phonetic": "/mə'ʃiːn/",
+      "meaning": "n.机器,机械装置;计算机，电脑",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "rubbish",
+      "phonetic": "/'rʌbɪʃ/",
+      "meaning": "n.垃圾;废弃物",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "gym",
+      "phonetic": "/dʒɪm/",
+      "meaning": "(未填)",
+      "wrongAnswer": "未填写",
+      "errorNote": "未填写，需重点学习",
+      "tip": "",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "theatre",
+      "phonetic": "/'θɪətə(r)/;/'θiːətər/",
+      "meaning": "(未填)",
+      "wrongAnswer": "未填写",
+      "errorNote": "未填写，需重点学习",
+      "tip": "",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "across",
+      "phonetic": "/ə'krɒs/;/ə'krɔːs/",
+      "meaning": "adv.,prep.从一边到另一边；横过",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "corner",
+      "phonetic": "/'kɔːnə(r)/;/'kɔːrnər/",
+      "meaning": "n.街角;拐角",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "madam",
+      "phonetic": "/'mædəm/",
+      "meaning": "n.女士;夫人",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "station",
+      "phonetic": "/'steɪʃn/",
+      "meaning": "n.公共汽车站,长途汽车站; 火车站",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "crossing",
+      "phonetic": "/'krɒsɪŋ/;/'krɔːsɪŋ/",
+      "meaning": "n.安全通行处; 人行横道",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "island",
+      "phonetic": "/'aɪlənd/",
+      "meaning": "n.岛",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "village",
+      "phonetic": "/'vɪlɪdʒ/",
+      "meaning": "n.村庄",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "neighbour",
+      "phonetic": "/'neɪbə(r)/",
+      "meaning": "(未填)",
+      "wrongAnswer": "未填写",
+      "errorNote": "未填写，需重点学习",
+      "tip": "",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "community",
+      "phonetic": "/kə'mjuːnəti/",
+      "meaning": "n.社区",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "service",
+      "phonetic": "/'sɜːvɪs/;/'sɜːrvɪs/",
+      "meaning": "n.服务",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "italian",
+      "phonetic": "/ɪ'tæliən/",
+      "meaning": "adj.意大利",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "police",
+      "phonetic": "/pə'liːs/",
+      "meaning": "n.警方",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "exciting",
+      "phonetic": "/ɪk'saɪtɪŋ/",
+      "meaning": "adj.令人兴奋的;令人激动的",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "turning",
+      "phonetic": "/'tɜːnɪŋ/;/'tɜːrnɪŋ/",
+      "meaning": "n.岔路口",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "straight",
+      "phonetic": "/streɪt/",
+      "meaning": "adv.笔直地",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "medical",
+      "phonetic": "/'medɪkl/",
+      "meaning": "adj.医疗的;医学的",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "volunteer",
+      "phonetic": "/ˌvɒlən'tɪə(r)/;/ˌvɑːlən'tɪr/",
+      "meaning": "n.志愿者 v.自愿做",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "transportation",
+      "phonetic": "/ˌtrænspɔː'teɪʃn/;/ˌtrænspər'teɪʃn/",
+      "meaning": "n.公共交通运输系统",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "nearby",
+      "phonetic": "/ˌnɪə'baɪ/;/ˌnɪr'baɪ/",
+      "meaning": "adv.在附近adj.附近的",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "item",
+      "phonetic": "/'aɪtəm/",
+      "meaning": "n.项目;物件",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "peephole",
+      "phonetic": "/'piːphəul/",
+      "meaning": "n.(墙或门上等的)窥视孔",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "stranger",
+      "phonetic": "/'streɪndʒə(r)/",
+      "meaning": "n.陌生人",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "delivery",
+      "phonetic": "/dɪ'lɪvəri/",
+      "meaning": "n.递送;传送;交付",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "environment",
+      "phonetic": "/ɪn'vaɪrənmənt/",
+      "meaning": "n.自然环境; 生态环境",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "since",
+      "phonetic": "/sɪns/",
+      "meaning": "conj.因为;既然",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "french",
+      "phonetic": "/frentʃ/",
+      "meaning": "n.法语;法国人 adj.法国的；法国人的；法语的",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "attention",
+      "phonetic": "/ə'tenʃn/",
+      "meaning": "n.注意;专心",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "subway",
+      "phonetic": "/'sʌbweɪ/",
+      "meaning": "n.地铁",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "dollar",
+      "phonetic": "/'dɒlə(r)/;/'dɑːlər/",
+      "meaning": "n.元",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "helmet",
+      "phonetic": "/'helmɪt/",
+      "meaning": "n.头盔",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "manner",
+      "phonetic": "/'mænə(r)/",
+      "meaning": "n.礼仪;礼貌",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "seat",
+      "phonetic": "/siːt/",
+      "meaning": "n.座位",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "engineer",
+      "phonetic": "/ˌendʒɪ'nɪə(r)/;/ˌendʒɪ'nɪr/",
+      "meaning": "n.工程师；设计师",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "discuss",
+      "phonetic": "/dɪˈskʌs/",
+      "meaning": "v.讨论;谈论",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "soccer",
+      "phonetic": "/'sɒkə(r)/;/'sɑːkər/",
+      "meaning": "n.足球,足球运动",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "project",
+      "phonetic": "/'prɒdʒekt/;/'prɑːdʒekt/",
+      "meaning": "n.项目; 方案；专题研究",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "british",
+      "phonetic": "/'brɪtɪʃ/",
+      "meaning": "adj.英国的;英国人的",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "support",
+      "phonetic": "/sə'pɔːt/;/sə'pɔːrt/",
+      "meaning": "v.,n.支持",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "chalk",
+      "phonetic": "/tʃɔːk/",
+      "meaning": "n.粉笔",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "host",
+      "phonetic": "/həʊst/",
+      "meaning": "n.主人;东道主",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "tabletennis",
+      "phonetic": "/ˈteɪbltenɪs/",
+      "meaning": "n.乒乓球运动",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "voluntary",
+      "phonetic": "/'vɒləntri/;/'vɑːlənteri/",
+      "meaning": "adj.无偿的，义务性的；自愿的，志愿的，主动的",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "experience",
+      "phonetic": "/ɪk'spɪəriəns/;/ɪk'spɪriəns/",
+      "meaning": "n.经历;经验;体验 v.经历;体验",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "guard",
+      "phonetic": "/gɑːd/;/gɑːrd/",
+      "meaning": "n.警卫,看守",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "accident",
+      "phonetic": "/'æksɪdənt/",
+      "meaning": "n.(交通)事故;意外",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "behavior",
+      "phonetic": "/bɪ'heɪvjə(r)/",
+      "meaning": "n.行为;举止;态度",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "cause",
+      "phonetic": "/kɔːz/",
+      "meaning": "n.原因;起因 v.造成;引起; 导致",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "effect",
+      "phonetic": "/ɪ'fekt/",
+      "meaning": "n.结果;影响",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "polite",
+      "phonetic": "/pə'laɪt/",
+      "meaning": "adj.有礼貌的",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "board",
+      "phonetic": "/bɔːd/;/bɔːrd/",
+      "meaning": "n.板;木板",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "traffic",
+      "phonetic": "/'træfɪk/",
+      "meaning": "n.交通",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七下 未知单元"
+    },
+    {
+      "word": "june",
+      "phonetic": "dʒuːn",
+      "meaning": "*n*.六月",
+      "wrongAnswer": "june",
+      "errorNote": "需大写",
+      "tip": "月份要大写June",
+      "category": "unlearned",
+      "unit": "七上 Unit 5 Expl"
+    },
+    {
+      "word": "forest",
+      "phonetic": "ˈfɒrɪst",
+      "meaning": "*n*.森林； 林区",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 5 Expl"
+    },
+    {
+      "word": "plenty",
+      "phonetic": "ˈplenti",
+      "meaning": "*pron*.大量；充足",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 5 Expl"
+    },
+    {
+      "word": "few",
+      "phonetic": "fjuː",
+      "meaning": "*det*.,*adj*.有些，几个;很少 *pron*.一些",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 5 Expl"
+    },
+    {
+      "word": "butterfly",
+      "phonetic": "ˈbʌtəflaɪ",
+      "meaning": "*n*.蝴蝶",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 5 Expl"
+    },
+    {
+      "word": "vegetable",
+      "phonetic": "ˈvedʒtəb(ə)l",
+      "meaning": "*n*.蔬菜",
+      "wrongAnswer": "vegetables",
+      "errorNote": "多了s",
+      "tip": "vegetable单数不加s",
+      "category": "spelling",
+      "unit": "七上 Unit 5 WU"
+    },
+    {
+      "word": "dragon",
+      "phonetic": "ˈdræɡən",
+      "meaning": "*n*.龙",
+      "wrongAnswer": "drango",
+      "errorNote": "末尾o",
+      "tip": "drag-on",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Prep"
+    },
+    {
+      "word": "august",
+      "phonetic": "ˈɔːɡəst",
+      "meaning": "*n*.八月",
+      "wrongAnswer": "august",
+      "errorNote": "需大写",
+      "tip": "月份要大写August",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Prep"
+    },
+    {
+      "word": "money",
+      "phonetic": "ˈmʌni",
+      "meaning": "*n*.钱币；钱;财产",
+      "wrongAnswer": "mony",
+      "errorNote": "漏字母e",
+      "tip": "mon-ey",
+      "category": "spelling",
+      "unit": "七上 Unit 6 Prep"
+    },
+    {
+      "word": "celebrate",
+      "phonetic": "ˈselɪbreɪt",
+      "meaning": "*v*.庆祝；庆贺",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Prep"
+    },
+    {
+      "word": "tomb",
+      "phonetic": "tuːm",
+      "meaning": "*n*.坟墓",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Prep"
+    },
+    {
+      "word": "lantern",
+      "phonetic": "ˈlæntən",
+      "meaning": "*n*.灯笼",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Prep"
+    },
+    {
+      "word": "lunar",
+      "phonetic": "ˈluːnə(r)",
+      "meaning": "*adj*.月球的;月亮的",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Prep"
+    },
+    {
+      "word": "january",
+      "phonetic": "ˈdʒænjuəri",
+      "meaning": "*n*.一月",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Prep"
+    },
+    {
+      "word": "april",
+      "phonetic": "ˈeɪprəl",
+      "meaning": "*n*. 四月",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Prep"
+    },
+    {
+      "word": "labour",
+      "phonetic": "ˈleɪbə(r)",
+      "meaning": "*n*.工人;劳动",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Prep"
+    },
+    {
+      "word": "then",
+      "phonetic": "ðen",
+      "meaning": "*adv*.然后；当时;那么",
+      "wrongAnswer": "than",
+      "errorNote": "近形混淆",
+      "tip": "then=然后, than=比",
+      "category": "spelling",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "present",
+      "phonetic": "ˈprez(ə)nt",
+      "meaning": "*n*.礼物 *adj*. 当前的",
+      "wrongAnswer": "presnet",
+      "errorNote": "字母颠倒",
+      "tip": "pre-sent",
+      "category": "spelling",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "couplet",
+      "phonetic": "ˈkʌplɪt",
+      "meaning": "*n*.对联",
+      "wrongAnswer": "couple",
+      "errorNote": "漏字母t",
+      "tip": "couple+t=couplet（对联）",
+      "category": "spelling",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "christmas",
+      "phonetic": "ˈkrɪsməs",
+      "meaning": "*n*.圣诞节",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "confucius",
+      "phonetic": "kənˈfjuːʃəs",
+      "meaning": "孔子",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "another",
+      "phonetic": "əˈnʌðə(r)",
+      "meaning": "*det*.,*pron*.又一",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "celebration",
+      "phonetic": "ˌselɪˈbreɪʃn",
+      "meaning": "*n*.庆祝活动；庆祝",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "delicious",
+      "phonetic": "dɪˈlɪʃəs",
+      "meaning": "*adj*.美味的，可口的",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "excited",
+      "phonetic": "ɪkˈsaɪtɪd",
+      "meaning": "*adj*.激动的;兴奋的",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "author",
+      "phonetic": "ˈɔːθə(r)",
+      "meaning": "*n*.著者;作者;作家",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "thirteenth",
+      "phonetic": "ˌθɜːˈtiːnθ",
+      "meaning": "*ordinal* *num*.第十二",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "hundred",
+      "phonetic": "ˈhʌndrəd",
+      "meaning": "*num*.一百",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "second",
+      "phonetic": "ˈsekənd",
+      "meaning": "*ordinal* *num*.,*det*.第二 *n*.秒",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "twelfth",
+      "phonetic": "twelfθ",
+      "meaning": "*ordinal* *num*.第十— .",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "twentieth",
+      "phonetic": "ˈtwentiəθ",
+      "meaning": "*ordinal* *num*.第二十",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "forty",
+      "phonetic": "ˈfɔːti",
+      "meaning": "*num*. 四十",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "fortieth",
+      "phonetic": "ˈfɔːtiəθ",
+      "meaning": "*ordinal* *num*.第四十",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "fifty",
+      "phonetic": "ˈfɪfti",
+      "meaning": "*num*.五十",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "ninety",
+      "phonetic": "ˈnaɪnti",
+      "meaning": "*num*.九十",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Expl"
+    },
+    {
+      "word": "football",
+      "phonetic": "ˈfʊtbɔːl",
+      "meaning": "*n*.足球运动；足球",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 1 Prep"
+    },
+    {
+      "word": "square",
+      "phonetic": "skweə(r)",
+      "meaning": "*n*.广场;正方形 *adj*.正方形的",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Dev"
+    },
+    {
+      "word": "street",
+      "phonetic": "striːt",
+      "meaning": "*n*.街道",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Dev"
+    },
+    {
+      "word": "prepare",
+      "phonetic": "prɪˈpeə(r)",
+      "meaning": "*v*.使做好准备;做",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Dev"
+    },
+    {
+      "word": "riddle",
+      "phonetic": "ˈrɪd(ə)l",
+      "meaning": "*n*.谜；谜语",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 Dev"
+    },
+    {
+      "word": "poster",
+      "phonetic": "ˈpəʊstə(r)",
+      "meaning": "*n*.海报；招贴画",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 WU"
+    },
+    {
+      "word": "february",
+      "phonetic": "ˈfebruəri",
+      "meaning": "*n*.二月",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 WU"
+    },
+    {
+      "word": "march",
+      "phonetic": "mɑːtʃ",
+      "meaning": "*n*.二月",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 WU"
+    },
+    {
+      "word": "republic",
+      "phonetic": "rɪˈpʌblɪk",
+      "meaning": "*n*.共和国",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 WU"
+    },
+    {
+      "word": "calendar",
+      "phonetic": "ˈkælɪndə(r)",
+      "meaning": "*n*. 日历",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 WU"
+    },
+    {
+      "word": "december",
+      "phonetic": "dɪˈsembə(r)",
+      "meaning": "*n*.十二月",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 WU"
+    },
+    {
+      "word": "midnight",
+      "phonetic": "ˈmɪdnaɪt",
+      "meaning": "*n*.午夜",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 WU"
+    },
+    {
+      "word": "bell",
+      "phonetic": "bel",
+      "meaning": "*n*.钟",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 WU"
+    },
+    {
+      "word": "ring",
+      "phonetic": "rɪŋ",
+      "meaning": "*v*.(使)发出钟声 *n*.钟声;指环",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 WU"
+    },
+    {
+      "word": "say",
+      "phonetic": "seɪ",
+      "meaning": "*v*.说;指示",
+      "wrongAnswer": "(未填)",
+      "errorNote": "未填写",
+      "tip": "未填写，需重点学习",
+      "category": "unlearned",
+      "unit": "七上 Unit 6 WU"
+    }
+  ]
+}

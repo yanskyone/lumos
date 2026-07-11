@@ -93,6 +93,73 @@ const VocabStateManager = (() => {
 
   // ========== 错题管理 ==========
 
+  // 检查是否需要初始化数据（首次使用或数据为空）
+  let _initialized = false;
+  let _initPromise = null;
+
+  async function ensureInitialized() {
+    if (_initialized) return;
+    if (_initPromise) return _initPromise;
+
+    const existingErrors = getAllErrors();
+
+    // 如果已经有数据，不需要重新初始化
+    if (existingErrors.length > 0) {
+      _initialized = true;
+      return;
+    }
+
+    // 尝试从本地 JSON 文件加载数据
+    _initPromise = loadFromJsonFile();
+    await _initPromise;
+    _initialized = true;
+  }
+
+  async function loadFromJsonFile() {
+    try {
+      console.log('[VocabStateManager] 正在加载本地数据文件...');
+      const response = await fetch('data/errors.json');
+      if (!response.ok) {
+        console.warn('[VocabStateManager] 未找到本地数据文件');
+        return;
+      }
+
+      const data = await response.json();
+      if (data.errors && data.errors.length > 0) {
+        console.log('[VocabStateManager] 找到 ' + data.errors.length + ' 条错题，开始初始化...');
+
+        const errors = data.errors.map((e, index) => ({
+          id: 've-' + (index + 1).toString().padStart(3, '0'),
+          word: e.word,
+          phonetic: e.phonetic || '',
+          meaning: e.meaning,
+          category: e.category || CATEGORIES.UNLEARNED,
+          wrongAnswer: e.wrongAnswer || '',
+          errorNote: e.errorNote || '',
+          tip: e.tip || '',
+          unit: e.unit || '',
+          status: STATUS.PENDING,
+          correctCount: 0,
+          createdAt: new Date().toISOString(),
+          lastPracticedAt: null,
+          batchId: 'batch-initial',
+        }));
+
+        saveAllErrors(errors);
+
+        // 创建初始批次记录
+        createBatch({
+          source: 'excel_import',
+          totalImported: errors.length,
+        });
+
+        console.log('[VocabStateManager] 数据初始化完成！共 ' + errors.length + ' 条错题');
+      }
+    } catch (e) {
+      console.error('[VocabStateManager] 加载本地数据失败:', e);
+    }
+  }
+
   // 获取所有错题
   function getAllErrors() {
     return safeJsonParse(localStorage.getItem(KEYS.ERRORS), []);
@@ -197,11 +264,39 @@ const VocabStateManager = (() => {
     return errors.filter(e => e.status === STATUS.MASTERED);
   }
 
-  // 获取随机待复习错题（用于训练）
-  function getRandomPendingError() {
-    const pending = getPendingErrors();
+  // 获取随机待复习错题（用于训练，可排除指定词）
+  function getRandomPendingError(excludeIds) {
+    let pending = getPendingErrors();
+
+    // 排除指定 ID（本次训练中已正确回答过的词）
+    if (excludeIds && excludeIds.length > 0) {
+      const excludeSet = new Set(excludeIds);
+      pending = pending.filter(e => !excludeSet.has(e.id));
+    }
+
     if (pending.length === 0) return null;
     return pending[Math.floor(Math.random() * pending.length)];
+  }
+
+  // 获取下一个待复习词（按顺序，减少随机性）
+  function getNextPendingError(excludeIds) {
+    let pending = getPendingErrors();
+
+    // 排除指定 ID
+    if (excludeIds && excludeIds.length > 0) {
+      const excludeSet = new Set(excludeIds);
+      pending = pending.filter(e => !excludeSet.has(e.id));
+    }
+
+    // 按上次练习时间排序，优先练习很久没练的
+    pending.sort((a, b) => {
+      const aTime = a.lastPracticedAt ? new Date(a.lastPracticedAt).getTime() : 0;
+      const bTime = b.lastPracticedAt ? new Date(b.lastPracticedAt).getTime() : 0;
+      return aTime - bTime; // 早练习的排在前面
+    });
+
+    if (pending.length === 0) return null;
+    return pending[0];
   }
 
   // ========== 拼写特训营专用方法 ==========
