@@ -1111,6 +1111,53 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
           const nextLevelInfo = VocabStateManager.getSpellingLevels();
           errors = nextLevelInfo.levelWords;
         }
+      } else if (mode === 'confusion') {
+        // 混淆词大作战
+        const questions = VocabStateManager.getConfusionQuestions(10);
+        if (questions.length === 0) {
+          showToast('暂无混淆词数据，请先添加易混词对~');
+          return;
+        }
+        trainingState = {
+          active: true,
+          mode: 'confusion',
+          startTime: Date.now(),
+          timerInterval: null,
+          sessionCorrect: 0,
+          sessionTotal: 0,
+          currentError: null,
+          confusionQuestions: questions,
+          confusionIndex: 0,
+        };
+        showView('training');
+        trainingState.timerInterval = setInterval(updateTimer, 1000);
+        document.getElementById('training-timer').textContent = '🔀 混淆词大作战';
+        showConfusionQuestion();
+        return;
+      } else if (mode === 'from_zero') {
+        // 从零学词
+        const words = VocabStateManager.getFromZeroWords();
+        if (words.length === 0) {
+          showToast('太棒了！所有词汇都已掌握~');
+          return;
+        }
+        trainingState = {
+          active: true,
+          mode: 'from_zero',
+          startTime: Date.now(),
+          timerInterval: null,
+          sessionCorrect: 0,
+          sessionTotal: 0,
+          currentError: null,
+          fromZeroWords: words,
+          fromZeroIndex: 0,
+          fromZeroStep: 0,
+        };
+        showView('training');
+        trainingState.timerInterval = setInterval(updateTimer, 1000);
+        document.getElementById('training-timer').textContent = '🧱 从零学词';
+        showFromZeroStep();
+        return;
       }
 
       if (errors.length === 0) {
