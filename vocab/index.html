@@ -749,9 +749,9 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
                  autocapitalize="none"
                  spellcheck="false"
                  inputmode="text">
-          <div id="syllable-buttons" style="margin-top: 12px;">
-            <button id="btn-confirm-syllable" class="btn btn-primary" onclick="window._checkSyllable()">确认</button>
-            <button id="btn-skip-syllable" class="btn btn-ghost" style="margin-top: 8px; width: 100%;" onclick="window._skipSyllable()">跳过这个音节 →</button>
+          <div id="syllable-buttons" style="margin-top: 12px; -webkit-tap-highlight-color: transparent;">
+            <button id="btn-confirm-syllable" class="btn btn-primary" style="touch-action: manipulation; min-height: 48px;">确认</button>
+            <button id="btn-skip-syllable" class="btn btn-ghost" style="touch-action: manipulation; min-height: 48px; margin-top: 8px; width: 100%;">跳过这个音节 →</button>
           </div>
         </div>
 
@@ -1924,8 +1924,26 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       skipFromZeroSyllable();
     };
 
+    // 绑定确认按钮
+    var confirmBtn = document.getElementById('btn-confirm-syllable');
+    confirmBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      checkSyllableAnswer();
+    }, false);
+
+    // 绑定跳过按钮
+    var skipBtn = document.getElementById('btn-skip-syllable');
+    skipBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      skipFromZeroSyllable();
+    }, false);
+
+    // 输入框回车事件
     document.getElementById('syllable-input').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
+        e.preventDefault();
         checkSyllableAnswer();
       }
     });
