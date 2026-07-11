@@ -1286,6 +1286,8 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
         syllables = [word.word];
       }
 
+      console.log('[showFromZeroStep] after safety check - syllables:', syllables, 'length:', syllables.length, 'step:', step);
+
       // 如果当前步骤已经超过音节数，说明是最后一个，直接标记完成
       if (step >= syllables.length) {
         // 当前词完成，进入下一个
@@ -1344,6 +1346,8 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
 
     function checkSyllableAnswer() {
       console.log('[checkSyllableAnswer] called');
+      console.log('[checkSyllableAnswer] trainingState:', trainingState);
+
       const input = document.getElementById('syllable-input');
       if (!input) {
         alert('输入框未找到，请刷新重试');
