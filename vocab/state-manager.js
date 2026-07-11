@@ -672,6 +672,9 @@ const VocabStateManager = (() => {
     STATUS,
     MODES,
 
+    // 初始化
+    ensureInitialized,
+
     // 错题管理
     getAllErrors,
     addError,
@@ -681,10 +684,15 @@ const VocabStateManager = (() => {
     deleteError,
     getPendingErrors,
     getMasteredErrors,
+    getNextPendingError,
     getRandomPendingError,
     markCorrect,
     markIncorrect,
     resetAllErrors,
+
+    // 拼写特训营
+    getSpellingErrors,
+    getSpellingLevels,
 
     // 训练记录
     saveTrainingRecord,
