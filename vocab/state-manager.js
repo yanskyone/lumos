@@ -359,20 +359,14 @@ const VocabStateManager = (() => {
     return passRate >= 0.8;
   }
 
-  // 答对错题（更新正确次数）
+  // 答对错题（答对1次就标记为已掌握）
   function markCorrect(id) {
     const error = getError(id);
     if (!error) return null;
 
-    error.correctCount = (error.correctCount || 0) + 1;
+    error.correctCount = 1;
+    error.status = STATUS.MASTERED;
     error.lastPracticedAt = new Date().toISOString();
-
-    // 答对 3 次标记为已掌握
-    if (error.correctCount >= 3) {
-      error.status = STATUS.MASTERED;
-    } else {
-      error.status = STATUS.PRACTICING;
-    }
 
     return updateError(id, error);
   }
