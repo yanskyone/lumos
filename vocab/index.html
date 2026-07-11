@@ -1239,41 +1239,64 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
         <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">
           ${word.meaning}
         </div>
-        <div style="font-size: 20px; margin-top: 12px;">
-          请输入这个音节：<span style="color: var(--primary); font-weight: bold;">${hint}</span>
+        <div style="font-size: 18px; margin: 16px 0;">
+          单词 "${word.word}" 共 ${syllables.length} 个音节
         </div>
       `;
       document.getElementById('word-phonetic').textContent = word.phonetic ? `/${word.phonetic}/` : '';
 
-      // 隐藏普通输入框，显示音节输入区域
-      document.getElementById('answer-input').style.display = 'none';
-
-      // 显示音节输入
+      // 创建音节输入区域
       let syllableEl = document.getElementById('from-zero-syllable-area');
       if (!syllableEl) {
         syllableEl = document.createElement('div');
         syllableEl.id = 'from-zero-syllable-area';
-        syllableEl.innerHTML = `
-          <div style="margin: 20px 0;">
-            <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">
-              完整单词：${word.word.length} 个字母
-            </div>
-            <div class="progress-bar" style="margin: 8px 0;">
-              <div class="progress-fill" id="from-zero-progress" style="width: ${(step / syllables.length) * 100}%"></div>
-            </div>
-            <div style="text-align: center; margin: 20px 0;">
-              <button class="btn btn-secondary" onclick="skipFromZeroSyllable()" style="margin: 4px;">
-                跳过这个音节 →
-              </button>
-            </div>
-          </div>
-        `;
         const trainingCard = document.querySelector('.training-card');
         trainingCard.insertBefore(syllableEl, document.getElementById('feedback-area'));
       }
 
+      // 构建已完成的音节展示
+      let completedSyllablesHtml = '';
+      for (let i = 0; i < step; i++) {
+        completedSyllablesHtml += `<span style="color: var(--primary); font-weight: bold; font-size: 18px;">${syllables[i]}</span> `;
+      }
+
+      syllableEl.innerHTML = `
+        <div style="margin: 20px 0;">
+          <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">
+            完整单词：${'_'.repeat(word.word.length)} (${word.word.length} 个字母)
+          </div>
+          <div class="progress-bar" style="margin: 12px 0;">
+            <div class="progress-fill" id="from-zero-progress" style="width: ${(step / syllables.length) * 100}%"></div>
+          </div>
+          <div style="text-align: center; margin: 16px 0;">
+            <div style="font-size: 14px; color: var(--text-secondary);">已完成：${completedSyllablesHtml || '(空)'}</div>
+          </div>
+          <div style="font-size: 16px; text-align: center; margin: 16px 0;">
+            第 ${step + 1}/${syllables.length} 音节：请输入 <span style="color: var(--primary); font-weight: bold; font-size: 20px;">${hint}</span>
+          </div>
+          <input type="text" id="syllable-input"
+                 class="answer-input"
+                 placeholder="输入音节..."
+                 autocomplete="off"
+                 autocorrect="off"
+                 autocapitalize="none"
+                 spellcheck="false"
+                 style="margin: 12px 0;">
+          <button class="btn btn-primary" onclick="checkSyllableAnswer()" style="margin-top: 12px;">
+            确认
+          </button>
+          <div style="text-align: center; margin-top: 12px;">
+            <button class="btn btn-ghost" onclick="skipFromZeroSyllable()" style="margin: 4px; font-size: 13px;">
+              跳过这个音节 →
+            </button>
+          </div>
+        </div>
+      `;
       syllableEl.style.display = 'block';
-      document.getElementById('from-zero-progress').style.width = `${(step / syllables.length) * 100}%`;
+
+      // 隐藏普通输入框和提交按钮
+      document.getElementById('answer-input').style.display = 'none';
+      document.querySelector('.btn-primary[onclick="checkAnswer()"]').style.display = 'none';
 
       // 隐藏反馈
       document.getElementById('feedback-area').classList.add('hidden');
@@ -1282,8 +1305,52 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       document.getElementById('training-progress').textContent =
         `词汇 ${wordIndex + 1}/${words.length} · 音节 ${step + 1}/${syllables.length}`;
 
-      // 隐藏提交按钮
-      document.querySelector('.btn-primary[onclick="checkAnswer()"]').style.display = 'none';
+      // 聚焦到输入框
+      setTimeout(() => {
+        const input = document.getElementById('syllable-input');
+        if (input) input.focus();
+      }, 100);
+    }
+
+    function checkSyllableAnswer() {
+      const input = document.getElementById('syllable-input');
+      if (!input) return;
+
+      const userAnswer = input.value.trim().toLowerCase();
+      const words = trainingState.fromZeroWords;
+      const word = words[trainingState.fromZeroIndex];
+      const syllables = VocabStateManager.getSyllableHint(word.word);
+      const step = trainingState.fromZeroStep;
+      const correctSyllable = syllables[step].toLowerCase();
+
+      if (userAnswer === correctSyllable) {
+        // 正确！进入下一个音节
+        trainingState.fromZeroStep++;
+        showFromZeroStep();
+      } else {
+        // 错误，显示鼓励反馈
+        const feedbackEl = document.getElementById('feedback-area');
+        feedbackEl.classList.remove('hidden');
+        feedbackEl.innerHTML = `
+          <div class="feedback incorrect">
+            <div class="feedback-emoji">😊</div>
+            <div class="feedback-text">${getRandomFeedback('wrong')}</div>
+            <div class="correct-answer">提示：这个音节是 "${correctSyllable}"</div>
+          </div>
+          <button class="btn btn-primary" onclick="nextFromZeroSyllableAttempt()">再试一次</button>
+        `;
+      }
+    }
+
+    function nextFromZeroSyllableAttempt() {
+      // 清空输入框并重新聚焦
+      const input = document.getElementById('syllable-input');
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+      // 隐藏反馈
+      document.getElementById('feedback-area').classList.add('hidden');
     }
 
     function skipFromZeroSyllable() {
