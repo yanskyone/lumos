@@ -98,35 +98,51 @@ const VocabStateManager = (() => {
   let _initPromise = null;
 
   async function ensureInitialized() {
-    if (_initialized) return;
-    if (_initPromise) return _initPromise;
+    // 如果已经初始化过，直接返回
+    if (_initialized) {
+      console.log('[VocabStateManager] 已初始化，跳过');
+      return;
+    }
+
+    // 如果正在初始化中，等待完成
+    if (_initPromise) {
+      console.log('[VocabStateManager] 正在初始化中，等待...');
+      await _initPromise;
+      return;
+    }
 
     const existingErrors = getAllErrors();
 
     // 如果已经有数据，不需要重新初始化
     if (existingErrors.length > 0) {
+      console.log('[VocabStateManager] localStorage 已有 ' + existingErrors.length + ' 条数据');
       _initialized = true;
       return;
     }
 
     // 尝试从本地 JSON 文件加载数据
+    console.log('[VocabStateManager] localStorage 为空，开始从 JSON 加载...');
     _initPromise = loadFromJsonFile();
     await _initPromise;
     _initialized = true;
+    console.log('[VocabStateManager] 初始化完成');
   }
 
   async function loadFromJsonFile() {
     try {
-      console.log('[VocabStateManager] 正在加载本地数据文件...');
+      console.log('[VocabStateManager] 正在加载 data/errors.json...');
       const response = await fetch('data/errors.json');
+
       if (!response.ok) {
-        console.warn('[VocabStateManager] 未找到本地数据文件');
+        console.warn('[VocabStateManager] fetch 失败, status:', response.status);
         return;
       }
 
       const data = await response.json();
+      console.log('[VocabStateManager] JSON 解析完成，errors 数量:', data.errors ? data.errors.length : 0);
+
       if (data.errors && data.errors.length > 0) {
-        console.log('[VocabStateManager] 找到 ' + data.errors.length + ' 条错题，开始初始化...');
+        console.log('[VocabStateManager] 开始转换 ' + data.errors.length + ' 条错题...');
 
         const errors = data.errors.map((e, index) => ({
           id: 've-' + (index + 1).toString().padStart(3, '0'),
@@ -146,6 +162,7 @@ const VocabStateManager = (() => {
         }));
 
         saveAllErrors(errors);
+        console.log('[VocabStateManager] 已保存 ' + errors.length + ' 条到 localStorage');
 
         // 创建初始批次记录
         createBatch({

@@ -849,6 +849,8 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       const weekly = VocabStateManager.getWeeklyProgress();
       const today = VocabStateManager.getTodayStats();
 
+      console.log('[updateMainStats] stats:', stats);
+
       document.getElementById('stat-total').textContent = stats.total;
       document.getElementById('stat-mastered').textContent = stats.mastered;
       document.getElementById('stat-pending').textContent = stats.pending + stats.practicing;
@@ -1302,11 +1304,21 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
 
     // ========== 初始化 ==========
     async function init() {
+      console.log('[Lumos Vocab] 开始初始化...');
+
       // 确保数据已加载（首次从本地 JSON 初始化）
       await VocabStateManager.ensureInitialized();
+
       initialized = true;
       updateMainStats();
-      console.log('[Lumos Vocab] Initialized');
+
+      // 验证数据是否加载成功
+      const stats = VocabStateManager.getStats();
+      console.log('[Lumos Vocab] 初始化完成，统计数据:', stats);
+
+      if (stats.total === 0) {
+        console.warn('[Lumos Vocab] 数据加载失败，stats.total 为 0');
+      }
     }
 
     init();
