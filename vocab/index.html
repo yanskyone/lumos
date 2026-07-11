@@ -1319,10 +1319,10 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       document.getElementById('syllable-current').innerHTML = `第 ${step + 1}/${syllables.length} 音节：请输入 <span style="color: var(--primary); font-weight: bold; font-size: 20px;">${syllables[step]}</span>`;
 
       // 显示音节区域，隐藏普通输入
-      document.getElementById('syllable-area').style.display = 'block';
-      document.getElementById('answer-input').style.display = 'none';
-      document.getElementById('btn-submit-answer').style.display = 'none';
-      document.getElementById('feedback-area').style.display = 'none';
+      document.getElementById('syllable-area').classList.remove('hidden');
+      document.getElementById('answer-input').classList.add('hidden');
+      document.getElementById('btn-submit-answer').classList.add('hidden');
+      document.getElementById('feedback-area').classList.add('hidden');
 
       // 清空并聚焦输入框
       document.getElementById('syllable-input').value = '';
@@ -1358,7 +1358,7 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       } else {
         console.log('[checkSyllableAnswer] wrong, expected:', correctSyllable, 'got:', userAnswer);
         const feedbackEl = document.getElementById('feedback-area');
-        feedbackEl.style.display = 'block';
+        feedbackEl.classList.remove('hidden');
         feedbackEl.innerHTML = `
           <div class="feedback incorrect">
             <div class="feedback-emoji">😊</div>
@@ -1404,7 +1404,7 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
     function showFromZeroWordComplete(word) {
       console.log('[showFromZeroWordComplete] word:', word.word);
       const feedbackEl = document.getElementById('feedback-area');
-      feedbackEl.style.display = 'block';
+      feedbackEl.classList.remove('hidden');
       feedbackEl.innerHTML = `
         <div class="feedback correct">
           <div class="feedback-emoji">🎉</div>
@@ -1874,8 +1874,8 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       // 清理从零学词语义节区域
       document.getElementById('syllable-area').classList.add('hidden');
       // 恢复输入框和提交按钮
-      document.getElementById('answer-input').style.display = 'block';
-      document.getElementById('btn-submit-answer').style.display = 'block';
+      document.getElementById('answer-input').classList.remove('hidden');
+      document.getElementById('btn-submit-answer').classList.remove('hidden');
     }
 
     // ========== Toast ==========
