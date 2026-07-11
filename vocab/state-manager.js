@@ -47,6 +47,80 @@ const VocabStateManager = (() => {
     REVIEW:       'review',       // 复盘
   };
 
+  // 混淆词对定义（手动定义常见易混词对）
+  const CONFUSION_PAIRS = [
+    { word: 'sale', meaning: '特价销售（名词）', confused: 'sell', confusedMeaning: '卖（动词）' },
+    { word: 'raise', meaning: '举起；增加（动词）', confused: 'rise', confusedMeaning: '升起；起立（动词）' },
+    { word: 'lie', meaning: '躺；撒谎（不及物动词）', confused: 'lay', confusedMeaning: '放置（及物动词）' },
+    { word: 'sit', meaning: '坐（不及物动词）', confused: 'set', confusedMeaning: '设置；放置（及物动词）' },
+    { word: 'wear', meaning: '穿（衣服）（持续动作）', confused: 'put on', confusedMeaning: '穿上（动作）' },
+    { word: 'study', meaning: '学习（持续性）', confused: 'learn', confusedMeaning: '学会（结果）' },
+    { word: 'lost', meaning: '丢失（过去式/过去分词）', confused: 'lose', confusedMeaning: '丢失（原形）' },
+    { word: 'expensive', meaning: '昂贵的', confused: 'cheap', confusedMeaning: '便宜的' },
+    { word: 'quiet', meaning: '安静的', confused: 'quite', confusedMeaning: '相当；十分' },
+    { word: 'beside', meaning: '在...旁边', confused: 'besides', confusedMeaning: '而且；此外' },
+    { word: 'weather', meaning: '天气', confused: 'whether', confusedMeaning: '是否' },
+    { word: 'through', meaning: '穿过（空间）', confused: 'though', confusedMeaning: '虽然' },
+    { word: 'accept', meaning: '接受（主动）', confused: 'except', confusedMeaning: '除了' },
+    { word: 'effect', meaning: '效果（名词）', confused: 'affect', confusedMeaning: '影响（动词）' },
+    { word: 'principle', meaning: '原则（名词）', confused: 'principal', confusedMeaning: '主要的；校长' },
+  ];
+
+  // 从数据中识别混淆词对
+  function getConfusionPairsFromErrors() {
+    const errors = getAllErrors();
+    const pairs = [];
+    const processed = new Set();
+
+    for (const e of errors) {
+      if (processed.has(e.word.toLowerCase())) continue;
+
+      const note = (e.errorNote || '').toLowerCase();
+      const meaning = (e.meaning || '').toLowerCase();
+
+      // 识别主/宾格混淆
+      if (note.includes('主/宾格') || note.includes('主格') || note.includes('宾格')) {
+        if (e.word === 'he' || e.word === 'she') {
+          const other = e.word === 'he' ? { word: 'she', meaning: '她' } : { word: 'he', meaning: '他' };
+          pairs.push({
+            word: e.word,
+            meaning: e.meaning,
+            confused: other.word,
+            confusedMeaning: other.meaning,
+            type: '主格/宾格'
+          });
+          processed.add(e.word.toLowerCase());
+          processed.add(other.word.toLowerCase());
+        }
+      }
+
+      // 识别名词/动词混淆
+      if (note.includes('名/动') || note.includes('名/动混淆')) {
+        // 尝试找配对
+        for (const e2 of errors) {
+          if (e2.word.toLowerCase() === e.word.toLowerCase()) continue;
+          if (processed.has(e2.word.toLowerCase())) continue;
+
+          const note2 = (e2.errorNote || '').toLowerCase();
+          if (note2.includes('名/动') || note2.includes('名/动混淆')) {
+            pairs.push({
+              word: e.word,
+              meaning: e.meaning,
+              confused: e2.word,
+              confusedMeaning: e2.meaning,
+              type: '名词/动词'
+            });
+            processed.add(e.word.toLowerCase());
+            processed.add(e2.word.toLowerCase());
+            break;
+          }
+        }
+      }
+    }
+
+    return pairs;
+  }
+
   // ========== 内部工具函数 ==========
 
   function safeJsonParse(raw, defaultValue) {
@@ -367,6 +441,85 @@ const VocabStateManager = (() => {
   function checkLevelPass(correctCount, totalCount) {
     const passRate = totalCount > 0 ? correctCount / totalCount : 0;
     return passRate >= 0.8;
+  }
+
+  // ========== 混淆词大作战专用方法 ==========
+
+  // 获取所有混淆词对（预设 + 从数据识别）
+  function getAllConfusionPairs() {
+    const pairs = [...CONFUSION_PAIRS];
+    const fromErrors = getConfusionPairsFromErrors();
+    for (const p of fromErrors) {
+      // 避免重复
+      const exists = pairs.some(ex =>
+        (ex.word.toLowerCase() === p.word.toLowerCase()) ||
+        (ex.word.toLowerCase() === p.confused.toLowerCase())
+      );
+      if (!exists) {
+        pairs.push(p);
+      }
+    }
+    return pairs;
+  }
+
+  // 获取混淆词对练习题目（随机打乱）
+  function getConfusionQuestions(count = 10) {
+    const pairs = getAllConfusionPairs();
+    // 随机选择
+    const shuffled = [...pairs].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, Math.min(count, shuffled.length));
+  }
+
+  // 检查混淆词对是否掌握（连续答对2次）
+  function getConfusionMasteredCount() {
+    const errors = getAllErrors();
+    // 简化：返回已通过混淆训练的记录数
+    const records = getTrainingRecords();
+    return records.filter(r => r.mode === MODES.CONFUSION && r.isCorrect).length;
+  }
+
+  // ========== 从零学词专用方法 ==========
+
+  // 获取适合"从零学词"的词（完全不会的）
+  function getFromZeroWords() {
+    const errors = getAllErrors();
+    // 筛选：状态为 pending 或 practicing，且从未被标记为 practicing 的
+    // 简化：返回未掌握的词，按创建时间排序
+    return errors
+      .filter(e => e.status !== STATUS.MASTERED)
+      .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+  }
+
+  // 获取单词的音节提示
+  function getSyllableHint(word) {
+    // 简单的音节分割启发式算法
+    const vowels = 'aeiouAEIOU';
+    const syllables = [];
+    let current = '';
+
+    for (let i = 0; i < word.length; i++) {
+      const char = word[i];
+      current += char;
+
+      // 如果是元音，检查是否需要分割
+      if (vowels.includes(char)) {
+        // 查看后面是否有辅音+元音组合，可能是下一个音节
+        if (i + 1 < word.length && !vowels.includes(word[i + 1])) {
+          // 继续看下一个
+          if (i + 2 < word.length && vowels.includes(word[i + 2])) {
+            // 辅音+元音组合，可以分割
+            syllables.push(current);
+            current = '';
+          }
+        }
+      }
+    }
+
+    if (current) {
+      syllables.push(current);
+    }
+
+    return syllables.length > 1 ? syllables : [word];
   }
 
   // 答对错题（答对1次就标记为已掌握，记录通过的模式）
@@ -710,6 +863,16 @@ const VocabStateManager = (() => {
     // 拼写特训营
     getSpellingErrors,
     getSpellingLevels,
+
+    // 混淆词大作战
+    getAllConfusionPairs,
+    getConfusionQuestions,
+    getConfusionMasteredCount,
+    CONFUSION_PAIRS,
+
+    // 从零学词
+    getFromZeroWords,
+    getSyllableHint,
 
     // 训练记录
     saveTrainingRecord,

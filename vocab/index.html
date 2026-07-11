@@ -604,6 +604,14 @@
 
           <div class="mode-card" onclick="startTraining('spelling')">
             <div class="mode-icon">🎯</div>
+
+          <div class="mode-card" onclick="startTraining('confusion')">
+            <div class="mode-icon">🔀</div>
+            <div class="mode-info">
+              <div class="mode-title">混淆词大作战</div>
+              <div class="mode-desc">区分易混词，如 sale vs sell</div>
+            </div>
+          </div>
             <div class="mode-info">
               <div class="mode-title">拼写特训营</div>
               <div class="mode-desc">闯关模式，答对80%通关（适合拼写错误）</div>
@@ -680,6 +688,10 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
 
       <button class="btn btn-secondary" style="margin-top: 16px;" onclick="exportData()">
         📤 导出备份
+      </button>
+
+      <button class="btn btn-secondary" style="margin-top: 16px;" onclick="exportPracticeList()">
+        📝 导出默写清单
       </button>
     </div>
 
@@ -813,6 +825,9 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
 
       // 隐藏训练模式选择
       hideTrainingModeSelect();
+
+      // 清理训练特殊UI
+      cleanupTrainingUI();
 
       // 刷新视图数据
       if (view === 'main') {
@@ -982,6 +997,81 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       showToast('数据已导出~');
     }
 
+    // ========== 导出默写清单 ==========
+    function exportPracticeList() {
+      const errors = VocabStateManager.getAllErrors();
+      const pending = errors.filter(e => e.status !== 'mastered');
+
+      if (pending.length === 0) {
+        showToast('🎉 所有词都已掌握啦！');
+        return;
+      }
+
+      // 生成默写清单 HTML
+      const html = generatePracticeListHTML(pending);
+
+      // 下载
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `lumos-默写清单-${new Date().toISOString().split('T')[0]}.html`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      showToast(`已导出 ${pending.length} 个词的默写清单~`);
+    }
+
+    function generatePracticeListHTML(errors) {
+      // 按单元分组
+      const byUnit = {};
+      for (const e of errors) {
+        const unit = e.unit || '未分类';
+        if (!byUnit[unit]) byUnit[unit] = [];
+        byUnit[unit].push(e);
+      }
+
+      let rows = '';
+      for (const [unit, words] of Object.entries(byUnit)) {
+        rows += `<tr><td colspan="3" style="background: #e8f5e9; font-weight: bold; padding: 8px;">${unit}</td></tr>`;
+        for (const w of words) {
+          rows += `
+            <tr>
+              <td style="padding: 8px; border: 1px solid #e0e0e0;">${w.word}</td>
+              <td style="padding: 8px; border: 1px solid #e0e0e0;">${w.phonetic || ''}</td>
+              <td style="padding: 8px; border: 1px solid #e0e0e0; width: 40%;">${w.meaning}</td>
+            </tr>
+          `;
+        }
+      }
+
+      return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Lumos 默写清单</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    h1 { text-align: center; color: #4CAF50; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th { background: #f5f5f5; padding: 10px; border: 1px solid #e0e0e0; text-align: left; }
+  </style>
+</head>
+<body>
+  <h1>📝 Lumos 默写清单</h1>
+  <p style="text-align: center; color: #666;">共 ${errors.length} 个词 | 日期：${new Date().toLocaleDateString()}</p>
+  <table>
+    <tr>
+      <th style="width: 25%;">单词</th>
+      <th style="width: 20%;">音标</th>
+      <th style="width: 55%;">中文</th>
+    </tr>
+    ${rows}
+  </table>
+</body>
+</html>`;
+    }
+
     // ========== 训练 ==========
     function startTraining(mode) {
       // 隐藏模式选择
@@ -1048,6 +1138,302 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       nextWord();
     }
 
+    // ========== 从零学词 ==========
+    function showFromZeroStep() {
+      const words = trainingState.fromZeroWords;
+      const wordIndex = trainingState.fromZeroIndex;
+
+      if (wordIndex >= words.length) {
+        // 全部完成
+        showFromZeroComplete();
+        return;
+      }
+
+      const word = words[wordIndex];
+      const syllables = VocabStateManager.getSyllableHint(word.word);
+      const step = trainingState.fromZeroStep;
+
+      if (step >= syllables.length) {
+        // 当前词完成，进入下一个
+        // 标记为已掌握
+        VocabStateManager.markCorrect(word.id, 'from_zero');
+        trainingState.sessionCorrect++;
+        trainingState.sessionTotal++;
+
+        // 显示完成动画
+        showFromZeroWordComplete(word);
+
+        // 重置步骤，准备下一个词
+        trainingState.fromZeroStep = 0;
+        trainingState.fromZeroIndex++;
+        return;
+      }
+
+      // 显示当前音节
+      const hint = syllables[step];
+
+      document.getElementById('word-meaning').innerHTML = `
+        <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">
+          ${word.meaning}
+        </div>
+        <div style="font-size: 20px; margin-top: 12px;">
+          请输入这个音节：<span style="color: var(--primary); font-weight: bold;">${hint}</span>
+        </div>
+      `;
+      document.getElementById('word-phonetic').textContent = word.phonetic ? `/${word.phonetic}/` : '';
+
+      // 隐藏普通输入框，显示音节输入区域
+      document.getElementById('answer-input').style.display = 'none';
+
+      // 显示音节输入
+      let syllableEl = document.getElementById('from-zero-syllable-area');
+      if (!syllableEl) {
+        syllableEl = document.createElement('div');
+        syllableEl.id = 'from-zero-syllable-area';
+        syllableEl.innerHTML = `
+          <div style="margin: 20px 0;">
+            <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">
+              完整单词：${word.word.length} 个字母
+            </div>
+            <div class="progress-bar" style="margin: 8px 0;">
+              <div class="progress-fill" id="from-zero-progress" style="width: ${(step / syllables.length) * 100}%"></div>
+            </div>
+            <div style="text-align: center; margin: 20px 0;">
+              <button class="btn btn-secondary" onclick="skipFromZeroSyllable()" style="margin: 4px;">
+                跳过这个音节 →
+              </button>
+            </div>
+          </div>
+        `;
+        const trainingCard = document.querySelector('.training-card');
+        trainingCard.insertBefore(syllableEl, document.getElementById('feedback-area'));
+      }
+
+      syllableEl.style.display = 'block';
+      document.getElementById('from-zero-progress').style.width = `${(step / syllables.length) * 100}%`;
+
+      // 隐藏反馈
+      document.getElementById('feedback-area').classList.add('hidden');
+
+      // 更新进度
+      document.getElementById('training-progress').textContent =
+        `词汇 ${wordIndex + 1}/${words.length} · 音节 ${step + 1}/${syllables.length}`;
+
+      // 隐藏提交按钮
+      document.querySelector('.btn-primary[onclick="checkAnswer()"]').style.display = 'none';
+    }
+
+    function skipFromZeroSyllable() {
+      const words = trainingState.fromZeroWords;
+      const word = words[trainingState.fromZeroIndex];
+      const syllables = VocabStateManager.getSyllableHint(word.word);
+
+      trainingState.fromZeroStep++;
+
+      if (trainingState.fromZeroStep >= syllables.length) {
+        // 当前词完成
+        VocabStateManager.markCorrect(word.id, 'from_zero');
+        trainingState.sessionCorrect++;
+        trainingState.sessionTotal++;
+        showFromZeroWordComplete(word);
+        trainingState.fromZeroStep = 0;
+        trainingState.fromZeroIndex++;
+      } else {
+        showFromZeroStep();
+      }
+    }
+
+    function showFromZeroWordComplete(word) {
+      const feedbackEl = document.getElementById('feedback-area');
+      feedbackEl.classList.remove('hidden');
+      feedbackEl.innerHTML = `
+        <div class="feedback correct">
+          <div class="feedback-emoji">🎉</div>
+          <div style="font-size: 24px; font-weight: bold; margin: 12px 0;">
+            ${word.word}
+          </div>
+          <div class="feedback-text">又认识一个新词！</div>
+        </div>
+        <button class="btn btn-primary" onclick="nextFromZeroWord()">下一个词 →</button>
+      `;
+
+      // 隐藏音节区域
+      const syllableEl = document.getElementById('from-zero-syllable-area');
+      if (syllableEl) syllableEl.style.display = 'none';
+    }
+
+    function nextFromZeroWord() {
+      showFromZeroStep();
+    }
+
+    function showFromZeroComplete() {
+      trainingState.active = false;
+      if (trainingState.timerInterval) {
+        clearInterval(trainingState.timerInterval);
+      }
+
+      const modal = document.getElementById('time-limit-modal');
+      modal.querySelector('.modal-title').textContent = '🎉 从零学词完成！';
+      modal.querySelector('.modal-text').innerHTML =
+        `学会了 <strong>${trainingState.sessionCorrect}</strong> 个新词！<br><br>` +
+        `太棒了！词汇量又增加了~`;
+      modal.querySelector('.btn-primary').textContent = '返回主页';
+      modal.querySelector('.btn-primary').onclick = () => {
+        modal.classList.remove('show');
+        showView('main');
+      };
+      modal.classList.add('show');
+    }
+
+    // ========== 混淆词大作战 ==========
+    function showConfusionQuestion() {
+      const questions = trainingState.confusionQuestions;
+      const idx = trainingState.confusionIndex;
+
+      if (idx >= questions.length) {
+        // 全部完成
+        showConfusionComplete();
+        return;
+      }
+
+      const pair = questions[idx];
+      // 随机决定显示哪个词作为题目
+      const showFirst = Math.random() > 0.5;
+      trainingState.showConfusedWord = showFirst;
+
+      const mainWord = showFirst ? pair.word : pair.confused;
+      const mainMeaning = showFirst ? pair.meaning : pair.confusedMeaning;
+      const confusedWord = showFirst ? pair.confused : pair.word;
+      const confusedMeaning = showFirst ? pair.confusedMeaning : pair.meaning;
+
+      // 更新界面
+      document.getElementById('word-meaning').innerHTML = `
+        <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">
+          请选择正确的单词：
+        </div>
+        <div style="font-size: 16px; margin-bottom: 8px;">${mainMeaning}</div>
+        <div style="font-size: 14px; color: var(--text-secondary);">
+          哪个是"${mainMeaning}"？
+        </div>
+      `;
+      document.getElementById('word-phonetic').textContent = '';
+
+      // 显示选项
+      const optionsHtml = `
+        <div class="confusion-options" style="display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap; justify-content: center;">
+          <button class="btn btn-secondary" onclick="checkConfusionAnswer('${pair.word}')" style="flex: 1; min-width: 120px;">
+            ${pair.word}
+          </button>
+          <button class="btn btn-secondary" onclick="checkConfusionAnswer('${pair.confused}')" style="flex: 1; min-width: 120px;">
+            ${pair.confused}
+          </button>
+        </div>
+      `;
+
+      document.getElementById('answer-input').style.display = 'none';
+      document.getElementById('feedback-area').classList.add('hidden');
+
+      // 在输入框前插入选项
+      const inputArea = document.querySelector('.answer-input');
+      if (inputArea) {
+        inputArea.style.display = 'none';
+      }
+
+      // 显示选项区域
+      let optionsEl = document.getElementById('confusion-options-area');
+      if (!optionsEl) {
+        optionsEl = document.createElement('div');
+        optionsEl.id = 'confusion-options-area';
+        const trainingCard = document.querySelector('.training-card');
+        trainingCard.insertBefore(optionsEl, document.getElementById('feedback-area'));
+      }
+      optionsEl.innerHTML = optionsHtml;
+      optionsEl.style.display = 'block';
+
+      // 隐藏提交按钮
+      document.querySelector('.btn-primary[onclick="checkAnswer()"]').style.display = 'none';
+
+      // 更新进度
+      document.getElementById('training-progress').textContent =
+        `进度: ${idx + 1}/${questions.length} ✨`;
+    }
+
+    function checkConfusionAnswer(answer) {
+      const pair = trainingState.confusionQuestions[trainingState.confusionIndex];
+      const isCorrect = answer === (trainingState.showConfusedWord ? pair.word : pair.confused);
+
+      // 记录训练
+      VocabStateManager.saveTrainingRecord({
+        errorId: 'confusion-' + pair.word + '-vs-' + pair.confused,
+        mode: 'confusion',
+        isCorrect,
+        responseTime: Date.now() - trainingState.startTime,
+      });
+
+      trainingState.sessionTotal++;
+      if (isCorrect) trainingState.sessionCorrect++;
+
+      // 显示反馈
+      const optionsEl = document.getElementById('confusion-options-area');
+      if (optionsEl) optionsEl.style.display = 'none';
+
+      const feedbackEl = document.getElementById('feedback-area');
+      feedbackEl.classList.remove('hidden');
+
+      const mainWord = trainingState.showConfusedWord ? pair.word : pair.confused;
+      const confusedWord = trainingState.showConfusedWord ? pair.confused : pair.word;
+
+      if (isCorrect) {
+        feedbackEl.innerHTML = `
+          <div class="feedback correct">
+            <div class="feedback-emoji">🌟</div>
+            <div class="feedback-text">选对啦！${mainWord} 是"${pair.meaning}"</div>
+            <div class="correct-answer">${confusedWord} = ${trainingState.showConfusedWord ? pair.confusedMeaning : pair.meaning}</div>
+          </div>
+          <button class="btn btn-primary" onclick="nextConfusionQuestion()">下一题 →</button>
+        `;
+      } else {
+        feedbackEl.innerHTML = `
+          <div class="feedback incorrect">
+            <div class="feedback-emoji">😊</div>
+            <div class="feedback-text">这两个词确实很容易混~</div>
+            <div class="correct-answer">${mainWord} = ${pair.meaning}</div>
+            <div class="correct-answer" style="color: var(--text-secondary);">${confusedWord} = ${pair.confusedMeaning}</div>
+          </div>
+          <button class="btn btn-primary" onclick="nextConfusionQuestion()">继续 →</button>
+        `;
+      }
+    }
+
+    function nextConfusionQuestion() {
+      trainingState.confusionIndex++;
+      showConfusionQuestion();
+    }
+
+    function showConfusionComplete() {
+      trainingState.active = false;
+      if (trainingState.timerInterval) {
+        clearInterval(trainingState.timerInterval);
+      }
+
+      const accuracy = trainingState.sessionTotal > 0
+        ? Math.round(trainingState.sessionCorrect / trainingState.sessionTotal * 100)
+        : 0;
+
+      const modal = document.getElementById('time-limit-modal');
+      modal.querySelector('.modal-title').textContent = '🎉 混淆词练习完成！';
+      modal.querySelector('.modal-text').innerHTML =
+        `正确率 ${accuracy}%！<br>` +
+        `${trainingState.sessionCorrect}/${trainingState.sessionTotal} 题答对！<br><br>` +
+        `太棒了！继续加油~`;
+      modal.querySelector('.btn-primary').textContent = '返回主页';
+      modal.querySelector('.btn-primary').onclick = () => {
+        modal.classList.remove('show');
+        showView('main');
+      };
+      modal.classList.add('show');
+    }
+
     function updateTimer() {
       if (!trainingState.active || !trainingState.startTime) return;
 
@@ -1083,6 +1469,18 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
     }
 
     function nextWord() {
+      // 混淆词大作战
+      if (trainingState.mode === 'confusion') {
+        showConfusionQuestion();
+        return;
+      }
+
+      // 从零学词
+      if (trainingState.mode === 'from_zero') {
+        showFromZeroStep();
+        return;
+      }
+
       let error = null;
 
       if (trainingState.mode === 'flash_war') {
@@ -1301,7 +1699,22 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       if (trainingState.timerInterval) {
         clearInterval(trainingState.timerInterval);
       }
+      // 清理所有特殊区域的显示
+      cleanupTrainingUI();
       showView('main');
+    }
+
+    function cleanupTrainingUI() {
+      // 清理混淆词选项区域
+      const optionsEl = document.getElementById('confusion-options-area');
+      if (optionsEl) optionsEl.style.display = 'none';
+      // 清理从零学词语义节区域
+      const syllableEl = document.getElementById('from-zero-syllable-area');
+      if (syllableEl) syllableEl.style.display = 'none';
+      // 恢复输入框和提交按钮
+      document.getElementById('answer-input').style.display = 'block';
+      const submitBtn = document.querySelector('.btn-primary[onclick="checkAnswer()"]');
+      if (submitBtn) submitBtn.style.display = 'block';
     }
 
     // ========== Toast ==========
