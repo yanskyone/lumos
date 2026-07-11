@@ -1267,6 +1267,8 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       const words = trainingState.fromZeroWords;
       const wordIndex = trainingState.fromZeroIndex;
 
+      console.log('[showFromZeroStep] words.length:', words.length, 'wordIndex:', wordIndex);
+
       if (wordIndex >= words.length) {
         // 全部完成
         showFromZeroComplete();
@@ -1276,6 +1278,8 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       const word = words[wordIndex];
       const syllables = VocabStateManager.getSyllableHint(word.word);
       const step = trainingState.fromZeroStep;
+
+      console.log('[showFromZeroStep] word:', word.word, 'syllables:', syllables, 'step:', step);
 
       if (step >= syllables.length) {
         // 当前词完成，进入下一个
@@ -1287,6 +1291,7 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
 
         trainingState.fromZeroStep = 0;
         trainingState.fromZeroIndex++;
+        console.log('[showFromZeroStep] Word complete, next index:', trainingState.fromZeroIndex);
         return;
       }
 
@@ -1314,14 +1319,17 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       document.getElementById('syllable-current').innerHTML = `第 ${step + 1}/${syllables.length} 音节：请输入 <span style="color: var(--primary); font-weight: bold; font-size: 20px;">${syllables[step]}</span>`;
 
       // 显示音节区域，隐藏普通输入
-      document.getElementById('syllable-area').classList.remove('hidden');
+      document.getElementById('syllable-area').style.display = 'block';
       document.getElementById('answer-input').style.display = 'none';
       document.getElementById('btn-submit-answer').style.display = 'none';
-      document.getElementById('feedback-area').classList.add('hidden');
+      document.getElementById('feedback-area').style.display = 'none';
 
       // 清空并聚焦输入框
       document.getElementById('syllable-input').value = '';
-      setTimeout(() => document.getElementById('syllable-input').focus(), 100);
+      setTimeout(() => {
+        const inp = document.getElementById('syllable-input');
+        if (inp) inp.focus();
+      }, 150);
 
       // 更新进度
       document.getElementById('training-progress').textContent =
@@ -1329,9 +1337,10 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
     }
 
     function checkSyllableAnswer() {
+      console.log('[checkSyllableAnswer] called');
       const input = document.getElementById('syllable-input');
       if (!input) {
-        alert('输入框未找到');
+        alert('输入框未找到，请刷新重试');
         return;
       }
 
@@ -1343,11 +1352,13 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       const correctSyllable = syllables[step].toLowerCase();
 
       if (userAnswer === correctSyllable) {
+        console.log('[checkSyllableAnswer] correct!');
         trainingState.fromZeroStep++;
         showFromZeroStep();
       } else {
+        console.log('[checkSyllableAnswer] wrong, expected:', correctSyllable, 'got:', userAnswer);
         const feedbackEl = document.getElementById('feedback-area');
-        feedbackEl.classList.remove('hidden');
+        feedbackEl.style.display = 'block';
         feedbackEl.innerHTML = `
           <div class="feedback incorrect">
             <div class="feedback-emoji">😊</div>
@@ -1369,6 +1380,7 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
     }
 
     function skipFromZeroSyllable() {
+      console.log('[skipFromZeroSyllable] called');
       const words = trainingState.fromZeroWords;
       const word = words[trainingState.fromZeroIndex];
       const syllables = VocabStateManager.getSyllableHint(word.word);
@@ -1376,6 +1388,7 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       trainingState.fromZeroStep++;
 
       if (trainingState.fromZeroStep >= syllables.length) {
+        console.log('[skipFromZeroSyllable] word complete:', word.word);
         VocabStateManager.markCorrect(word.id, 'from_zero');
         trainingState.sessionCorrect++;
         trainingState.sessionTotal++;
@@ -1383,13 +1396,15 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
         trainingState.fromZeroStep = 0;
         trainingState.fromZeroIndex++;
       } else {
+        console.log('[skipFromZeroSyllable] next step:', trainingState.fromZeroStep);
         showFromZeroStep();
       }
     }
 
     function showFromZeroWordComplete(word) {
+      console.log('[showFromZeroWordComplete] word:', word.word);
       const feedbackEl = document.getElementById('feedback-area');
-      feedbackEl.classList.remove('hidden');
+      feedbackEl.style.display = 'block';
       feedbackEl.innerHTML = `
         <div class="feedback correct">
           <div class="feedback-emoji">🎉</div>
