@@ -1320,18 +1320,32 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
                  autocorrect="off"
                  autocapitalize="none"
                  spellcheck="false"
+                 inputmode="text"
                  style="margin: 12px 0;">
-          <button class="btn btn-primary" onclick="checkSyllableAnswer()" style="margin-top: 12px;">
+          <button id="syllable-submit-btn" class="btn btn-primary" style="margin-top: 12px;">
             确认
           </button>
           <div style="text-align: center; margin-top: 12px;">
-            <button class="btn btn-ghost" onclick="skipFromZeroSyllable()" style="margin: 4px; font-size: 13px;">
+            <button id="syllable-skip-btn" class="btn btn-ghost" style="margin: 4px; font-size: 13px;">
               跳过这个音节 →
             </button>
           </div>
         </div>
       `;
       syllableEl.style.display = 'block';
+
+      // 使用事件监听器而非 onclick（移动端更可靠）
+      const submitBtn = document.getElementById('syllable-submit-btn');
+      const skipBtn = document.getElementById('syllable-skip-btn');
+      const inputEl = document.getElementById('syllable-input');
+
+      submitBtn.addEventListener('click', checkSyllableAnswer);
+      skipBtn.addEventListener('click', skipFromZeroSyllable);
+      inputEl.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          checkSyllableAnswer();
+        }
+      });
 
       // 隐藏普通输入框和提交按钮
       document.getElementById('answer-input').style.display = 'none';
