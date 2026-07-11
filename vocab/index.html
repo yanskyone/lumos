@@ -779,7 +779,7 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
-  <script src="state-manager.js"></script>
+  <script src="state-manager.js?v=2026071102"></script>
   <script>
     // ========== 状态 ==========
     let currentView = 'main';
@@ -1340,7 +1340,15 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       const inputEl = document.getElementById('syllable-input');
 
       submitBtn.addEventListener('click', checkSyllableAnswer);
+      submitBtn.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        checkSyllableAnswer();
+      });
       skipBtn.addEventListener('click', skipFromZeroSyllable);
+      skipBtn.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        skipFromZeroSyllable();
+      });
       inputEl.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
           checkSyllableAnswer();
@@ -1390,8 +1398,19 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
             <div class="feedback-text">${getRandomFeedback('wrong')}</div>
             <div class="correct-answer">提示：这个音节是 "${correctSyllable}"</div>
           </div>
-          <button class="btn btn-primary" onclick="nextFromZeroSyllableAttempt()">再试一次</button>
+          <button id="retry-btn" class="btn btn-primary">再试一次</button>
         `;
+        // 添加事件监听
+        setTimeout(() => {
+          const retryBtn = document.getElementById('retry-btn');
+          if (retryBtn) {
+            retryBtn.addEventListener('click', nextFromZeroSyllableAttempt);
+            retryBtn.addEventListener('touchend', function(e) {
+              e.preventDefault();
+              nextFromZeroSyllableAttempt();
+            });
+          }
+        }, 50);
       }
     }
 
@@ -1437,12 +1456,24 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
           </div>
           <div class="feedback-text">又认识一个新词！</div>
         </div>
-        <button class="btn btn-primary" onclick="nextFromZeroWord()">下一个词 →</button>
+        <button id="next-word-btn" class="btn btn-primary">下一个词 →</button>
       `;
 
       // 隐藏音节区域
       const syllableEl = document.getElementById('from-zero-syllable-area');
       if (syllableEl) syllableEl.style.display = 'none';
+
+      // 添加事件监听
+      setTimeout(() => {
+        const nextBtn = document.getElementById('next-word-btn');
+        if (nextBtn) {
+          nextBtn.addEventListener('click', nextFromZeroWord);
+          nextBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            nextFromZeroWord();
+          });
+        }
+      }, 50);
     }
 
     function nextFromZeroWord() {
