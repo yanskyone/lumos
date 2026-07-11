@@ -204,6 +204,49 @@ const VocabStateManager = (() => {
     return pending[Math.floor(Math.random() * pending.length)];
   }
 
+  // ========== 拼写特训营专用方法 ==========
+
+  // 获取拼写类错题
+  function getSpellingErrors() {
+    const errors = getAllErrors();
+    return errors.filter(e => e.category === CATEGORIES.SPELLING);
+  }
+
+  // 获取待复习的拼写类错题
+  function getPendingSpellingErrors() {
+    return getSpellingErrors().filter(e => e.status !== STATUS.MASTERED);
+  }
+
+  // 按关卡分组拼写错题（每关 5-10 个）
+  function getSpellingLevels() {
+    const pending = getPendingSpellingErrors();
+    const mastered = getMasteredErrors().filter(e => e.category === CATEGORIES.SPELLING);
+
+    const LEVEL_SIZE = 5; // 每关 5 个词
+
+    // 计算当前关卡
+    const currentLevel = Math.floor(mastered.length / LEVEL_SIZE) + 1;
+
+    // 获取当前关卡需要练习的词
+    const startIndex = mastered.length;
+    const levelWords = pending.slice(startIndex, startIndex + LEVEL_SIZE);
+
+    return {
+      currentLevel,
+      totalWords: getSpellingErrors().length,
+      masteredCount: mastered.length,
+      levelWords,      // 当前关卡的词
+      isCompleted: levelWords.length === 0 && pending.length === 0, // 全部通关
+      isLevelComplete: levelWords.length === 0 && pending.length > 0, // 当前关卡完成，等待下一关
+    };
+  }
+
+  // 检查当前关卡是否通过（正确率 >= 80%）
+  function checkLevelPass(correctCount, totalCount) {
+    const passRate = totalCount > 0 ? correctCount / totalCount : 0;
+    return passRate >= 0.8;
+  }
+
   // 答对错题（更新正确次数）
   function markCorrect(id) {
     const error = getError(id);

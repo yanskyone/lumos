@@ -564,7 +564,7 @@
       </div>
 
       <!-- Action Buttons -->
-      <button class="btn btn-primary" id="btn-start-training" onclick="startTraining()">
+      <button class="btn btn-primary" id="btn-start-training" onclick="showTrainingModeSelect()">
         ⚡ 开始训练
       </button>
 
@@ -575,6 +575,33 @@
         <button class="btn btn-secondary" onclick="showView('import')">
           📥 导入
         </button>
+      </div>
+
+      <!-- Training Mode Selection -->
+      <div id="training-mode-select" class="hidden" style="margin-top: 16px;">
+        <div class="card">
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">🎯 选择训练模式</div>
+
+          <div class="mode-card" onclick="startTraining('flash_war')">
+            <div class="mode-icon">⚡</div>
+            <div class="mode-info">
+              <div class="mode-title">词汇闪电战</div>
+              <div class="mode-desc">随机练习，快速反应（适合未学会的词）</div>
+            </div>
+          </div>
+
+          <div class="mode-card" onclick="startTraining('spelling')">
+            <div class="mode-icon">🎯</div>
+            <div class="mode-info">
+              <div class="mode-title">拼写特训营</div>
+              <div class="mode-desc">闯关模式，答对80%通关（适合拼写错误）</div>
+            </div>
+          </div>
+
+          <button class="btn btn-ghost" onclick="hideTrainingModeSelect()" style="margin-top: 8px;">
+            取消
+          </button>
+        </div>
       </div>
 
       <!-- Weekly Progress -->
@@ -762,6 +789,9 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       document.getElementById(view + '-view').classList.remove('hidden');
       currentView = view;
 
+      // 隐藏训练模式选择
+      hideTrainingModeSelect();
+
       // 刷新视图数据
       if (view === 'main') {
         updateMainStats();
@@ -770,6 +800,25 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       } else if (view === 'import') {
         updateImportStats();
       }
+    }
+
+    // ========== 训练模式选择 ==========
+    function showTrainingModeSelect() {
+      const stats = VocabStateManager.getStats();
+      if (stats.total === 0) {
+        showView('import');
+        return;
+      }
+      if (stats.pending + stats.practicing === 0) {
+        showToast('太棒了！所有词汇都已掌握~');
+        return;
+      }
+
+      document.getElementById('training-mode-select').classList.remove('hidden');
+    }
+
+    function hideTrainingModeSelect() {
+      document.getElementById('training-mode-select').classList.add('hidden');
     }
 
     // ========== 主页统计更新 ==========
@@ -806,7 +855,7 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
         btn.textContent = '⚡ 开始训练';
         btn.disabled = false;
         btn.style.opacity = '1';
-        btn.onclick = startTraining;
+        btn.onclick = showTrainingModeSelect;
       }
     }
 
@@ -910,10 +959,39 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
     }
 
     // ========== 训练 ==========
-    function startTraining() {
-      const pending = VocabStateManager.getPendingErrors();
+    function startTraining(mode) {
+      // 隐藏模式选择
+      hideTrainingModeSelect();
 
-      if (pending.length === 0) {
+      // 获取待训练词
+      let errors = [];
+      let modeName = '';
+
+      if (mode === 'flash_war') {
+        errors = VocabStateManager.getPendingErrors();
+        modeName = '⚡ 词汇闪电战';
+      } else if (mode === 'spelling') {
+        const levelInfo = VocabStateManager.getSpellingErrors().length > 0
+          ? VocabStateManager.getSpellingLevels()
+          : null;
+
+        if (!levelInfo || levelInfo.isCompleted) {
+          showToast('🎉 拼写特训营已全部通关！');
+          return;
+        }
+
+        errors = levelInfo.levelWords;
+        modeName = `🎯 拼写特训营 第${levelInfo.currentLevel}关`;
+
+        if (errors.length === 0) {
+          showToast('🎊 第' + (levelInfo.currentLevel - 1) + '关已通关！即将开始第' + levelInfo.currentLevel + '关...');
+          // 获取下一关的词
+          const nextLevelInfo = VocabStateManager.getSpellingLevels();
+          errors = nextLevelInfo.levelWords;
+        }
+      }
+
+      if (errors.length === 0) {
         showView('completion');
         return;
       }
@@ -921,17 +999,25 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       // 重置训练状态
       trainingState = {
         active: true,
+        mode: mode,
         startTime: Date.now(),
         timerInterval: null,
         sessionCorrect: 0,
         sessionTotal: 0,
         currentError: null,
+        levelWords: errors,  // 拼写特训营专用：当前关卡的词
+        levelCorrect: 0,     // 拼写特训营专用：当前关正确数
+        levelTotal: errors.length, // 拼写特训营专用：当前关总数
+        levelIndex: 0,       // 拼写特训营专用：当前关卡进度
       };
 
       showView('training');
 
       // 启动计时器
       trainingState.timerInterval = setInterval(updateTimer, 1000);
+
+      // 显示模式名称
+      document.getElementById('training-timer').textContent = modeName;
 
       // 获取第一个词
       nextWord();
@@ -972,7 +1058,20 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
     }
 
     function nextWord() {
-      const error = VocabStateManager.getRandomPendingError();
+      let error = null;
+
+      if (trainingState.mode === 'flash_war') {
+        // 词汇闪电战：随机获取待复习词
+        error = VocabStateManager.getRandomPendingError();
+      } else if (trainingState.mode === 'spelling') {
+        // 拼写特训营：按顺序获取当前关卡的词
+        if (trainingState.levelIndex >= trainingState.levelWords.length) {
+          // 关卡完成
+          checkLevelComplete();
+          return;
+        }
+        error = trainingState.levelWords[trainingState.levelIndex];
+      }
 
       if (!error) {
         // 全部掌握
@@ -993,10 +1092,73 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       document.getElementById('feedback-area').classList.add('hidden');
 
       // 更新进度
-      const stats = VocabStateManager.getStats();
-      const practiced = stats.total - (stats.pending + stats.practicing);
-      document.getElementById('training-progress').textContent =
-        `进度: ${practiced}/${stats.total}`;
+      if (trainingState.mode === 'flash_war') {
+        const stats = VocabStateManager.getStats();
+        const practiced = stats.total - (stats.pending + stats.practicing);
+        document.getElementById('training-progress').textContent = `进度: ${practiced}/${stats.total}`;
+      } else if (trainingState.mode === 'spelling') {
+        document.getElementById('training-progress').textContent =
+          `本关进度: ${trainingState.levelIndex}/${trainingState.levelTotal} ✨`;
+      }
+    }
+
+    // 检查关卡是否完成
+    function checkLevelComplete() {
+      const passRate = trainingState.levelCorrect / trainingState.levelTotal;
+
+      if (passRate >= 0.8) {
+        // 关卡通过
+        showLevelPassModal();
+      } else {
+        // 关卡失败，需要重试
+        showLevelFailModal(passRate);
+      }
+    }
+
+    function showLevelPassModal() {
+      const modal = document.getElementById('time-limit-modal');
+      modal.querySelector('.modal-title').textContent = '🎉 恭喜过关！';
+      modal.querySelector('.modal-text').innerHTML =
+        `正确率 ${Math.round(trainingState.levelCorrect / trainingState.levelTotal * 100)}%！<br>` +
+        `本关 ${trainingState.levelCorrect}/${trainingState.levelTotal} 题答对！<br><br>` +
+        `太棒了！继续下一关吗？`;
+      modal.querySelector('.btn-primary').textContent = '继续下一关 →';
+      modal.querySelector('.btn-primary').onclick = () => {
+        modal.classList.remove('show');
+        // 重置状态，开始下一关
+        const nextLevel = VocabStateManager.getSpellingLevels();
+        trainingState.levelWords = nextLevel.levelWords;
+        trainingState.levelTotal = nextLevel.levelWords.length;
+        trainingState.levelIndex = 0;
+        trainingState.levelCorrect = 0;
+        if (nextLevel.isCompleted) {
+          showView('completion');
+        } else {
+          nextWord();
+        }
+      };
+      modal.classList.add('show');
+      trainingState.active = false;
+    }
+
+    function showLevelFailModal(passRate) {
+      const modal = document.getElementById('time-limit-modal');
+      modal.querySelector('.modal-title').textContent = '😊 没关系，再试一次~';
+      modal.querySelector('.modal-text').innerHTML =
+        `正确率 ${Math.round(passRate * 100)}%（需要 80% 才能过关）<br><br>` +
+        `我们再来练习一遍这关，好吗？`;
+      modal.querySelector('.btn-primary').textContent = '重新挑战这一关';
+      modal.querySelector('.btn-primary').onclick = () => {
+        modal.classList.remove('show');
+        // 重置当前关卡
+        trainingState.levelIndex = 0;
+        trainingState.levelCorrect = 0;
+        trainingState.active = true;
+        trainingState.timerInterval = setInterval(updateTimer, 1000);
+        nextWord();
+      };
+      modal.classList.add('show');
+      trainingState.active = false;
     }
 
     function checkAnswer() {
@@ -1016,12 +1178,17 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       // 记录训练
       VocabStateManager.saveTrainingRecord({
         errorId: error.id,
-        mode: 'flash_war',
+        mode: trainingState.mode || 'flash_war',
         isCorrect,
         responseTime: Date.now() - trainingState.startTime,
       });
 
       trainingState.sessionTotal++;
+
+      // 如果是拼写特训营模式，追踪关卡正确数
+      if (trainingState.mode === 'spelling' && isCorrect) {
+        trainingState.levelCorrect++;
+      }
 
       // 显示反馈
       const feedbackEl = document.getElementById('feedback-area');
@@ -1032,13 +1199,20 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
         trainingState.sessionCorrect++;
         VocabStateManager.markCorrect(error.id);
 
+        // 拼写特训营模式下，增加关卡进度
+        if (trainingState.mode === 'spelling') {
+          trainingState.levelIndex++;
+        }
+
         const newError = VocabStateManager.getError(error.id);
         if (newError && newError.status === 'mastered') {
           feedbackEl.innerHTML = `
             <div class="feedback correct">
               <div class="feedback-emoji">🎉</div>
               <div class="feedback-text">${getRandomFeedback('mastered')}</div>
-              <div class="correct-answer">掌握度: ${newError.correctCount}/3 ✓</div>
+              ${trainingState.mode === 'spelling' ?
+                `<div class="correct-answer">本关进度: ${trainingState.levelCorrect}/${trainingState.levelTotal} ✓</div>` :
+                `<div class="correct-answer">掌握度: ${newError.correctCount}/3 ✓</div>`}
             </div>
             <button class="btn btn-primary" onclick="nextWord()">下一题 →</button>
           `;
@@ -1047,7 +1221,9 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
             <div class="feedback correct">
               <div class="feedback-emoji">🌟</div>
               <div class="feedback-text">${getRandomFeedback('correct')}</div>
-              <div class="correct-answer">掌握度: ${newError ? newError.correctCount : 1}/3</div>
+              ${trainingState.mode === 'spelling' ?
+                `<div class="correct-answer">本关进度: ${trainingState.levelCorrect}/${trainingState.levelTotal}</div>` :
+                `<div class="correct-answer">掌握度: ${newError ? newError.correctCount : 1}/3</div>`}
             </div>
             <button class="btn btn-primary" onclick="nextWord()">下一题 →</button>
           `;
@@ -1055,6 +1231,11 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       } else {
         // 答错
         VocabStateManager.markIncorrect(error.id);
+
+        // 拼写特训营模式下，增加关卡进度（答错也继续）
+        if (trainingState.mode === 'spelling') {
+          trainingState.levelIndex++;
+        }
 
         feedbackEl.innerHTML = `
           <div class="feedback incorrect">
