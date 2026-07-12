@@ -1302,7 +1302,7 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       const feedbackEl = document.getElementById('feedback-area');
       feedbackEl.classList.remove('hidden');
 
-      const pair = trainingState.currentConfusionPair;
+      // pair already declared above
       const showFirst = trainingState.showConfusedWord;
       const mainWord = showFirst ? pair.word : pair.confused;
       const mainMeaning = showFirst ? pair.meaning : pair.confusedMeaning;
@@ -1654,6 +1654,10 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
     async function init() {
       console.log('[Lumos Vocab] 开始初始化...');
 
+      // 检查 localStorage 状态
+      const localData = localStorage.getItem('lumos:vocab:errors');
+      console.log('[Lumos Vocab] localStorage 状态:', localData ? '有数据' : '空');
+
       // 确保数据已加载（首次从本地 JSON 初始化）
       await VocabStateManager.ensureInitialized();
 
@@ -1664,8 +1668,27 @@ colourful	ˈkʌləf(ə)l	丰富多彩的	colorful	英式美式
       const stats = VocabStateManager.getStats();
       console.log('[Lumos Vocab] 初始化完成，统计数据:', stats);
 
+      // 显示调试信息
+      const localDataAfter = localStorage.getItem('lumos:vocab:errors');
+      if (localDataAfter) {
+        const parsed = JSON.parse(localDataAfter);
+        console.log('[调试] localStorage 实际数据条数:', parsed.length);
+      }
+
       if (stats.total === 0) {
-        console.warn('[Lumos Vocab] 数据加载失败，stats.total 为 0');
+        // 尝试手动加载
+        console.log('[Lumos Vocab] 数据加载失败，尝试手动加载...');
+        try {
+          const response = await fetch('data/errors.json');
+          const data = await response.json();
+          console.log('[手动加载] 获取到数据:', data.errors?.length, '条');
+          if (data.errors && data.errors.length > 0) {
+            VocabStateManager.addErrorsBatch(data.errors, 'debug-load');
+            updateMainStats();
+          }
+        } catch (e) {
+          console.error('[手动加载] 失败:', e);
+        }
       }
     }
 
