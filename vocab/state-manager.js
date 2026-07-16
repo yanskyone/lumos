@@ -187,6 +187,7 @@ const VocabStateManager = (() => {
   // 检查是否需要初始化数据（首次使用或数据为空）
   let _initialized = false;
   let _initPromise = null;
+  const DATA_VERSION = '4.0';  // 数据版本，更新此版本号可强制刷新数据
 
   async function ensureInitialized() {
     // 如果已经初始化过，直接返回
@@ -202,11 +203,19 @@ const VocabStateManager = (() => {
       return;
     }
 
-    const existingErrors = getAllErrors();
-
-    // 如果已经有数据，不需要重新初始化
-    if (existingErrors.length > 0) {
-      console.log('[VocabStateManager] localStorage 已有 ' + existingErrors.length + ' 条数据');
+    // 检查数据版本
+    const savedVersion = localStorage.getItem(PREFIX + ':data-version');
+    if (savedVersion === DATA_VERSION) {
+      const existingErrors = getAllErrors();
+      if (existingErrors.length > 0) {
+        console.log('[VocabStateManager] localStorage 已有 ' + existingErrors.length + ' 条数据（版本一致）');
+        _initialized = true;
+        return;
+      }
+    } else {
+      console.log('[VocabStateManager] 数据版本不匹配，清除旧数据');
+      localStorage.removeItem(KEYS.ERRORS);
+    }
       _initialized = true;
       return;
     }
@@ -256,6 +265,9 @@ const VocabStateManager = (() => {
 
         saveAllErrors(errors);
         console.log('[VocabStateManager] 已保存 ' + errors.length + ' 条到 localStorage');
+
+        // 保存数据版本
+        localStorage.setItem(PREFIX + ':data-version', DATA_VERSION);
 
         // 创建初始批次记录
         createBatch({
