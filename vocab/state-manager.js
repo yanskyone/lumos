@@ -1,5 +1,5 @@
 /**
- * Lumos Vocab - StateManager v1.0
+ * Lumos Vocab - StateManager v1.1
  * 英语词汇错题训练系统的状态管理模块
  *
  * 支持功能：
@@ -8,12 +8,24 @@
  * - 批次管理
  * - 线下测试记录
  * - 数据导入/导出
+ * - 双模式支持：localStorage / Supabase 云端
  */
 
 const VocabStateManager = (() => {
+  // ========== 配置 ==========
+  const CONFIG = {
+    // 存储模式：'local' = localStorage, 'cloud' = Supabase
+    STORAGE_MODE: 'cloud',
+
+    // Supabase 配置（STORAGE_MODE = 'cloud' 时使用）
+    SUPABASE_URL: 'https://dmxytyvleoodvaggvkdg.supabase.co',
+    SUPABASE_KEY: 'sb_publishable_KIUoi4AebdtwJDMrPeq01w_i_m7MGNz'
+  };
+
   // ========== 常量 ==========
-  const VERSION = '1.0';
+  const VERSION = '1.1';
   const PREFIX = 'lumos:vocab';
+  const DATA_VERSION = '5.0';
 
   // localStorage keys
   const KEYS = {
@@ -187,7 +199,12 @@ const VocabStateManager = (() => {
   // 检查是否需要初始化数据（首次使用或数据为空）
   let _initialized = false;
   let _initPromise = null;
-  const DATA_VERSION = '4.0';  // 数据版本，更新此版本号可强制刷新数据
+  let _useCloud = false;  // 是否使用云端模式
+
+  // 检查是否使用云端模式
+  function isCloudMode() {
+    return CONFIG.STORAGE_MODE === 'cloud' && CloudStorage && CloudStorage.isConfigured();
+  }
 
   async function ensureInitialized() {
     // 如果已经初始化过，直接返回
@@ -203,43 +220,62 @@ const VocabStateManager = (() => {
       return;
     }
 
-    // 检查数据版本
-    const savedVersion = localStorage.getItem(PREFIX + ':data-version');
-    const existingErrors = getAllErrors();
-
-    if (savedVersion === DATA_VERSION && existingErrors.length > 0) {
-      console.log('[VocabStateManager] localStorage 已有 ' + existingErrors.length + ' 条数据（版本一致）');
-      _initialized = true;
-      return;
-    } else {
-      console.log('[VocabStateManager] 数据版本不匹配或为空，清除旧数据并重新加载');
-      localStorage.removeItem(KEYS.ERRORS);
+    // 初始化云端（如果配置了）
+    if (CONFIG.STORAGE_MODE === 'cloud' && CloudStorage) {
+      CloudStorage.init(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+      _useCloud = CloudStorage.isConfigured();
     }
 
-    // 尝试从本地 JSON 文件加载数据
-    console.log('[VocabStateManager] 开始从 JSON 加载...');
-    _initPromise = loadFromJsonFile();
+    if (_useCloud) {
+      // 云端模式
+      console.log('[VocabStateManager] 使用云端存储模式');
+      _initPromise = initCloudMode();
+    } else {
+      // 本地模式
+      console.log('[VocabStateManager] 使用本地存储模式');
+      _initPromise = initLocalMode();
+    }
+
     await _initPromise;
     _initialized = true;
     console.log('[VocabStateManager] 初始化完成');
   }
 
-  async function loadFromJsonFile() {
+  // 云端模式初始化
+  async function initCloudMode() {
     try {
-      console.log('[VocabStateManager] 正在加载 data/errors.json...');
-      const response = await fetch('data/errors.json');
-
-      if (!response.ok) {
-        console.warn('[VocabStateManager] fetch 失败, status:', response.status);
+      const result = await CloudStorage.getErrors();
+      if (result.error) {
+        console.error('[VocabStateManager] 云端获取失败:', result.error);
+        // 回退到本地模式
+        _useCloud = false;
+        await initLocalMode();
         return;
       }
 
+      if (result.data && result.data.length > 0) {
+        console.log('[VocabStateManager] 从云端加载了 ' + result.data.length + ' 条错题');
+        _cloudErrors = result.data;
+        return;
+      }
+
+      // 云端没有数据，从本地 JSON 导入
+      console.log('[VocabStateManager] 云端暂无数据，从 JSON 导入...');
+      await importFromJsonToCloud();
+    } catch (e) {
+      console.error('[VocabStateManager] 云端初始化失败:', e);
+      _useCloud = false;
+      await initLocalMode();
+    }
+  }
+
+  // 从 JSON 文件导入到云端
+  async function importFromJsonToCloud() {
+    try {
+      const response = await fetch('data/errors.json');
       const data = await response.json();
-      console.log('[VocabStateManager] JSON 解析完成，errors 数量:', data.errors ? data.errors.length : 0);
 
       if (data.errors && data.errors.length > 0) {
-        console.log('[VocabStateManager] 开始转换 ' + data.errors.length + ' 条错题...');
-
         const errors = data.errors.map((e, index) => ({
           id: 've-' + (index + 1).toString().padStart(3, '0'),
           word: e.word,
@@ -251,8 +287,64 @@ const VocabStateManager = (() => {
           tip: e.tip || '',
           unit: e.unit || '',
           status: STATUS.PENDING,
-          masteredModes: [],  // 记录通过哪些模式掌握了此词
-          confusedWith: [],   // 易混词列表（用于混淆词大作战）
+          masteredModes: [],
+          confusedWith: [],
+          correctCount: 0,
+          createdAt: new Date().toISOString(),
+          lastPracticedAt: null,
+          batchId: 'batch-initial',
+        }));
+
+        await CloudStorage.saveErrors(errors);
+        _cloudErrors = errors;
+        console.log('[VocabStateManager] 已导入 ' + errors.length + ' 条到云端');
+      }
+    } catch (e) {
+      console.error('[VocabStateManager] JSON 导入失败:', e);
+    }
+  }
+
+  // 本地模式初始化
+  async function initLocalMode() {
+    // 检查数据版本
+    const savedVersion = localStorage.getItem(PREFIX + ':data-version');
+    const existingErrors = getAllErrors();
+
+    if (savedVersion === DATA_VERSION && existingErrors.length > 0) {
+      console.log('[VocabStateManager] localStorage 已有 ' + existingErrors.length + ' 条数据（版本一致）');
+      return;
+    } else {
+      console.log('[VocabStateManager] 数据版本不匹配或为空，清除旧数据并重新加载');
+      localStorage.removeItem(KEYS.ERRORS);
+    }
+
+    // 尝试从本地 JSON 文件加载数据
+    console.log('[VocabStateManager] 开始从 JSON 加载...');
+    try {
+      const response = await fetch('data/errors.json');
+
+      if (!response.ok) {
+        console.warn('[VocabStateManager] fetch 失败, status:', response.status);
+        return;
+      }
+
+      const data = await response.json();
+      console.log('[VocabStateManager] JSON 解析完成，errors 数量:', data.errors ? data.errors.length : 0);
+
+      if (data.errors && data.errors.length > 0) {
+        const errors = data.errors.map((e, index) => ({
+          id: 've-' + (index + 1).toString().padStart(3, '0'),
+          word: e.word,
+          phonetic: e.phonetic || '',
+          meaning: e.meaning,
+          category: e.category || CATEGORIES.UNLEARNED,
+          wrongAnswer: e.wrongAnswer || '',
+          errorNote: e.errorNote || '',
+          tip: e.tip || '',
+          unit: e.unit || '',
+          status: STATUS.PENDING,
+          masteredModes: [],
+          confusedWith: [],
           correctCount: 0,
           createdAt: new Date().toISOString(),
           lastPracticedAt: null,
@@ -264,27 +356,31 @@ const VocabStateManager = (() => {
 
         // 保存数据版本
         localStorage.setItem(PREFIX + ':data-version', DATA_VERSION);
-
-        // 创建初始批次记录
-        createBatch({
-          source: 'excel_import',
-          totalImported: errors.length,
-        });
-
-        console.log('[VocabStateManager] 数据初始化完成！共 ' + errors.length + ' 条错题');
       }
     } catch (e) {
       console.error('[VocabStateManager] 加载本地数据失败:', e);
     }
   }
 
+  // 云端数据缓存
+  let _cloudErrors = [];
+  let _cloudTraining = [];
+
   // 获取所有错题
   function getAllErrors() {
+    if (_useCloud) {
+      return _cloudErrors;
+    }
     return safeJsonParse(localStorage.getItem(KEYS.ERRORS), []);
   }
 
   // 保存所有错题
   function saveAllErrors(errors) {
+    if (_useCloud) {
+      _cloudErrors = errors;
+      CloudStorage.saveErrors(errors);
+      return;
+    }
     safeSetItem(KEYS.ERRORS, JSON.stringify(errors));
   }
 
@@ -360,6 +456,12 @@ const VocabStateManager = (() => {
 
     errors[index] = { ...errors[index], ...updates };
     saveAllErrors(errors);
+
+    // 云端同步
+    if (_useCloud) {
+      CloudStorage.updateError(id, updates);
+    }
+
     return errors[index];
   }
 
@@ -647,7 +749,6 @@ const VocabStateManager = (() => {
 
   // 保存训练记录
   function saveTrainingRecord(record) {
-    const records = safeJsonParse(localStorage.getItem(KEYS.TRAINING), []);
     const newRecord = {
       id: generateId(),
       errorId: record.errorId,
@@ -656,17 +757,31 @@ const VocabStateManager = (() => {
       isCorrect: record.isCorrect,
       responseTime: record.responseTime || 0,
     };
-    records.push(newRecord);
 
-    // 限制最多 100 条
-    const toSave = records.slice(-100);
-    safeSetItem(KEYS.TRAINING, JSON.stringify(toSave));
+    if (_useCloud) {
+      _cloudTraining.push(newRecord);
+      // 限制最多 100 条
+      if (_cloudTraining.length > 100) {
+        _cloudTraining = _cloudTraining.slice(-100);
+      }
+      CloudStorage.saveTrainingRecord(newRecord);
+    } else {
+      const records = safeJsonParse(localStorage.getItem(KEYS.TRAINING), []);
+      records.push(newRecord);
+      // 限制最多 100 条
+      const toSave = records.slice(-100);
+      safeSetItem(KEYS.TRAINING, JSON.stringify(toSave));
+    }
 
     return newRecord;
   }
 
   // 获取训练记录
   function getTrainingRecords(limit) {
+    if (_useCloud) {
+      const records = _cloudTraining;
+      return limit ? records.slice(-limit) : records;
+    }
     const records = safeJsonParse(localStorage.getItem(KEYS.TRAINING), []);
     return limit ? records.slice(-limit) : records;
   }
@@ -690,6 +805,9 @@ const VocabStateManager = (() => {
 
   // 清除训练记录
   function clearTrainingRecords() {
+    if (_useCloud) {
+      _cloudTraining = [];
+    }
     localStorage.removeItem(KEYS.TRAINING);
   }
 
@@ -914,9 +1032,11 @@ const VocabStateManager = (() => {
     CATEGORIES,
     STATUS,
     MODES,
+    CONFIG,
 
     // 初始化
     ensureInitialized,
+    isCloudMode,
 
     // 错题管理
     getAllErrors,
