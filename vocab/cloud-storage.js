@@ -89,14 +89,28 @@ const CloudStorage = (() => {
     // 先删除当前用户的数据
     const userId = encodeURIComponent(_userId);
     await request(`/vocab_errors?user_id=eq.${userId}`, { method: 'DELETE' });
-    // 批量插入
-    const dbErrors = errors.map(errorToDb);
-    const result = await request('/vocab_errors', {
-      method: 'POST',
-      headers: { 'Prefer': 'return=minimal' },
-      body: JSON.stringify(dbErrors)
+
+    // 为每条数据添加用户ID后逐条插入（避免批量冲突）
+    const dbErrors = errors.map((e, i) => {
+      const error = errorToDb(e);
+      error.user_id = _userId;
+      error.id = _userId + '-' + e.id;  // 确保ID唯一
+      return error;
     });
-    return result;
+
+    // 分批插入，每批10条
+    const batchSize = 10;
+    for (let i = 0; i < dbErrors.length; i += batchSize) {
+      const batch = dbErrors.slice(i, i + batchSize);
+      await request('/vocab_errors', {
+        method: 'POST',
+        headers: { 'Prefer': 'return=minimal' },
+        body: JSON.stringify(batch)
+      });
+    }
+
+    console.log('[CloudStorage] 已保存 ' + dbErrors.length + ' 条错题');
+    return { error: null };
   }
 
   async function updateError(id, updates) {
