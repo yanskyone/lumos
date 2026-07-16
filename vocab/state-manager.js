@@ -205,23 +205,19 @@ const VocabStateManager = (() => {
 
     // 检查数据版本
     const savedVersion = localStorage.getItem(PREFIX + ':data-version');
-    if (savedVersion === DATA_VERSION) {
-      const existingErrors = getAllErrors();
-      if (existingErrors.length > 0) {
-        console.log('[VocabStateManager] localStorage 已有 ' + existingErrors.length + ' 条数据（版本一致）');
-        _initialized = true;
-        return;
-      }
-    } else {
-      console.log('[VocabStateManager] 数据版本不匹配，清除旧数据');
-      localStorage.removeItem(KEYS.ERRORS);
-    }
+    const existingErrors = getAllErrors();
+
+    if (savedVersion === DATA_VERSION && existingErrors.length > 0) {
+      console.log('[VocabStateManager] localStorage 已有 ' + existingErrors.length + ' 条数据（版本一致）');
       _initialized = true;
       return;
+    } else {
+      console.log('[VocabStateManager] 数据版本不匹配或为空，清除旧数据并重新加载');
+      localStorage.removeItem(KEYS.ERRORS);
     }
 
     // 尝试从本地 JSON 文件加载数据
-    console.log('[VocabStateManager] localStorage 为空，开始从 JSON 加载...');
+    console.log('[VocabStateManager] 开始从 JSON 加载...');
     _initPromise = loadFromJsonFile();
     await _initPromise;
     _initialized = true;
