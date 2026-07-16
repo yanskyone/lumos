@@ -25,14 +25,14 @@ const CloudStorage = (() => {
     return _isConfigured;
   }
 
-  // 生成或获取用户ID
+  // 生成或获取用户ID（只包含安全的URL字符）
   function getUserId() {
     const STORAGE_KEY = 'lumos:vocab:user-id';
     let userId = localStorage.getItem(STORAGE_KEY);
 
     if (!userId) {
-      // 生成新的匿名ID
-      userId = 'user-' + Date.now().toString(36) + '-' + Math.random().toString(36).substr(2, 9);
+      // 生成新的匿名ID（只包含字母数字）
+      userId = 'u' + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
       localStorage.setItem(STORAGE_KEY, userId);
       console.log('[CloudStorage] 生成新用户ID:', userId);
     }
@@ -77,7 +77,8 @@ const CloudStorage = (() => {
 
   async function getErrors() {
     // 按用户ID获取数据
-    const result = await request(`/vocab_errors?user_id=eq.${_userId}&select=*&order=id.asc`);
+    const userId = encodeURIComponent(_userId);
+    const result = await request(`/vocab_errors?user_id=eq.${userId}&select=*&order=id.asc`);
     if (result.error) return { data: [], error: result.error };
     // 转换数据库字段为前端格式
     const errors = result.data.map(dbToError);
@@ -85,8 +86,9 @@ const CloudStorage = (() => {
   }
 
   async function saveErrors(errors) {
-    // 先删除所有
-    await request('/vocab_errors', { method: 'DELETE' });
+    // 先删除当前用户的数据
+    const userId = encodeURIComponent(_userId);
+    await request(`/vocab_errors?user_id=eq.${userId}`, { method: 'DELETE' });
     // 批量插入
     const dbErrors = errors.map(errorToDb);
     const result = await request('/vocab_errors', {
@@ -104,8 +106,9 @@ const CloudStorage = (() => {
       if (dbKey) dbUpdates[dbKey] = value;
     }
     // 确保更新属于当前用户
+    const userId = encodeURIComponent(_userId);
     dbUpdates.user_id = _userId;
-    const result = await request(`/vocab_errors?id=eq.${id}&user_id=eq.${_userId}`, {
+    const result = await request(`/vocab_errors?id=eq.${id}&user_id=eq.${userId}`, {
       method: 'PATCH',
       body: JSON.stringify(dbUpdates)
     });
