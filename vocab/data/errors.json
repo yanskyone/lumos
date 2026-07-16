@@ -1,12 +1,13 @@
 {
   "_meta": {
-    "version": "3.0",
+    "version": "4.0",
     "generatedAt": "2026-07-16",
     "sources": [
       "英语错题-答案版.xlsx (7A)",
-      "英语错题-八上-答案版.xlsx (8A)"
+      "英语错题-八上-答案版.xlsx (8A)",
+      "英语错题-八下错题-答案版.xlsx (8B)"
     ],
-    "totalCount": 476
+    "totalCount": 667
   },
   "errors": [
     {
@@ -3816,6 +3817,1534 @@
       "wrongAnswer": "未填",
       "errorNote": "拼写错误",
       "tip": "Pluto正确拼写"
+    },
+    {
+      "word": "experiment",
+      "phonetic": "/ɪkˈsperɪmənt/",
+      "meaning": "n. 实验",
+      "wrongAnswer": "expriment",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 experiment，你漏了字母"
+    },
+    {
+      "word": "pizza",
+      "phonetic": "/piːtsə/",
+      "meaning": "n. 比萨饼；意大利肉饼",
+      "wrongAnswer": "pizze",
+      "errorNote": "拼写错误",
+      "tip": "注意pizza的正确拼写"
+    },
+    {
+      "word": "programme",
+      "phonetic": "/ˈprəʊɡræm/(program AmE)",
+      "meaning": "n. 节目",
+      "wrongAnswer": "program",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 programme，你少了几个字母"
+    },
+    {
+      "word": "repeat",
+      "phonetic": "/rɪˈpiːt/",
+      "meaning": "v. 复述，跟读；重复；重写",
+      "wrongAnswer": "repreat",
+      "errorNote": "多字母",
+      "tip": "单词拼写为 repeat，多写了一些字母"
+    },
+    {
+      "word": "disappoint",
+      "phonetic": "/ˌdɪsəˈpɔɪnt/",
+      "meaning": "v. 使失望",
+      "wrongAnswer": "disappoint",
+      "errorNote": "拼写错误",
+      "tip": "记忆：disap + point"
+    },
+    {
+      "word": "imagine",
+      "phonetic": "/ɪˈmædʒɪn/",
+      "meaning": "v. 想象",
+      "wrongAnswer": "imaadime",
+      "errorNote": "多字母",
+      "tip": "单词拼写为 imagine，多写了一些字母"
+    },
+    {
+      "word": "educator",
+      "phonetic": "/ˈedʒukeɪtə(r)/",
+      "meaning": "n. 教育学家；教育家；教育工作者",
+      "wrongAnswer": "edukate",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 educator，你漏了字母"
+    },
+    {
+      "word": "master",
+      "phonetic": "/ˈmɑːstə(r)/; /ˈmæstər/",
+      "meaning": "n. 大师",
+      "wrongAnswer": "marster",
+      "errorNote": "多字母",
+      "tip": "单词拼写为 master，多写了一些字母"
+    },
+    {
+      "word": "private",
+      "phonetic": "/ˈpraɪvət/",
+      "meaning": "adj. 私立的；私营的",
+      "wrongAnswer": "privet",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 private，你漏了字母"
+    },
+    {
+      "word": "increase",
+      "phonetic": "/ɪnˈkriːs/; /ˈɪŋkriːs/",
+      "meaning": "v.（使）增长，增多，增加；",
+      "wrongAnswer": "incress",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 increase，你漏了字母"
+    },
+    {
+      "word": "foreign",
+      "phonetic": "/ˈfɒrən/; /ˈfɔːrən/",
+      "meaning": "adj. 外国的；涉外的",
+      "wrongAnswer": "foren",
+      "errorNote": "拼写错误",
+      "tip": "注意对比 foreign 和 foren 的差异"
+    },
+    {
+      "word": "else",
+      "phonetic": "/els/",
+      "meaning": "adv. 其他的；另外的",
+      "wrongAnswer": "els",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 else，你少了几个字母"
+    },
+    {
+      "word": "memorize",
+      "phonetic": "/ˈmeməraɪz/",
+      "meaning": "v. 记忆；记住",
+      "wrongAnswer": "memerise",
+      "errorNote": "拼写错误",
+      "tip": "注意对比 memorize 和 memerise 的差异"
+    },
+    {
+      "word": "poor",
+      "phonetic": "/pɔː(r)/; /pɔːr/",
+      "meaning": "adj. 贫穷的；差的；可怜的",
+      "wrongAnswer": "pour",
+      "errorNote": "拼写错误",
+      "tip": "注意poor的正确拼写"
+    },
+    {
+      "word": "effort",
+      "phonetic": "/ˈefət/; /ˈefərt/",
+      "meaning": "n. 努力；试图",
+      "wrongAnswer": "efcet",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 effort，你漏了字母"
+    },
+    {
+      "word": "stick",
+      "phonetic": "/stɪk/",
+      "meaning": "v. 粘贴；卡住；n. 枝条；枯枝",
+      "wrongAnswer": "stik",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 stick，你漏了字母"
+    },
+    {
+      "word": "pound",
+      "phonetic": "/paʊnd/",
+      "meaning": "n. 英镑；磅",
+      "wrongAnswer": "pround",
+      "errorNote": "多字母",
+      "tip": "单词拼写为 pound，多写了一些字母"
+    },
+    {
+      "word": "mutton",
+      "phonetic": "/ˈmʌtn/",
+      "meaning": "n. 羊肉",
+      "wrongAnswer": "monton",
+      "errorNote": "漏字母",
+      "tip": "注意mutton中的双写字母"
+    },
+    {
+      "word": "cheese",
+      "phonetic": "/tʃiːz/",
+      "meaning": "n. 干酪；奶酪",
+      "wrongAnswer": "choose",
+      "errorNote": "漏字母",
+      "tip": "注意cheese中的双写字母"
+    },
+    {
+      "word": "porridge",
+      "phonetic": "/ˈpɒrɪdʒ/; /ˈpɔːrɪdʒ/",
+      "meaning": "n. 粥",
+      "wrongAnswer": "poridge",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 porridge，你漏了字母"
+    },
+    {
+      "word": "convenient",
+      "phonetic": "/kənˈviːniənt/",
+      "meaning": "adj. 便利的；方便的",
+      "wrongAnswer": "convinet",
+      "errorNote": "拼写错误",
+      "tip": "注意对比 convenient 和 convinet 的差异"
+    },
+    {
+      "word": "wallet",
+      "phonetic": "/ˈwɒlɪt/; /ˈwɑːlɪt/",
+      "meaning": "n. 钱包",
+      "wrongAnswer": "walt",
+      "errorNote": "漏字母",
+      "tip": "注意wallet中的双写字母"
+    },
+    {
+      "word": "directly",
+      "phonetic": "/dəˈrektli/",
+      "meaning": "adv. 直接；径直",
+      "wrongAnswer": "derectly",
+      "errorNote": "拼写错误",
+      "tip": "注意directly的正确拼写"
+    },
+    {
+      "word": "shell",
+      "phonetic": "/ʃel/",
+      "meaning": "n. 壳",
+      "wrongAnswer": "shall",
+      "errorNote": "拼写错误",
+      "tip": "注意shell的正确拼写"
+    },
+    {
+      "word": "warring",
+      "phonetic": "/ˈwɔːrɪŋ/",
+      "meaning": "adj. 战争的；交战的；敌对的",
+      "wrongAnswer": "worring",
+      "errorNote": "拼写错误",
+      "tip": "注意warring的正确拼写"
+    },
+    {
+      "word": "metal",
+      "phonetic": "/ˈmetl/",
+      "meaning": "n. 金属",
+      "wrongAnswer": "metil",
+      "errorNote": "拼写错误",
+      "tip": "注意metal的正确拼写"
+    },
+    {
+      "word": "piggy",
+      "phonetic": "/ˈpɪɡi/",
+      "meaning": "adj. 像猪一样的；n. 小猪",
+      "wrongAnswer": "pigy",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 piggy，你漏了字母"
+    },
+    {
+      "word": "wastepaper",
+      "phonetic": "/ˈweɪstpeɪpə(r)/;/ˈweɪstpeɪpər/",
+      "meaning": "n. 废纸",
+      "wrongAnswer": "wastpaper",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 wastepaper，你漏了字母"
+    },
+    {
+      "word": "earthquake",
+      "phonetic": "/ˈɜːθkweɪk/; /ˈɜːrθkweɪk/",
+      "meaning": "n. 地震",
+      "wrongAnswer": "earthwake",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 earthquake，你漏了字母"
+    },
+    {
+      "word": "typhoon",
+      "phonetic": "/taɪˈfuːn/",
+      "meaning": "n. 台风",
+      "wrongAnswer": "tyhoon",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 typhoon，你漏了字母"
+    },
+    {
+      "word": "flood",
+      "phonetic": "/flʌd/",
+      "meaning": "n. 洪水；水灾",
+      "wrongAnswer": "fvood",
+      "errorNote": "拼写错误",
+      "tip": "注意flood的正确拼写"
+    },
+    {
+      "word": "coastal",
+      "phonetic": "/ˈkəʊstl/",
+      "meaning": "adj. 沿海的；靠近海岸的",
+      "wrongAnswer": "coastl",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 coastal，你漏了字母"
+    },
+    {
+      "word": "tape",
+      "phonetic": "/teɪp/",
+      "meaning": "n. 胶带；胶条；磁带",
+      "wrongAnswer": "type",
+      "errorNote": "拼写错误",
+      "tip": "注意tape的正确拼写"
+    },
+    {
+      "word": "scared",
+      "phonetic": "/skeəd/; /skerd/",
+      "meaning": "adj. 害怕；恐惧",
+      "wrongAnswer": "scrad",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 scared，你漏了字母"
+    },
+    {
+      "word": "account",
+      "phonetic": "/əˈkaʊnt/",
+      "meaning": "n. 账户",
+      "wrongAnswer": "acount",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 account，你漏了字母"
+    },
+    {
+      "word": "virus",
+      "phonetic": "/ˈvaɪrəs/",
+      "meaning": "n.（计算机程序中的）病毒",
+      "wrongAnswer": "vius",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 virus，你漏了字母"
+    },
+    {
+      "word": "possibility",
+      "phonetic": "/ˌpɒsəˈbɪləti/;",
+      "meaning": "n. 可能性",
+      "wrongAnswer": "possiblety",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 possibility，你漏了字母"
+    },
+    {
+      "word": "disappear",
+      "phonetic": "/ˌdɪsəˈpɪə(r)/; /ˌdɪsəˈpɪr/",
+      "meaning": "v. 消失",
+      "wrongAnswer": "disapear",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 disappear，你漏了字母"
+    },
+    {
+      "word": "kungfu",
+      "phonetic": "",
+      "meaning": "n. 功夫",
+      "wrongAnswer": "kongfu",
+      "errorNote": "拼写错误",
+      "tip": "注意kungfu的正确拼写"
+    },
+    {
+      "word": "talented",
+      "phonetic": "/ˈtæləntɪd/",
+      "meaning": "adj. 有才能的；天才的",
+      "wrongAnswer": "tanlanted",
+      "errorNote": "多字母",
+      "tip": "单词拼写为 talented，多写了一些字母"
+    },
+    {
+      "word": "bravely",
+      "phonetic": "/ˈbreɪvli/",
+      "meaning": "adv. 勇敢地",
+      "wrongAnswer": "bravey",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 bravely，你漏了字母"
+    },
+    {
+      "word": "monitor",
+      "phonetic": "/ˈmɒnɪtə(r)/; /ˈmɑːnɪtər/",
+      "meaning": "v. 监测；监视；监控；监听；",
+      "wrongAnswer": "monniter",
+      "errorNote": "多字母",
+      "tip": "单词拼写为 monitor，多写了一些字母"
+    },
+    {
+      "word": "grand",
+      "phonetic": "/ɡrænd/",
+      "meaning": "adj. 宏大的；壮丽的；堂皇的",
+      "wrongAnswer": "ground",
+      "errorNote": "多字母",
+      "tip": "单词拼写为 grand，多写了一些字母"
+    },
+    {
+      "word": "movement",
+      "phonetic": "/ˈmuːvmənt/",
+      "meaning": "n. 移动；运动；转移；迁移",
+      "wrongAnswer": "moviement",
+      "errorNote": "多字母",
+      "tip": "单词拼写为 movement，多写了一些字母"
+    },
+    {
+      "word": "beauty",
+      "phonetic": "/ˈbjuːti/",
+      "meaning": "n. 美；美丽",
+      "wrongAnswer": "beauti",
+      "errorNote": "拼写错误",
+      "tip": "注意beauty的正确拼写"
+    },
+    {
+      "word": "tale",
+      "phonetic": "/teɪl/",
+      "meaning": "n. 故事",
+      "wrongAnswer": "tail",
+      "errorNote": "拼写错误",
+      "tip": "注意对比 tale 和 tail 的差异"
+    },
+    {
+      "word": "handsome",
+      "phonetic": "/ˈhænsəm/",
+      "meaning": "adj. 英俊的；有魅力的",
+      "wrongAnswer": "hansome",
+      "errorNote": "漏字母",
+      "tip": "完整单词为 handsome，你漏了字母"
+    },
+    {
+      "word": "bully",
+      "phonetic": "/ˈbʊli/",
+      "meaning": "v. 恐吓；伤害；胁迫",
+      "wrongAnswer": "bouly",
+      "errorNote": "漏字母",
+      "tip": "注意bully中的双写字母"
+    },
+    {
+      "word": "tiring",
+      "phonetic": "/ˈtaɪərɪŋ/",
+      "meaning": "adj. 令人困倦的；使人劳累的；累人的",
+      "wrongAnswer": "tireing",
+      "errorNote": "多字母",
+      "tip": "单词拼写为 tiring，多写了一些字母"
+    },
+    {
+      "word": "bored",
+      "phonetic": "/bɔːd/; /bɔːrd/",
+      "meaning": "adj. 厌倦的；烦闷的",
+      "wrongAnswer": "broad",
+      "errorNote": "拼写错误",
+      "tip": "注意对比 bored 和 broad 的差异"
+    },
+    {
+      "word": "romance",
+      "phonetic": "/rəʊˈmæns/; /roʊˈmæns/",
+      "meaning": "n. 传奇故事；爱情故事；浪漫氛围",
+      "wrongAnswer": "rowmance",
+      "errorNote": "多字母",
+      "tip": "单词拼写为 romance，多写了一些字母"
+    },
+    {
+      "word": "romantic",
+      "phonetic": "/rəʊˈmæntɪk/",
+      "meaning": "adj. 浪漫主义",
+      "wrongAnswer": "rowmantick",
+      "errorNote": "拼写错误",
+      "tip": "注意对比 romantic 和 rowmantick 的差异"
+    },
+    {
+      "word": "chemistry",
+      "phonetic": "/ˈkemɪstri/",
+      "meaning": "n. 化学",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "pronunciation",
+      "phonetic": "/prəˌnʌnsiˈeɪʃn/",
+      "meaning": "n. 发音；读音",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "state",
+      "phonetic": "/steɪt/",
+      "meaning": "n. 国家；州；状态",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "thought",
+      "phonetic": "/θɔːt/",
+      "meaning": "n. 思想；想法；看法",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "etc.",
+      "phonetic": "/etˈsetərə/",
+      "meaning": "abbr. 以及诸如此类，以及其他，等等",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "digital",
+      "phonetic": "/ˈdɪdʒɪtl/",
+      "meaning": "adj. 数字的；数码的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "education",
+      "phonetic": "/ˌedʒuˈkeɪʃn/",
+      "meaning": "n.（尤指学校）教育",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "suppose",
+      "phonetic": "/səˈpəʊz/",
+      "meaning": "v. 假定；假设；推断",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "educational",
+      "phonetic": "/ˌedʒuˈkeɪʃnəl/",
+      "meaning": "adj. 教育的；有关教育的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "satisfy",
+      "phonetic": "/ˈsætɪsfaɪ/",
+      "meaning": "v. 使满足；使满意",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "socialism",
+      "phonetic": "/ˈsəʊʃəlɪzəm/",
+      "meaning": "n. 社会主义",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "dictionary",
+      "phonetic": "/ˈdɪkʃənri/; /ˈdɪkʃəneri/",
+      "meaning": "n. 词典；字典",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "discussion",
+      "phonetic": "/dɪˈskʌʃn/",
+      "meaning": "n. 讨论；商讨",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "serious",
+      "phonetic": "/ˈsɪəriəs/; /ˈsɪriəs/",
+      "meaning": "adj. 严重的；严肃的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "actually",
+      "phonetic": "/ˈæktʃuəli/",
+      "meaning": "adv. 事实上；实际上",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "college",
+      "phonetic": "/ˈkɒlɪdʒ/; /ˈkɑːlɪdʒ/",
+      "meaning": "n.（美国）大学；（英国）学院",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "graduate",
+      "phonetic": "/ˈɡrædʒueɪt/; /ˈɡrædʒuət/",
+      "meaning": "v. 毕业；n. 毕业生",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "predict",
+      "phonetic": "/prɪˈdɪkt/",
+      "meaning": "v. 实现；意识到",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "euro",
+      "phonetic": "/ˈjʊərəʊ/; /ˈjʊroʊ/",
+      "meaning": "n. 欧元",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "foreigner",
+      "phonetic": "/ˈfɒrənə(r)/; /ˈfɔːrənər/",
+      "meaning": "n. 外国人",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "unit",
+      "phonetic": "/ˈjuːnɪt/",
+      "meaning": "n. 单位；单元",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "persuade",
+      "phonetic": "/pəˈsweɪd/; /pərˈsweɪd/",
+      "meaning": "v. 使信服；使相信",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "entertain",
+      "phonetic": "/ˌentəˈteɪn/; /ˌentərˈteɪn/",
+      "meaning": "v. 使快乐；娱乐",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "resource",
+      "phonetic": "/rɪˈsɔːs/; /rɪˈsɔːrs/",
+      "meaning": "n. 资源；财力",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "continue",
+      "phonetic": "/kənˈtɪnjuː/",
+      "meaning": "v. 继续说；持续，继续做",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "case",
+      "phonetic": "/keɪs/",
+      "meaning": "n. 情况；事例",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "rope",
+      "phonetic": "/rəʊp/",
+      "meaning": "n. 粗绳；绳索",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "technology",
+      "phonetic": "/tekˈnɒlədʒi/; /tekˈnɑːlədʒi/",
+      "meaning": "n. 技术；工艺",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "exist",
+      "phonetic": "/ɪɡˈzɪst/",
+      "meaning": "v. 存在；实际上有",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "covering",
+      "phonetic": "/ˈkʌvərɪŋ/",
+      "meaning": "n.（一层）覆盖层，遮盖物",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "situation",
+      "phonetic": "/ˌsɪtʃuˈeɪʃn/",
+      "meaning": "n. 情况；状况；形势",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "economy",
+      "phonetic": "/ɪˈkɒnəmi/; /ɪˈkɑːnəmi/",
+      "meaning": "n. 经济；经济情况",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "blouse",
+      "phonetic": "/blaʊz/; /blaʊs/",
+      "meaning": "n.（女式）短上衣，衬衫",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "unnecessary",
+      "phonetic": "/ʌnˈnesəsəri/; /ʌnˈnesəseri/",
+      "meaning": "adj. 不需要的；不必要的；多余的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "total",
+      "phonetic": "/ˈtəʊtl/",
+      "meaning": "adj. 总的；n. 总计",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "magazine",
+      "phonetic": "/ˌmæɡəˈziːn/; /ˌmæɡəˈziːn/",
+      "meaning": "n. 杂志",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "university",
+      "phonetic": "/ˌjuːnɪˈvɜːsəti/;/ˌjuːnɪˈvɜːrsəti/",
+      "meaning": "n. 大学",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "basic",
+      "phonetic": "/ˈbeɪsɪk/",
+      "meaning": "adj. 基本的；基础的；初级的；必需的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "graduation",
+      "phonetic": "/ˌɡrædʒuˈeɪʃn/",
+      "meaning": "n. 毕业；毕业典礼",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "necessary",
+      "phonetic": "/ˈnesəsəri/; /ˈnesəseri/",
+      "meaning": "adj. 必要的；必需的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "therefore",
+      "phonetic": "/ˈðeəfɔː(r)/; /ˈðerfɔːr/",
+      "meaning": "adv. 因此；所以；因而",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "society",
+      "phonetic": "/səˈsaɪəti/",
+      "meaning": "n. 社会",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "responsible",
+      "phonetic": "/rɪˈspɒnsəbl/; /rɪˈspɑːnsəbl/",
+      "meaning": "adj. 有责任；负责；承担义务",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "silly",
+      "phonetic": "/ˈsɪli/",
+      "meaning": "adj. 愚蠢的；傻的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "goose",
+      "phonetic": "/ɡuːs/",
+      "meaning": "n. 鹅",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "golden",
+      "phonetic": "/ˈɡəʊldən/",
+      "meaning": "adj. 金质的；金色的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "upon",
+      "phonetic": "/əˈpɒn/；/əˈpɑːn/",
+      "meaning": "prep. 在……之上；在……时候",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "lay",
+      "phonetic": "/leɪ/",
+      "meaning": "v. 下（蛋），产（卵）",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "basket",
+      "phonetic": "/ˈbɑːskɪt/；/ˈbæskɪt/",
+      "meaning": "n. 篮子",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "kill",
+      "phonetic": "/kɪl/",
+      "meaning": "v. 杀死",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "disappointment",
+      "phonetic": "/ˌdɪsəˈpɔɪntmənt/",
+      "meaning": "n. 失望；沮丧；扫兴",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "elsewhere",
+      "phonetic": "/ˌelsˈweə(r)/; /ˌelsˈwer/",
+      "meaning": "adv. 在（或去、到）别处",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "hurricane",
+      "phonetic": "/ˈhʌrɪkən/; /ˈhɜːrəkən/",
+      "meaning": "n. 飓风",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "reasonable",
+      "phonetic": "/ˈriːznəbl/",
+      "meaning": "adj. 明智的；合理的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "deadly",
+      "phonetic": "/ˈdedli/",
+      "meaning": "adj. 致命的，致死的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "disease",
+      "phonetic": "/dɪˈziːz/",
+      "meaning": "n. 病；疾病",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "waterway",
+      "phonetic": "/ˈwɔːtəweɪ/",
+      "meaning": "n. 水路；航道",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "preparation",
+      "phonetic": "/ˌprepəˈreɪʃn/",
+      "meaning": "n. 准备；准备工作",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "flashlight",
+      "phonetic": "/ˈflæʃlaɪt/",
+      "meaning": "n. 手电筒",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "danger",
+      "phonetic": "/ˈdeɪndʒə(r)/",
+      "meaning": "n. 危险；风险",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "emergency",
+      "phonetic": "/ɪˈmɜːdʒənsi/;/ɪˈmɜːrdʒənsi/",
+      "meaning": "n. 紧急情况；突发事件",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "kit",
+      "phonetic": "/kɪt/",
+      "meaning": "n. 成套工具；成套设备",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "aftershock",
+      "phonetic": "/ˈɑːftəʃɒk/; /ˈɑːftərʃɑːk/",
+      "meaning": "n.（地震后的）余震",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "storm",
+      "phonetic": "/stɔːm/",
+      "meaning": "n. 暴风雨",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "thunder",
+      "phonetic": "/ˈθʌndə(r)/",
+      "meaning": "n. 雷；雷声",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "lightning",
+      "phonetic": "/ˈlaɪtnɪŋ/",
+      "meaning": "n. 闪电",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "quake",
+      "phonetic": "/kweɪk/",
+      "meaning": "n. 地震；震动；颤动",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "prevention",
+      "phonetic": "/prɪˈvenʃn/",
+      "meaning": "n. 预防；防止",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "perform",
+      "phonetic": "/pəˈfɔːm/; /pərˈfɔːrm/",
+      "meaning": "v. 工作，运转（好/不好）；演出；表演",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "superstorm",
+      "phonetic": "/ˈsuːpəstɔːm/;",
+      "meaning": "n. 超级风暴（一种大型的、异常发生的破坏性风暴）",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "hillside",
+      "phonetic": "/ˈhɪlsaɪd/",
+      "meaning": "n. 小山坡",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "roof",
+      "phonetic": "/ruːf/",
+      "meaning": "n. 屋顶；顶部",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "painful",
+      "phonetic": "/ˈpeɪnfl/",
+      "meaning": "adj. 令人疼痛的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "clothing",
+      "phonetic": "/ˈkləʊðɪŋ/",
+      "meaning": "n. 衣服；（尤指某种）服装",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "ahead",
+      "phonetic": "/əˈhed/",
+      "meaning": "adv.在前面, (时间、空间)向前; 提前; 预先",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "passage",
+      "phonetic": "/ˈpæsɪdʒ/",
+      "meaning": "n. 通道；走廊；章节；段落",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "pour",
+      "phonetic": "/pɔː(r)/",
+      "meaning": "v.（雨）倾盆而下；倒出",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "pale",
+      "phonetic": "/peɪl/",
+      "meaning": "adj. 苍白的；v. 变苍白",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "towel",
+      "phonetic": "/ˈtaʊəl/",
+      "meaning": "n. 毛巾；手巾；抹布；纸巾",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "coal",
+      "phonetic": "/kəʊl/",
+      "meaning": "n. 煤",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "global",
+      "phonetic": "/ˈɡləʊbl/",
+      "meaning": "adj. 全球的；全世界的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "several",
+      "phonetic": "/ˈsevərəl/",
+      "meaning": "det.&pron. 几个；数个",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "recent",
+      "phonetic": "/ˈriːsnt/",
+      "meaning": "adj. 近来的；新近的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "seriously",
+      "phonetic": "/ˈsɪəriəsli/; /ˈsɪriəsli/",
+      "meaning": "adv. 严重地；严肃地；认真地",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "injured",
+      "phonetic": "/ˈɪndʒəd/; /ˈɪndʒərd/",
+      "meaning": "adj. 受伤的；有伤的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "physically",
+      "phonetic": "/ˈfɪzɪkli/",
+      "meaning": "adv. 身体上；肉体上",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "social",
+      "phonetic": "/ˈsəʊʃl/",
+      "meaning": "adj. 社交的；交际的；社会的；社会性的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "whatever",
+      "phonetic": "/wɒtˈevə(r)/; /wʌtˈevər/",
+      "meaning": "det.&pron. 一切事物; 无论什么，不管什么",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "collection",
+      "phonetic": "/kəˈlekʃn/",
+      "meaning": "n. 收集物，收藏品；一批物品；一群人",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "expert",
+      "phonetic": "/ˈekspɜːt/; /ˈekspɜːrt/",
+      "meaning": "n. 专家",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "citizen",
+      "phonetic": "/ˈsɪtɪzn/",
+      "meaning": "n. 公民；居民",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "communication",
+      "phonetic": "/kəˌmjuːnɪˈkeɪʃn/",
+      "meaning": "n. 通信；表达；交流；信息",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "airport",
+      "phonetic": "/ˈeəpɔːt/; /ˈerpɔːrt/",
+      "meaning": "n. 机场",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "watchful",
+      "phonetic": "/ˈwɒtʃfl/; /ˈwɑːtʃfl/",
+      "meaning": "adj. 警惕的；注意的；提防的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "fantastic",
+      "phonetic": "/fænˈtæstɪk/",
+      "meaning": "adj. 极好的；了不起的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "president",
+      "phonetic": "/ˈprezɪdənt/",
+      "meaning": "n.（机构、俱乐部、学院等的）主席，院长；总统；国家主席",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "clarify",
+      "phonetic": "/ˈklærəfaɪ/",
+      "meaning": "v. 阐明；使更清晰易懂；澄清",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "clue",
+      "phonetic": "/kluː/",
+      "meaning": "n. 线索，迹象；提示",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "embroidery",
+      "phonetic": "/ɪmˈbrɔɪdəri/",
+      "meaning": "n. 绣花；刺绣图案",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "Manchu",
+      "phonetic": "/ˌmænˈtʃuː/; /ˈmæntʃuː/",
+      "meaning": "adj. 满族的；满语的；n. 满语；满族人",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "trader",
+      "phonetic": "/ˈtreɪdə(r)/",
+      "meaning": "n. 商人",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "rely",
+      "phonetic": "/rɪˈlaɪ/",
+      "meaning": "v. 依赖；依靠",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "camel",
+      "phonetic": "/ˈkæml/",
+      "meaning": "n. 骆驼",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "waterwheel",
+      "phonetic": "/ˈwɔːtəwiːl/; /ˈwɔːtərwiːl/",
+      "meaning": "n.（尤指旧时的）水轮，水车",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "canal",
+      "phonetic": "/kəˈnæl/",
+      "meaning": "n. 运河；灌溉渠",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "tense",
+      "phonetic": "/tens/",
+      "meaning": "n. 时态",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "actual",
+      "phonetic": "/ˈæktʃuəl/",
+      "meaning": "adj. 真实的；实际的；真正的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "Korean",
+      "phonetic": "/kəˈriən/",
+      "meaning": "adj. 朝鲜族的，朝鲜人的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "onto",
+      "phonetic": "/ˈɒntəʊ/; /ˈɑːntəʊ/",
+      "meaning": "prep. 向，朝；朝向，面向（某个方向）",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "article",
+      "phonetic": "/ˈɑːtɪkl/; /ˈɑːrtɪkl/",
+      "meaning": "n. 文章",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "oven",
+      "phonetic": "/ˈʌvn/",
+      "meaning": "n. 烤炉；烤箱",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "skin",
+      "phonetic": "/skɪn/",
+      "meaning": "n. 皮；皮肤",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "feature",
+      "phonetic": "/ˈfiːtʃə(r)/",
+      "meaning": "n. 特征；特点；特色",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "jacket",
+      "phonetic": "/ˈdʒækɪt/",
+      "meaning": "n. 夹克衫",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "characteristic",
+      "phonetic": "/ˌkærəktəˈrɪstɪk/",
+      "meaning": "n. 特征；特点；品质；adj. 独特的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "overseas",
+      "phonetic": "/ˌəʊvəˈsiːz/; /ˌoʊvərˈsiːz/",
+      "meaning": "adj. 海外的；外国的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "local",
+      "phonetic": "/ˈləʊkl/",
+      "meaning": "n. 当地人；本地人；",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "ink",
+      "phonetic": "/ɪŋk/",
+      "meaning": "n. 墨水",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "biography",
+      "phonetic": "/baɪˈɒɡrəfi/; /baɪˈɑːɡrəfi/",
+      "meaning": "n. 传记；传记作品",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "merchant",
+      "phonetic": "/ˈmɜːtʃənt/; /ˈmɜːrtʃənt/",
+      "meaning": "n. 商人；商家",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "translate",
+      "phonetic": "/trænsˈleɪt/",
+      "meaning": "v. 翻译",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "translation",
+      "phonetic": "/trænsˈleɪʃn/",
+      "meaning": "n. 译文；译本；翻译；译",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "mansion",
+      "phonetic": "/ˈmænʃn/",
+      "meaning": "n. 宅第；公馆",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "energetic",
+      "phonetic": "/ˌenəˈdʒetɪk/; /ˌenərˈdʒetɪk/",
+      "meaning": "adj. 精力充沛的；充满活力的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "perhaps",
+      "phonetic": "/pəˈhæps/; /pərˈhæps/",
+      "meaning": "adv. 也许；可能",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "strategy",
+      "phonetic": "/ˈstrætədʒi/",
+      "meaning": "n. 策略；计策；规划",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "preview",
+      "phonetic": "/ˈpriːvjuː/",
+      "meaning": "v. 概述；n. 预览",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "*soup",
+      "phonetic": "",
+      "meaning": "n. 汤；羹",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "beak",
+      "phonetic": "/biːk/",
+      "meaning": "n. 鸟喙",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "jar",
+      "phonetic": "/dʒɑː(r)/",
+      "meaning": "n.（玻璃）罐子，广口瓶",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "neck",
+      "phonetic": "/nek/",
+      "meaning": "n.（物体的）细长部分；颈部；脖子；颈",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "scene",
+      "phonetic": "/siːn/",
+      "meaning": "n. 地点，现场；场面；景象；景色",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "regular",
+      "phonetic": "/ˈreɡjələr/",
+      "meaning": "adj.常去某地的; 有规律的; 定时的; 通常的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "landlord",
+      "phonetic": "/ˈlændlɔːd/; /ˈlændlɔːrd/",
+      "meaning": "n. 房东；业主；老板",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "treasure",
+      "phonetic": "/ˈtreʒə(r)/",
+      "meaning": "n. 财富；金银财宝；珠宝；珍宝",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "leading",
+      "phonetic": "/ˈliːdɪŋ/",
+      "meaning": "adj. 最重要的",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "playwright",
+      "phonetic": "/ˈpleɪraɪt/",
+      "meaning": "n. 剧作家",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "honesty",
+      "phonetic": "/ˈɒnəsti/ ; /ˈaːnəsti/",
+      "meaning": "n. 诚实；老实；正直",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
+    },
+    {
+      "word": "emotion",
+      "phonetic": "/ɪˈməʊʃn/",
+      "meaning": "n. 强烈的感情；激情；情绪",
+      "wrongAnswer": "(未填写)",
+      "errorNote": "未填写",
+      "tip": "需重点记忆"
     }
   ]
 }
