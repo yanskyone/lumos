@@ -1,6 +1,6 @@
 /**
  * Lumos Vocab - Cloud Storage 模块
- * 支持 Supabase 云端存储
+ * 支持 Supabase 云端存储 + 用户追踪
  */
 
 const CloudStorage = (() => {
@@ -10,13 +10,38 @@ const CloudStorage = (() => {
   };
 
   let _isConfigured = false;
+  let _userId = null;
 
   function init(url, key) {
     CONFIG.SUPABASE_URL = url;
     CONFIG.SUPABASE_KEY = key;
     _isConfigured = url && key && url !== '' && !url.includes('YOUR_');
+
+    // 生成或获取用户ID
+    _userId = getUserId();
+
     console.log('[CloudStorage] 初始化:', _isConfigured ? '已连接' : '未配置');
+    console.log('[CloudStorage] 用户ID:', _userId);
     return _isConfigured;
+  }
+
+  // 生成或获取用户ID
+  function getUserId() {
+    const STORAGE_KEY = 'lumos:vocab:user-id';
+    let userId = localStorage.getItem(STORAGE_KEY);
+
+    if (!userId) {
+      // 生成新的匿名ID
+      userId = 'user-' + Date.now().toString(36) + '-' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem(STORAGE_KEY, userId);
+      console.log('[CloudStorage] 生成新用户ID:', userId);
+    }
+
+    return userId;
+  }
+
+  function getCurrentUserId() {
+    return _userId;
   }
 
   function isConfigured() {
@@ -51,7 +76,8 @@ const CloudStorage = (() => {
   // ========== API 方法 ==========
 
   async function getErrors() {
-    const result = await request('/vocab_errors?select=*&order=id.asc');
+    // 按用户ID获取数据
+    const result = await request(`/vocab_errors?user_id=eq.${_userId}&select=*&order=id.asc`);
     if (result.error) return { data: [], error: result.error };
     // 转换数据库字段为前端格式
     const errors = result.data.map(dbToError);
@@ -77,7 +103,9 @@ const CloudStorage = (() => {
       const dbKey = errorToDbKey(key);
       if (dbKey) dbUpdates[dbKey] = value;
     }
-    const result = await request(`/vocab_errors?id=eq.${id}`, {
+    // 确保更新属于当前用户
+    dbUpdates.user_id = _userId;
+    const result = await request(`/vocab_errors?id=eq.${id}&user_id=eq.${_userId}`, {
       method: 'PATCH',
       body: JSON.stringify(dbUpdates)
     });
@@ -93,6 +121,7 @@ const CloudStorage = (() => {
 
   async function saveTrainingRecord(record) {
     const dbRecord = trainingToDb(record);
+    dbRecord.user_id = _userId;  // 添加用户ID
     const result = await request('/vocab_training', {
       method: 'POST',
       body: JSON.stringify([dbRecord])
@@ -210,7 +239,8 @@ const CloudStorage = (() => {
     getTrainingRecords,
     saveTrainingRecord,
     getBatches,
-    createBatch
+    createBatch,
+    getCurrentUserId
   };
 })();
 
