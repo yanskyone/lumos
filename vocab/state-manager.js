@@ -407,25 +407,13 @@ const VocabStateManager = (() => {
     return _cloudConnected;
   }
 
-  // 云端数据缓存（用于临时存储，不作为主要数据源）
-  let _cloudErrors = [];
-  let _cloudTraining = [];
-
   // 获取所有错题
   function getAllErrors() {
-    if (_useCloud) {
-      return _cloudErrors;
-    }
     return safeJsonParse(localStorage.getItem(KEYS.ERRORS), []);
   }
 
   // 保存所有错题
   function saveAllErrors(errors) {
-    if (_useCloud) {
-      _cloudErrors = errors;
-      CloudStorage.saveErrors(errors);
-      return;
-    }
     safeSetItem(KEYS.ERRORS, JSON.stringify(errors));
   }
 
@@ -508,11 +496,6 @@ const VocabStateManager = (() => {
 
     errors[index] = { ...errors[index], ...updates };
     saveAllErrors(errors);
-
-    // 云端同步
-    if (_useCloud) {
-      CloudStorage.updateError(id, updates);
-    }
 
     return errors[index];
   }
@@ -810,30 +793,18 @@ const VocabStateManager = (() => {
       responseTime: record.responseTime || 0,
     };
 
-    if (_useCloud) {
-      _cloudTraining.push(newRecord);
-      // 限制最多 100 条
-      if (_cloudTraining.length > 100) {
-        _cloudTraining = _cloudTraining.slice(-100);
-      }
-      CloudStorage.saveTrainingRecord(newRecord);
-    } else {
-      const records = safeJsonParse(localStorage.getItem(KEYS.TRAINING), []);
-      records.push(newRecord);
-      // 限制最多 100 条
-      const toSave = records.slice(-100);
-      safeSetItem(KEYS.TRAINING, JSON.stringify(toSave));
-    }
+    // 保存到 localStorage
+    const records = safeJsonParse(localStorage.getItem(KEYS.TRAINING), []);
+    records.push(newRecord);
+    // 限制最多 100 条
+    const toSave = records.slice(-100);
+    safeSetItem(KEYS.TRAINING, JSON.stringify(toSave));
 
     return newRecord;
   }
 
   // 获取训练记录
   function getTrainingRecords(limit) {
-    if (_useCloud) {
-      const records = _cloudTraining;
-      return limit ? records.slice(-limit) : records;
-    }
     const records = safeJsonParse(localStorage.getItem(KEYS.TRAINING), []);
     return limit ? records.slice(-limit) : records;
   }
@@ -857,9 +828,6 @@ const VocabStateManager = (() => {
 
   // 清除训练记录
   function clearTrainingRecords() {
-    if (_useCloud) {
-      _cloudTraining = [];
-    }
     localStorage.removeItem(KEYS.TRAINING);
   }
 
