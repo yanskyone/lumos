@@ -290,60 +290,112 @@ const VocabStateManager = (() => {
   }
 
   /**
-   * 从云端下载数据到本地（用户手动触发）
+   * 从云端初始化本地数据（用户手动触发）
+   * 会清空本地所有数据，重新从云端下载
    * @returns {Promise<{success: boolean, count: number, message: string}>}
    */
-  async function loadFromCloud() {
+  async function initializeFromCloud() {
     if (!_cloudConnected || !CloudStorage) {
       return { success: false, count: 0, message: '云端未连接，请检查网络' };
     }
 
-    console.log('[VocabStateManager] 开始从云端下载数据...');
+    console.log('[VocabStateManager] 开始从云端初始化...');
 
     try {
-      const result = await CloudStorage.getErrors();
+      // 第1步：清空本地所有数据
+      console.log('[VocabStateManager] 清空本地数据...');
+      clearAllLocalData();
 
-      if (result.error) {
-        console.error('[VocabStateManager] 云端获取失败:', result.error);
-        return { success: false, count: 0, message: '云端获取失败: ' + result.error.message };
+      let totalErrors = 0;
+
+      // 第2步：下载用户私有错题
+      console.log('[VocabStateManager] 下载私有错题...');
+      const privateResult = await CloudStorage.getErrors();
+
+      if (!privateResult.error && privateResult.data && privateResult.data.length > 0) {
+        const privateErrors = privateResult.data.map(e => convertCloudError(e));
+        saveAllErrors(privateErrors);
+        totalErrors += privateErrors.length;
+        console.log('[VocabStateManager] 下载私有错题: ' + privateErrors.length + ' 条');
       }
 
-      if (!result.data || result.data.length === 0) {
-        return { success: false, count: 0, message: '云端暂无数据' };
+      // 第3步：下载公共错题库
+      console.log('[VocabStateManager] 下载公共错题库...');
+      const publicResult = await CloudStorage.getPublicErrors();
+
+      if (!publicResult.error && publicResult.data && publicResult.data.length > 0) {
+        // 合并到现有数据（去重）
+        const existingWords = new Set(getAllErrors().map(e => e.word.toLowerCase()));
+        const newPublicErrors = [];
+
+        for (const e of publicResult.data) {
+          if (!existingWords.has(e.word.toLowerCase())) {
+            newPublicErrors.push(convertCloudError(e));
+            existingWords.add(e.word.toLowerCase());
+          }
+        }
+
+        if (newPublicErrors.length > 0) {
+          const allErrors = [...getAllErrors(), ...newPublicErrors];
+          saveAllErrors(allErrors);
+          totalErrors += newPublicErrors.length;
+          console.log('[VocabStateManager] 下载公共错题: ' + newPublicErrors.length + ' 条');
+        }
       }
 
-      // 保存到本地
-      const cloudErrors = result.data.map(e => ({
-        id: e.id,
-        word: e.word,
-        phonetic: e.phonetic || '',
-        meaning: e.meaning,
-        category: e.category || CATEGORIES.UNLEARNED,
-        wrongAnswer: e.wrongAnswer || '',
-        errorNote: e.errorNote || '',
-        tip: e.tip || '',
-        unit: e.unit || '',
-        status: e.status || STATUS.PENDING,
-        masteredModes: e.masteredModes || [],
-        confusedWith: e.confusedWith || [],
-        correctCount: e.correctCount || 0,
-        createdAt: e.createdAt || new Date().toISOString(),
-        lastPracticedAt: e.lastPracticedAt || null,
-        batchId: e.batchId || 'cloud-sync',
-        visibility: e.visibility || 'private',
-        ownerId: e.ownerId || 'cloud',
-      }));
-
-      saveAllErrors(cloudErrors);
+      // 第4步：重置版本号
       localStorage.setItem(PREFIX + ':data-version', DATA_VERSION);
 
-      console.log('[VocabStateManager] 已从云端下载 ' + cloudErrors.length + ' 条数据到本地');
-      return { success: true, count: cloudErrors.length, message: '成功从云端下载 ' + cloudErrors.length + ' 条数据' };
+      console.log('[VocabStateManager] 初始化完成，共 ' + totalErrors + ' 条数据');
+
+      if (totalErrors === 0) {
+        return { success: true, count: 0, message: '云端暂无数据' };
+      }
+
+      return { success: true, count: totalErrors, message: '初始化完成，共 ' + totalErrors + ' 条词汇' };
 
     } catch (e) {
-      console.error('[VocabStateManager] 从云端下载失败:', e);
-      return { success: false, count: 0, message: '下载失败: ' + e.message };
+      console.error('[VocabStateManager] 初始化失败:', e);
+      return { success: false, count: 0, message: '初始化失败: ' + e.message };
     }
+  }
+
+  /**
+   * 清空本地所有数据
+   */
+  function clearAllLocalData() {
+    Object.values(KEYS).forEach(key => {
+      localStorage.removeItem(key);
+    });
+    // 重置初始化状态
+    _initialized = false;
+    console.log('[VocabStateManager] 本地数据已清空');
+  }
+
+  /**
+   * 转换云端数据格式为本地格式
+   */
+  function convertCloudError(e) {
+    return {
+      id: e.id,
+      word: e.word,
+      phonetic: e.phonetic || '',
+      meaning: e.meaning,
+      category: e.category || CATEGORIES.UNLEARNED,
+      wrongAnswer: e.wrongAnswer || '',
+      errorNote: e.errorNote || '',
+      tip: e.tip || '',
+      unit: e.unit || '',
+      status: e.status || STATUS.PENDING,
+      masteredModes: e.masteredModes || [],
+      confusedWith: e.confusedWith || [],
+      correctCount: e.correctCount || 0,
+      createdAt: e.createdAt || new Date().toISOString(),
+      lastPracticedAt: e.lastPracticedAt || null,
+      batchId: e.batchId || 'cloud-sync',
+      visibility: e.visibility || 'private',
+      ownerId: e.ownerId || 'cloud',
+    };
   }
 
   /**
@@ -1060,7 +1112,7 @@ const VocabStateManager = (() => {
     checkCloudConnection,
 
     // 云端同步
-    loadFromCloud,
+    initializeFromCloud,
     syncToCloud,
 
     // 错题管理

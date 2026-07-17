@@ -854,7 +854,7 @@ function setupEventListeners() {
 
   // 云端同步按钮
   $('btn-sync-to-cloud').onclick = syncToCloud;
-  $('btn-load-from-cloud').onclick = loadFromCloud;
+  $('btn-load-from-cloud').onclick = initializeFromCloud;
 
   // 训练模式选择
   document.querySelectorAll('.mode-card[data-mode]').forEach(card => {
@@ -910,16 +910,16 @@ function setupEventListeners() {
 // ========== 云端同步功能 ==========
 
 /**
- * 从云端下载数据到本地
+ * 从云端初始化本地数据（清空本地，重新下载）
  */
-async function loadFromCloud() {
+async function initializeFromCloud() {
   const btn = $('btn-load-from-cloud');
   const originalText = btn.textContent;
-  btn.textContent = '下载中...';
+  btn.textContent = '初始化中...';
   btn.disabled = true;
 
   try {
-    const result = await VocabStateManager.loadFromCloud();
+    const result = await VocabStateManager.initializeFromCloud();
 
     if (result.success) {
       showToast(result.message, 3000);
@@ -929,8 +929,8 @@ async function loadFromCloud() {
       showToast(result.message, 3000);
     }
   } catch (e) {
-    console.error('[loadFromCloud] 失败:', e);
-    showToast('下载失败: ' + e.message, 3000);
+    console.error('[initializeFromCloud] 失败:', e);
+    showToast('初始化失败: ' + e.message, 3000);
   } finally {
     btn.textContent = originalText;
     btn.disabled = false;
