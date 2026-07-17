@@ -11,14 +11,6 @@
   },
   "errors": [
     {
-      "word": "单词",
-      "phonetic": "音标",
-      "meaning": "释义",
-      "wrongAnswer": "诗颖写了",
-      "errorNote": "错误分析",
-      "tip": "提示"
-    },
-    {
       "word": "he",
       "phonetic": "hiː; hi",
       "meaning": "pron*.他",
@@ -5251,7 +5243,7 @@
       "tip": "需重点记忆"
     },
     {
-      "word": "*soup",
+      "word": "soup",
       "phonetic": "",
       "meaning": "n. 汤；羹",
       "wrongAnswer": "(未填写)",
