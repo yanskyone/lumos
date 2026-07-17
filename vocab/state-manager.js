@@ -93,7 +93,6 @@ const VocabStateManager = (() => {
     { word: 'sit', meaning: 'v. 坐', confused: 'set', confusedMeaning: 'v. 设置；放置' },
     { word: 'wear', meaning: 'v. 穿（持续）', confused: 'put on', confusedMeaning: '穿上（动作）' },
     { word: 'study', meaning: 'v./n. 学习（持续）', confused: 'learn', confusedMeaning: '学会（结果）' },
-    { word: 'expensive', meaning: 'adj.昂贵的', confused: 'cheap', confusedMeaning: 'adj. 便宜的' },
     { word: 'lost', meaning: 'adj.丢失的', confused: 'lose', confusedMeaning: 'v. 丢失' },
   ];
 
