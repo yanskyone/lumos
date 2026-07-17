@@ -944,5 +944,16 @@ async function init() {
   }
 }
 
+// ========== 网络状态监听 ==========
+window.addEventListener('online', () => {
+  console.log('[Lumos Vocab] 网络已恢复，将使用云端同步');
+  showToast('🌐 网络已恢复');
+});
+
+window.addEventListener('offline', () => {
+  console.log('[Lumos Vocab] 网络已断开，将使用本地数据');
+  showToast('💾 已切换到离线模式');
+});
+
 // 启动
 document.addEventListener('DOMContentLoaded', init);

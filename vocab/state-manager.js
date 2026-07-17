@@ -202,10 +202,21 @@ const VocabStateManager = (() => {
   let _initialized = false;
   let _initPromise = null;
   let _useCloud = false;  // 是否使用云端模式
+  let _offline = false;   // 是否离线模式
+
+  // 检测网络状态
+  function checkNetworkStatus() {
+    const online = navigator.onLine;
+    if (!online) {
+      console.log('[VocabStateManager] 检测到离线状态，自动切换到本地模式');
+      _offline = true;
+    }
+    return online;
+  }
 
   // 检查是否使用云端模式
   function isCloudMode() {
-    return CONFIG.STORAGE_MODE === 'cloud' && CloudStorage && CloudStorage.isConfigured();
+    return _useCloud && !_offline;
   }
 
   async function ensureInitialized() {
@@ -219,6 +230,18 @@ const VocabStateManager = (() => {
     if (_initPromise) {
       console.log('[VocabStateManager] 正在初始化中，等待...');
       await _initPromise;
+      return;
+    }
+
+    // 检测网络状态
+    const isOnline = checkNetworkStatus();
+
+    // 如果离线，直接使用本地模式
+    if (!isOnline) {
+      console.log('[VocabStateManager] 离线模式，使用本地数据');
+      _initPromise = initLocalMode();
+      await _initPromise;
+      _initialized = true;
       return;
     }
 
