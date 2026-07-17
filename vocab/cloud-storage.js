@@ -12,6 +12,12 @@ const CloudStorage = (() => {
   let _isConfigured = false;
   let _userId = null;
 
+  // 混合模式配置
+  const MIXED_MODE = {
+    canCreatePublic: true,  // 用户是否可以创建公共错题
+    showPublicByDefault: true  // 默认是否显示公共错题
+  };
+
   function init(url, key) {
     CONFIG.SUPABASE_URL = url;
     CONFIG.SUPABASE_KEY = key;
@@ -75,28 +81,110 @@ const CloudStorage = (() => {
 
   // ========== API 方法 ==========
 
-  async function getErrors() {
-    // 按用户ID获取数据
-    const userId = encodeURIComponent(_userId);
-    const result = await request(`/vocab_errors?user_id=eq.${userId}&select=*&order=id.asc`);
-    if (result.error) return { data: [], error: result.error };
-    // 转换数据库字段为前端格式
-    const errors = result.data.map(dbToError);
-    return { data: errors, error: null };
+  // 从 vocab_public 表获取公共错题
+  async function getPublicErrors() {
+    console.log('[CloudStorage] >>> 开始获取公共错题...');
+    // 移除 is_active 过滤，直接获取所有数据
+    const result = await request('/vocab_public?select=*&order=word.asc');
+    if (result.error) {
+      console.error('[CloudStorage] 获取公共错题失败:', result.error);
+      return { data: [], error: result.error };
+    }
+    console.log('[CloudStorage] >>> vocab_public 返回 ' + result.data.length + ' 条数据');
+    return { data: result.data.map(dbToPublicError), error: null };
   }
 
-  async function saveErrors(errors) {
-    // 先删除当前用户的数据
+  async function getErrors(options = {}) {
+    console.log('[CloudStorage] === getErrors 开始 ===');
     const userId = encodeURIComponent(_userId);
-    await request(`/vocab_errors?user_id=eq.${userId}`, { method: 'DELETE' });
+    const plainUserId = _userId;
 
-    // 为每条数据添加用户ID后逐条插入（避免批量冲突）
-    const dbErrors = errors.map((e, i) => {
+    try {
+      // 1. 先获取用户私有错题
+      const privateResult = await request(`/vocab_errors?owner_id=eq.${userId}&select=*&order=created_at.desc`);
+      let privateErrors = [];
+
+      if (!privateResult.error && privateResult.data && privateResult.data.length > 0) {
+        privateErrors = privateResult.data.map(e => ({ ...e, isPublic: false }));
+        console.log('[CloudStorage] 用户私有错题:', privateErrors.length, '条');
+      }
+
+      // 2. 如果没有私有错题，从公共错题库同步
+      if (privateErrors.length === 0) {
+        console.log('[CloudStorage] 用户私有错题为空，开始同步公共错题...');
+        const publicResult = await getPublicErrors();
+
+        if (publicResult.data && publicResult.data.length > 0) {
+          // 将公共错题复制到用户私有表
+          const toSave = publicResult.data.map((e, index) => ({
+            id: plainUserId + '-ve-' + String(index + 1).padStart(3, '0'),
+            word: e.word,
+            phonetic: e.phonetic || '',
+            meaning: e.meaning,
+            category: e.category || 'unlearned',
+            wrong_answer: e.wrongAnswer || '',
+            error_note: e.errorNote || '',
+            tip: e.tip || '',
+            unit: e.unit || '',
+            status: 'pending',
+            mastered_modes: [],
+            confused_with: [],
+            correct_count: 0,
+            created_at: new Date().toISOString(),
+            last_practiced_at: null,
+            batch_id: e.batchId || 'synced-from-public',
+            owner_id: plainUserId,
+            source: 'synced'
+          }));
+
+          // 分批保存
+          for (let i = 0; i < toSave.length; i += 50) {
+            const batch = toSave.slice(i, i + 50);
+            await request('/vocab_errors', {
+              method: 'POST',
+              headers: { 'Prefer': 'return=minimal' },
+              body: JSON.stringify(batch)
+            });
+          }
+
+          console.log('[CloudStorage] 已同步', toSave.length, '条公共错题到私有表');
+          privateErrors = toSave.map(e => ({ ...e, isPublic: false }));
+        }
+      }
+
+      // 转换字段
+      const convertedErrors = privateErrors.map(e => dbToError(e));
+      console.log('[CloudStorage] === 返回 ' + convertedErrors.length + ' 条错题 ===');
+
+      return { data: convertedErrors, error: null };
+    } catch (e) {
+      console.error('[CloudStorage] 获取错题失败:', e);
+      return { data: [], error: e };
+    }
+  }
+
+  async function saveErrors(errors, options = {}) {
+    // 混合模式：只保存当前用户的私有错题，公共错题通过单独接口管理
+    const userId = encodeURIComponent(_userId);
+    const visibility = options.visibility || 'private';
+
+    // 只删除当前用户的私有错题（不删除公共错题）
+    await request(`/vocab_errors?owner_id=eq.${userId}&share_type=eq.private`, { method: 'DELETE' });
+
+    // 为每条数据添加 owner_id 和 visibility 后逐条插入
+    const dbErrors = errors.map((e) => {
       const error = errorToDb(e);
-      error.user_id = _userId;
-      error.id = _userId + '-' + e.id;  // 确保ID唯一
+      error.owner_id = _userId;
+      error.share_type = visibility;
+      // 私有错题ID加上用户前缀以确保唯一
+      error.id = _userId + '-' + e.id;
       return error;
     });
+
+    if (dbErrors.length === 0) {
+      console.log('[CloudStorage] 没有私有错题需要保存');
+      return { error: null };
+    }
 
     // 分批插入，每批10条
     const batchSize = 10;
@@ -109,23 +197,63 @@ const CloudStorage = (() => {
       });
     }
 
-    console.log('[CloudStorage] 已保存 ' + dbErrors.length + ' 条错题');
+    console.log('[CloudStorage] 已保存 ' + dbErrors.length + ' 条私有错题');
     return { error: null };
   }
 
-  async function updateError(id, updates) {
+  // 创建公共错题（供管理员或所有用户使用）
+  async function createPublicError(error) {
+    const dbError = errorToDb(error);
+    dbError.owner_id = _userId;
+    dbError.share_type = 'public';
+    dbError.id = 'public-' + error.id + '-' + Date.now();
+
+    const result = await request('/vocab_errors', {
+      method: 'POST',
+      body: JSON.stringify([dbError])
+    });
+
+    if (!result.error) {
+      console.log('[CloudStorage] 已创建公共错题:', dbError.id);
+    }
+    return result;
+  }
+
+  // 删除错题（私有错题可删除，公共错题需确认）
+  async function deleteError(id, options = {}) {
+    const error = options.error || {};
+    const userId = encodeURIComponent(_userId);
+
+    // 私有错题：仅创建者可删除
+    if (error.visibility === 'private') {
+      return await request(`/vocab_errors?id=eq.${id}&owner_id=eq.${userId}`, { method: 'DELETE' });
+    }
+
+    // 公共错题：需要 isPublicDelete 选项才能删除
+    if (options.allowPublicDelete) {
+      return await request(`/vocab_errors?id=eq.${id}`, { method: 'DELETE' });
+    }
+
+    return { error: new Error('Cannot delete public errors without confirmation') };
+  }
+
+  async function updateError(id, updates, options = {}) {
     const dbUpdates = {};
     for (const [key, value] of Object.entries(updates)) {
       const dbKey = errorToDbKey(key);
       if (dbKey) dbUpdates[dbKey] = value;
     }
-    // 确保更新属于当前用户
-    const userId = encodeURIComponent(_userId);
-    dbUpdates.user_id = _userId;
-    const result = await request(`/vocab_errors?id=eq.${id}&user_id=eq.${userId}`, {
+
+    // 更新用户私有表中的错题
+    const result = await request(`/vocab_errors?id=eq.${id}`, {
       method: 'PATCH',
       body: JSON.stringify(dbUpdates)
     });
+
+    if (result.error) {
+      console.error('[CloudStorage] 更新错题失败:', result.error);
+    }
+
     return result;
   }
 
@@ -185,11 +313,16 @@ const CloudStorage = (() => {
       correct_count: e.correctCount || 0,
       created_at: e.createdAt || new Date().toISOString(),
       last_practiced_at: e.lastPracticedAt || null,
-      batch_id: e.batchId || ''
+      batch_id: e.batchId || '',
+      // 混合模式新增字段
+      visibility: e.visibility || 'private',
+      owner_id: e.ownerId || _userId,
+      user_id: e.userId || _userId // 保留兼容
     };
   }
 
-  function dbToError(db) {
+  // 转换 vocab_public 表数据为前端格式
+  function dbToPublicError(db) {
     return {
       id: db.id,
       word: db.word,
@@ -206,7 +339,43 @@ const CloudStorage = (() => {
       correctCount: db.correct_count || 0,
       createdAt: db.created_at || null,
       lastPracticedAt: db.last_practiced_at || null,
-      batchId: db.batch_id || ''
+      batchId: db.batch_id || '',
+      // 公共错题标识
+      isPublic: true,
+      visibility: 'public',
+      source: db.source || 'system'
+    };
+  }
+
+  // 转换 vocab_errors 表数据为前端格式
+  function dbToError(db) {
+    // 如果是公共错题格式，使用公共转换函数
+    if (db.is_public || db.source === 'migrated') {
+      return dbToPublicError(db);
+    }
+
+    return {
+      id: db.id,
+      word: db.word,
+      phonetic: db.phonetic || '',
+      meaning: db.meaning,
+      category: db.category || 'unlearned',
+      wrongAnswer: db.wrong_answer || '',
+      errorNote: db.error_note || '',
+      tip: db.tip || '',
+      unit: db.unit || '',
+      status: db.status || 'pending',
+      masteredModes: db.mastered_modes || [],
+      confusedWith: db.confused_with || [],
+      correctCount: db.correct_count || 0,
+      createdAt: db.created_at || null,
+      lastPracticedAt: db.last_practiced_at || null,
+      batchId: db.batch_id || '',
+      // 混合模式新增字段
+      isPublic: db.isPublic || false,
+      visibility: db.share_type || db.visibility || 'private',
+      ownerId: db.owner_id || db.user_id || null,
+      isOwner: (db.owner_id || db.user_id) === _userId
     };
   }
 
@@ -219,7 +388,9 @@ const CloudStorage = (() => {
       'correctCount': 'correct_count',
       'createdAt': 'created_at',
       'lastPracticedAt': 'last_practiced_at',
-      'batchId': 'batch_id'
+      'batchId': 'batch_id',
+      'visibility': 'share_type',
+      'ownerId': 'owner_id'
     };
     return map[key] || null;
   }
@@ -251,13 +422,17 @@ const CloudStorage = (() => {
     isConfigured,
     ping,
     getErrors,
+    getPublicErrors,
     saveErrors,
     updateError,
+    deleteError,
+    createPublicError,
     getTrainingRecords,
     saveTrainingRecord,
     getBatches,
     createBatch,
-    getCurrentUserId
+    getCurrentUserId,
+    MIXED_MODE
   };
 })();
 

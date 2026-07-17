@@ -1,5 +1,5 @@
 /**
- * Lumos Vocab - StateManager v1.1
+ * Lumos Vocab - StateManager v1.2
  * 英语词汇错题训练系统的状态管理模块
  *
  * 支持功能：
@@ -9,6 +9,7 @@
  * - 线下测试记录
  * - 数据导入/导出
  * - 双模式支持：localStorage / Supabase 云端
+ * - 混淆词掌握状态追踪
  */
 
 const VocabStateManager = (() => {
@@ -23,18 +24,19 @@ const VocabStateManager = (() => {
   };
 
   // ========== 常量 ==========
-  const VERSION = '1.1';
+  const VERSION = '1.2';  // 支持公共错题库
   const PREFIX = 'lumos:vocab';
-  const DATA_VERSION = '5.0';
+  const DATA_VERSION = '6.0';
 
   // localStorage keys
   const KEYS = {
-    ERRORS:      `${PREFIX}:errors`,
-    TRAINING:    `${PREFIX}:training`,
-    BATCHES:     `${PREFIX}:batches`,
-    OFFLINE:     `${PREFIX}:offline`,
-    SETTINGS:    `${PREFIX}:settings`,
-    LAST_EXPORT: `${PREFIX}:last-export`,
+    ERRORS:           `${PREFIX}:errors`,
+    TRAINING:         `${PREFIX}:training`,
+    BATCHES:          `${PREFIX}:batches`,
+    OFFLINE:          `${PREFIX}:offline`,
+    SETTINGS:         `${PREFIX}:settings`,
+    LAST_EXPORT:      `${PREFIX}:last-export`,
+    CONFUSION_MASTERED: `${PREFIX}:confusion-mastered`,  // 已掌握的混淆词对
   };
 
   // 错因分类（简化版：只分 2 类）
@@ -385,7 +387,7 @@ const VocabStateManager = (() => {
   }
 
   // 添加错题
-  function addError(error) {
+  function addError(error, options = {}) {
     const errors = getAllErrors();
     const newError = {
       id: generateId(),
@@ -400,6 +402,9 @@ const VocabStateManager = (() => {
       createdAt: new Date().toISOString(),
       lastPracticedAt: null,
       batchId: error.batchId || generateBatchId(),
+      // 混合模式字段
+      visibility: error.visibility || options.visibility || 'private',
+      ownerId: options.ownerId || CloudStorage?.getCurrentUserId?.() || 'local',
     };
     errors.push(newError);
     saveAllErrors(errors);
@@ -407,11 +412,12 @@ const VocabStateManager = (() => {
   }
 
   // 批量添加错题（导入时用）
-  function addErrorsBatch(errorsList, batchId) {
+  function addErrorsBatch(errorsList, batchId, options = {}) {
     const errors = getAllErrors();
     const existingWords = new Set(errors.map(e => e.word.toLowerCase()));
     const batchErrors = [];
     const duplicates = [];
+    const visibility = options.visibility || 'private';  // 默认私有
 
     for (const error of errorsList) {
       if (existingWords.has(error.word.toLowerCase())) {
@@ -432,6 +438,9 @@ const VocabStateManager = (() => {
         createdAt: new Date().toISOString(),
         lastPracticedAt: null,
         batchId: batchId || generateBatchId(),
+        // 混合模式字段
+        visibility: visibility,
+        ownerId: options.ownerId || CloudStorage?.getCurrentUserId?.() || 'local',
       };
       errors.push(newError);
       batchErrors.push(newError);
@@ -519,56 +528,6 @@ const VocabStateManager = (() => {
     return pending[0];
   }
 
-  // ========== 拼写特训营专用方法 ==========
-
-  // 获取拼写类错题
-  function getSpellingErrors() {
-    const errors = getAllErrors();
-    return errors.filter(e => e.category === CATEGORIES.SPELLING);
-  }
-
-  // 获取待复习的拼写类错题
-  function getPendingSpellingErrors() {
-    return getSpellingErrors().filter(e => e.status !== STATUS.MASTERED);
-  }
-
-  // 按关卡分组拼写错题（每关 5-10 个）
-  function getSpellingLevels() {
-    const allSpelling = getSpellingErrors();
-    const mastered = allSpelling.filter(e => e.status === STATUS.MASTERED);
-    const pending = allSpelling.filter(e => e.status !== STATUS.MASTERED);
-
-    const LEVEL_SIZE = 5; // 每关 5 个词
-
-    // 计算当前关卡（基于已掌握数量）
-    const currentLevel = Math.floor(mastered.length / LEVEL_SIZE) + 1;
-
-    // 获取当前关卡需要练习的词
-    const startIndex = mastered.length;
-    const levelWords = pending.slice(0, LEVEL_SIZE);
-
-    // 判断是否还有待练习的词
-    const hasMoreLevels = pending.length > 0;
-    const isLevelComplete = levelWords.length === 0 && pending.length > 0;
-    const isCompleted = pending.length === 0; // 没有更多词了
-
-    return {
-      currentLevel,
-      totalWords: allSpelling.length,
-      masteredCount: mastered.length,
-      pendingCount: pending.length,
-      levelWords,      // 当前关卡的词
-      isCompleted,     // 全部通关
-      isLevelComplete, // 当前关卡完成，等待下一关
-      hasMoreLevels,   // 还有更多关卡
-    };
-  }
-
-  // 检查当前关卡是否通过（正确率 >= 80%）
-  function checkLevelPass(correctCount, totalCount) {
-    const passRate = totalCount > 0 ? correctCount / totalCount : 0;
-    return passRate >= 0.8;
-  }
 
   // ========== 混淆词大作战专用方法 ==========
 
@@ -601,12 +560,62 @@ const VocabStateManager = (() => {
     return shuffled.slice(0, Math.min(count, shuffled.length));
   }
 
-  // 检查混淆词对是否掌握（连续答对2次）
+  // ========== 混淆词掌握状态追踪 ==========
+
+  // 获取已掌握的混淆词对 key（用于去重）
+  function getConfusionMasteredPairs() {
+    return safeJsonParse(localStorage.getItem(KEYS.CONFUSION_MASTERED), []);
+  }
+
+  // 标记混淆词对为已掌握
+  function markConfusionPairMastered(pairKey) {
+    const mastered = getConfusionMasteredPairs();
+    if (!mastered.includes(pairKey)) {
+      mastered.push(pairKey);
+      localStorage.setItem(KEYS.CONFUSION_MASTERED, JSON.stringify(mastered));
+    }
+  }
+
+  // 获取待练习的混淆词对（排除已掌握的）
+  function getConfusionQuestionsForPractice(count = null) {
+    const allPairs = getAllConfusionPairs();
+    const mastered = getConfusionMasteredPairs();
+
+    // 过滤掉已掌握的词对
+    const pendingPairs = allPairs.filter(pair => {
+      const key = generateConfusionPairKey(pair);
+      return !mastered.includes(key);
+    });
+
+    // 随机打乱
+    const shuffled = [...pendingPairs].sort(() => Math.random() - 0.5);
+
+    if (count === null) {
+      return shuffled;
+    }
+    return shuffled.slice(0, Math.min(count, shuffled.length));
+  }
+
+  // 生成混淆词对的唯一 key（用于追踪）
+  function generateConfusionPairKey(pair) {
+    // 使用字母序较小的词作为主键，确保唯一性
+    const words = [pair.word.toLowerCase(), pair.confused.toLowerCase()].sort();
+    return words.join('||');
+  }
+
+  // 重置混淆词掌握状态（全部重新练习）
+  function resetConfusionMastered() {
+    localStorage.removeItem(KEYS.CONFUSION_MASTERED);
+  }
+
+  // 获取已掌握的混淆词对数量
   function getConfusionMasteredCount() {
-    const errors = getAllErrors();
-    // 简化：返回已通过混淆训练的记录数
-    const records = getTrainingRecords();
-    return records.filter(r => r.mode === MODES.CONFUSION && r.isCorrect).length;
+    return getConfusionMasteredPairs().length;
+  }
+
+  // 获取混淆词对总数量
+  function getConfusionTotalCount() {
+    return getAllConfusionPairs().length;
   }
 
   // ========== 从零学词专用方法 ==========
@@ -957,14 +966,14 @@ const VocabStateManager = (() => {
   }
 
   // 导入数据
-  async function importData(tsvText) {
+  async function importData(tsvText, options = {}) {
     const items = parseTSV(tsvText);
     if (items.length === 0) {
       return { success: false, message: '没有找到有效数据' };
     }
 
     const batchId = generateBatchId();
-    const result = addErrorsBatch(items, batchId);
+    const result = addErrorsBatch(items, batchId, options);
 
     // 创建批次记录
     createBatch({
@@ -1053,14 +1062,16 @@ const VocabStateManager = (() => {
     markIncorrect,
     resetAllErrors,
 
-    // 拼写特训营
-    getSpellingErrors,
-    getSpellingLevels,
-
     // 混淆词大作战
     getAllConfusionPairs,
     getConfusionQuestions,
+    getConfusionQuestionsForPractice,
+    getConfusionMasteredPairs,
     getConfusionMasteredCount,
+    getConfusionTotalCount,
+    markConfusionPairMastered,
+    generateConfusionPairKey,
+    resetConfusionMastered,
     CONFUSION_PAIRS,
 
     // 从零学词
