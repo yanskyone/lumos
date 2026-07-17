@@ -198,159 +198,61 @@ const VocabStateManager = (() => {
 
   // ========== 错题管理 ==========
 
-  // 检查是否需要初始化数据（首次使用或数据为空）
+  // ========== 初始化状态 ==========
   let _initialized = false;
-  let _initPromise = null;
-  let _useCloud = false;  // 是否使用云端模式
-  let _offline = false;   // 是否离线模式
+  let _cloudConnected = false;  // 云端是否已连接
 
-  // 检测网络状态
-  function checkNetworkStatus() {
-    const online = navigator.onLine;
-    if (!online) {
-      console.log('[VocabStateManager] 检测到离线状态，自动切换到本地模式');
-      _offline = true;
-    }
-    return online;
-  }
-
-  // 检查是否使用云端模式
-  function isCloudMode() {
-    return _useCloud && !_offline;
-  }
-
+  /**
+   * 初始化（仅加载本地数据，离线优先）
+   * 不自动连接云端，云端操作需要用户手动触发
+   */
   async function ensureInitialized() {
-    // 如果已经初始化过，直接返回
     if (_initialized) {
       console.log('[VocabStateManager] 已初始化，跳过');
       return;
     }
 
-    // 如果正在初始化中，等待完成
-    if (_initPromise) {
-      console.log('[VocabStateManager] 正在初始化中，等待...');
-      await _initPromise;
-      return;
+    console.log('[VocabStateManager] 开始初始化（离线优先模式）...');
+
+    // 初始化云端连接（不触发数据加载）
+    if (CloudStorage) {
+      CloudStorage.init(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+      _cloudConnected = CloudStorage.isConfigured();
+      console.log('[VocabStateManager] 云端连接:', _cloudConnected ? '已就绪' : '未配置');
     }
 
-    // 检测网络状态
-    const isOnline = checkNetworkStatus();
+    // 检查本地是否有数据
+    const existingErrors = getAllErrors();
 
-    // 如果离线，直接使用本地模式
-    if (!isOnline) {
-      console.log('[VocabStateManager] 离线模式，使用本地数据');
-      _initPromise = initLocalMode();
-      await _initPromise;
+    if (existingErrors.length > 0) {
+      console.log('[VocabStateManager] 使用本地数据，共 ' + existingErrors.length + ' 条');
       _initialized = true;
       return;
     }
 
-    // 初始化云端（如果配置了）
-    if (CONFIG.STORAGE_MODE === 'cloud' && CloudStorage) {
-      CloudStorage.init(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
-      _useCloud = CloudStorage.isConfigured();
-    }
+    // 本地无数据，尝试从 errors.json 加载初始数据
+    console.log('[VocabStateManager] 本地数据为空，从 errors.json 加载...');
+    await loadFromJson();
 
-    if (_useCloud) {
-      // 云端模式
-      console.log('[VocabStateManager] 使用云端存储模式');
-      _initPromise = initCloudMode();
-    } else {
-      // 本地模式
-      console.log('[VocabStateManager] 使用本地存储模式');
-      _initPromise = initLocalMode();
-    }
-
-    await _initPromise;
     _initialized = true;
     console.log('[VocabStateManager] 初始化完成');
   }
 
-  // 云端模式初始化
-  async function initCloudMode() {
-    try {
-      const result = await CloudStorage.getErrors();
-      if (result.error) {
-        console.error('[VocabStateManager] 云端获取失败:', result.error);
-        // 回退到本地模式
-        _useCloud = false;
-        await initLocalMode();
-        return;
-      }
-
-      if (result.data && result.data.length > 0) {
-        console.log('[VocabStateManager] 从云端加载了 ' + result.data.length + ' 条错题');
-        _cloudErrors = result.data;
-        return;
-      }
-
-      // 云端没有数据，从本地 JSON 导入
-      console.log('[VocabStateManager] 云端暂无数据，从 JSON 导入...');
-      await importFromJsonToCloud();
-    } catch (e) {
-      console.error('[VocabStateManager] 云端初始化失败:', e);
-      _useCloud = false;
-      await initLocalMode();
-    }
+  // 检查云端是否已连接
+  function isCloudConnected() {
+    return _cloudConnected;
   }
 
-  // 从 JSON 文件导入到云端
-  async function importFromJsonToCloud() {
-    try {
-      const response = await fetch('data/errors.json');
-      const data = await response.json();
-
-      if (data.errors && data.errors.length > 0) {
-        const errors = data.errors.map((e, index) => ({
-          id: 've-' + (index + 1).toString().padStart(3, '0'),
-          word: e.word,
-          phonetic: e.phonetic || '',
-          meaning: e.meaning,
-          category: e.category || CATEGORIES.UNLEARNED,
-          wrongAnswer: e.wrongAnswer || '',
-          errorNote: e.errorNote || '',
-          tip: e.tip || '',
-          unit: e.unit || '',
-          status: STATUS.PENDING,
-          masteredModes: [],
-          confusedWith: [],
-          correctCount: 0,
-          createdAt: new Date().toISOString(),
-          lastPracticedAt: null,
-          batchId: 'batch-initial',
-        }));
-
-        await CloudStorage.saveErrors(errors);
-        _cloudErrors = errors;
-        console.log('[VocabStateManager] 已导入 ' + errors.length + ' 条到云端');
-      }
-    } catch (e) {
-      console.error('[VocabStateManager] JSON 导入失败:', e);
-    }
-  }
-
-  // 本地模式初始化
-  async function initLocalMode() {
-    // 检查数据版本
-    const savedVersion = localStorage.getItem(PREFIX + ':data-version');
-    const existingErrors = getAllErrors();
-
-    if (savedVersion === DATA_VERSION && existingErrors.length > 0) {
-      console.log('[VocabStateManager] localStorage 已有 ' + existingErrors.length + ' 条数据（版本一致）');
-      return;
-    } else {
-      console.log('[VocabStateManager] 数据版本不匹配或为空，清除旧数据并重新加载');
-      localStorage.removeItem(KEYS.ERRORS);
-    }
-
-    // 尝试从本地 JSON 文件加载数据
-    console.log('[VocabStateManager] 开始从 JSON 加载...');
+  /**
+   * 从 errors.json 加载初始数据（仅在本地为空时使用）
+   */
+  async function loadFromJson() {
     try {
       const response = await fetch('data/errors.json');
 
       if (!response.ok) {
-        console.warn('[VocabStateManager] fetch 失败, status:', response.status);
-        return;
+        console.warn('[VocabStateManager] fetch errors.json 失败, status:', response.status);
+        return 0;
       }
 
       const data = await response.json();
@@ -377,17 +279,135 @@ const VocabStateManager = (() => {
         }));
 
         saveAllErrors(errors);
-        console.log('[VocabStateManager] 已保存 ' + errors.length + ' 条到 localStorage');
-
-        // 保存数据版本
         localStorage.setItem(PREFIX + ':data-version', DATA_VERSION);
+        console.log('[VocabStateManager] 已加载 ' + errors.length + ' 条初始数据');
+        return errors.length;
       }
     } catch (e) {
-      console.error('[VocabStateManager] 加载本地数据失败:', e);
+      console.error('[VocabStateManager] 加载 errors.json 失败:', e);
+    }
+    return 0;
+  }
+
+  /**
+   * 从云端下载数据到本地（用户手动触发）
+   * @returns {Promise<{success: boolean, count: number, message: string}>}
+   */
+  async function loadFromCloud() {
+    if (!_cloudConnected || !CloudStorage) {
+      return { success: false, count: 0, message: '云端未连接，请检查网络' };
+    }
+
+    console.log('[VocabStateManager] 开始从云端下载数据...');
+
+    try {
+      const result = await CloudStorage.getErrors();
+
+      if (result.error) {
+        console.error('[VocabStateManager] 云端获取失败:', result.error);
+        return { success: false, count: 0, message: '云端获取失败: ' + result.error.message };
+      }
+
+      if (!result.data || result.data.length === 0) {
+        return { success: false, count: 0, message: '云端暂无数据' };
+      }
+
+      // 保存到本地
+      const cloudErrors = result.data.map(e => ({
+        id: e.id,
+        word: e.word,
+        phonetic: e.phonetic || '',
+        meaning: e.meaning,
+        category: e.category || CATEGORIES.UNLEARNED,
+        wrongAnswer: e.wrongAnswer || '',
+        errorNote: e.errorNote || '',
+        tip: e.tip || '',
+        unit: e.unit || '',
+        status: e.status || STATUS.PENDING,
+        masteredModes: e.masteredModes || [],
+        confusedWith: e.confusedWith || [],
+        correctCount: e.correctCount || 0,
+        createdAt: e.createdAt || new Date().toISOString(),
+        lastPracticedAt: e.lastPracticedAt || null,
+        batchId: e.batchId || 'cloud-sync',
+        visibility: e.visibility || 'private',
+        ownerId: e.ownerId || 'cloud',
+      }));
+
+      saveAllErrors(cloudErrors);
+      localStorage.setItem(PREFIX + ':data-version', DATA_VERSION);
+
+      console.log('[VocabStateManager] 已从云端下载 ' + cloudErrors.length + ' 条数据到本地');
+      return { success: true, count: cloudErrors.length, message: '成功从云端下载 ' + cloudErrors.length + ' 条数据' };
+
+    } catch (e) {
+      console.error('[VocabStateManager] 从云端下载失败:', e);
+      return { success: false, count: 0, message: '下载失败: ' + e.message };
     }
   }
 
-  // 云端数据缓存
+  /**
+   * 将本地数据上传到云端（用户手动触发）
+   * @returns {Promise<{success: boolean, count: number, message: string}>}
+   */
+  async function syncToCloud() {
+    if (!_cloudConnected || !CloudStorage) {
+      return { success: false, count: 0, message: '云端未连接，请检查网络' };
+    }
+
+    const localErrors = getAllErrors();
+
+    if (localErrors.length === 0) {
+      return { success: false, count: 0, message: '本地暂无数据可上传' };
+    }
+
+    console.log('[VocabStateManager] 开始上传 ' + localErrors.length + ' 条数据到云端...');
+
+    try {
+      // 转换为云端格式
+      const cloudErrors = localErrors.map(e => ({
+        id: e.id,
+        word: e.word,
+        phonetic: e.phonetic || '',
+        meaning: e.meaning,
+        category: e.category || CATEGORIES.UNLEARNED,
+        wrongAnswer: e.wrongAnswer || '',
+        errorNote: e.errorNote || '',
+        tip: e.tip || '',
+        unit: e.unit || '',
+        status: e.status || STATUS.PENDING,
+        masteredModes: e.masteredModes || [],
+        confusedWith: e.confusedWith || [],
+        correctCount: e.correctCount || 0,
+        createdAt: e.createdAt || new Date().toISOString(),
+        lastPracticedAt: e.lastPracticedAt || null,
+        batchId: e.batchId || 'local-sync',
+      }));
+
+      const result = await CloudStorage.saveErrors(cloudErrors);
+
+      if (result.error) {
+        console.error('[VocabStateManager] 上传失败:', result.error);
+        return { success: false, count: 0, message: '上传失败: ' + result.error.message };
+      }
+
+      console.log('[VocabStateManager] 成功上传 ' + cloudErrors.length + ' 条数据到云端');
+      return { success: true, count: cloudErrors.length, message: '成功上传 ' + cloudErrors.length + ' 条数据到云端' };
+
+    } catch (e) {
+      console.error('[VocabStateManager] 上传失败:', e);
+      return { success: false, count: 0, message: '上传失败: ' + e.message };
+    }
+  }
+
+  /**
+   * 获取云端连接状态
+   */
+  function checkCloudConnection() {
+    return _cloudConnected;
+  }
+
+  // 云端数据缓存（用于临时存储，不作为主要数据源）
   let _cloudErrors = [];
   let _cloudTraining = [];
 
@@ -1068,7 +1088,12 @@ const VocabStateManager = (() => {
 
     // 初始化
     ensureInitialized,
-    isCloudMode,
+    isCloudConnected,
+    checkCloudConnection,
+
+    // 云端同步
+    loadFromCloud,
+    syncToCloud,
 
     // 错题管理
     getAllErrors,

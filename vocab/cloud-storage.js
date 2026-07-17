@@ -100,57 +100,16 @@ const CloudStorage = (() => {
     const plainUserId = _userId;
 
     try {
-      // 1. 先获取用户私有错题
+      // 获取用户私有错题
       const privateResult = await request(`/vocab_errors?owner_id=eq.${userId}&select=*&order=created_at.desc`);
-      let privateErrors = [];
 
-      if (!privateResult.error && privateResult.data && privateResult.data.length > 0) {
-        privateErrors = privateResult.data.map(e => ({ ...e, isPublic: false }));
-        console.log('[CloudStorage] 用户私有错题:', privateErrors.length, '条');
+      if (privateResult.error) {
+        console.error('[CloudStorage] 获取私有错题失败:', privateResult.error);
+        return { data: [], error: privateResult.error };
       }
 
-      // 2. 如果没有私有错题，从公共错题库同步
-      if (privateErrors.length === 0) {
-        console.log('[CloudStorage] 用户私有错题为空，开始同步公共错题...');
-        const publicResult = await getPublicErrors();
-
-        if (publicResult.data && publicResult.data.length > 0) {
-          // 将公共错题复制到用户私有表
-          const toSave = publicResult.data.map((e, index) => ({
-            id: plainUserId + '-ve-' + String(index + 1).padStart(3, '0'),
-            word: e.word,
-            phonetic: e.phonetic || '',
-            meaning: e.meaning,
-            category: e.category || 'unlearned',
-            wrong_answer: e.wrongAnswer || '',
-            error_note: e.errorNote || '',
-            tip: e.tip || '',
-            unit: e.unit || '',
-            status: 'pending',
-            mastered_modes: [],
-            confused_with: [],
-            correct_count: 0,
-            created_at: new Date().toISOString(),
-            last_practiced_at: null,
-            batch_id: e.batchId || 'synced-from-public',
-            owner_id: plainUserId,
-            source: 'synced'
-          }));
-
-          // 分批保存
-          for (let i = 0; i < toSave.length; i += 50) {
-            const batch = toSave.slice(i, i + 50);
-            await request('/vocab_errors', {
-              method: 'POST',
-              headers: { 'Prefer': 'return=minimal' },
-              body: JSON.stringify(batch)
-            });
-          }
-
-          console.log('[CloudStorage] 已同步', toSave.length, '条公共错题到私有表');
-          privateErrors = toSave.map(e => ({ ...e, isPublic: false }));
-        }
-      }
+      const privateErrors = privateResult.data || [];
+      console.log('[CloudStorage] 用户私有错题:', privateErrors.length, '条');
 
       // 转换字段
       const convertedErrors = privateErrors.map(e => dbToError(e));
@@ -163,42 +122,57 @@ const CloudStorage = (() => {
     }
   }
 
+  /**
+   * 保存用户错题到云端（完整替换模式）
+   * 先删除用户的所有旧错题，再插入新数据
+   */
   async function saveErrors(errors, options = {}) {
-    // 混合模式：只保存当前用户的私有错题，公共错题通过单独接口管理
     const userId = encodeURIComponent(_userId);
-    const visibility = options.visibility || 'private';
+    const plainUserId = _userId;
 
-    // 只删除当前用户的私有错题（不删除公共错题）
-    await request(`/vocab_errors?owner_id=eq.${userId}&share_type=eq.private`, { method: 'DELETE' });
+    console.log('[CloudStorage] 开始保存 ' + errors.length + ' 条错题到云端...');
 
-    // 为每条数据添加 owner_id 和 visibility 后逐条插入
-    const dbErrors = errors.map((e) => {
-      const error = errorToDb(e);
-      error.owner_id = _userId;
-      error.share_type = visibility;
-      // 私有错题ID加上用户前缀以确保唯一
-      error.id = _userId + '-' + e.id;
-      return error;
-    });
+    try {
+      // 1. 先删除用户的所有旧错题
+      await request(`/vocab_errors?owner_id=eq.${userId}`, { method: 'DELETE' });
 
-    if (dbErrors.length === 0) {
-      console.log('[CloudStorage] 没有私有错题需要保存');
-      return { error: null };
-    }
+      if (errors.length === 0) {
+        console.log('[CloudStorage] 没有数据需要保存');
+        return { error: null };
+      }
 
-    // 分批插入，每批10条
-    const batchSize = 10;
-    for (let i = 0; i < dbErrors.length; i += batchSize) {
-      const batch = dbErrors.slice(i, i + batchSize);
-      await request('/vocab_errors', {
-        method: 'POST',
-        headers: { 'Prefer': 'return=minimal' },
-        body: JSON.stringify(batch)
+      // 2. 转换并添加必要字段
+      const dbErrors = errors.map((e) => {
+        const error = errorToDb(e);
+        error.owner_id = plainUserId;
+        error.share_type = 'private';
+        error.id = plainUserId + '-' + e.id;
+        return error;
       });
-    }
 
-    console.log('[CloudStorage] 已保存 ' + dbErrors.length + ' 条私有错题');
-    return { error: null };
+      // 3. 分批插入
+      const batchSize = 50;
+      for (let i = 0; i < dbErrors.length; i += batchSize) {
+        const batch = dbErrors.slice(i, i + batchSize);
+        const result = await request('/vocab_errors', {
+          method: 'POST',
+          headers: { 'Prefer': 'return=minimal' },
+          body: JSON.stringify(batch)
+        });
+
+        if (result.error) {
+          console.error('[CloudStorage] 批量插入失败:', result.error);
+          return { error: result.error };
+        }
+      }
+
+      console.log('[CloudStorage] 已保存 ' + dbErrors.length + ' 条错题到云端');
+      return { error: null };
+
+    } catch (e) {
+      console.error('[CloudStorage] 保存失败:', e);
+      return { error: e };
+    }
   }
 
   // 创建公共错题（供管理员或所有用户使用）

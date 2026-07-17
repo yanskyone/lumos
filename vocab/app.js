@@ -102,6 +102,9 @@ const elements = {
 
   // Toast
   toast: $('toast'),
+
+  // Cloud Sync
+  cloudStatus: $('cloud-status'),
 };
 
 // ========== 工具函数 ==========
@@ -849,6 +852,10 @@ function setupEventListeners() {
   $('btn-back-main').onclick = () => showView('main');
   $('btn-end-training').onclick = endTraining;
 
+  // 云端同步按钮
+  $('btn-sync-to-cloud').onclick = syncToCloud;
+  $('btn-load-from-cloud').onclick = loadFromCloud;
+
   // 训练模式选择
   document.querySelectorAll('.mode-card[data-mode]').forEach(card => {
     card.onclick = () => startTraining(card.dataset.mode);
@@ -900,6 +907,75 @@ function setupEventListeners() {
   $('btn-modal-confirm').onclick = closeTimeLimitModal;
 }
 
+// ========== 云端同步功能 ==========
+
+/**
+ * 从云端下载数据到本地
+ */
+async function loadFromCloud() {
+  const btn = $('btn-load-from-cloud');
+  const originalText = btn.textContent;
+  btn.textContent = '下载中...';
+  btn.disabled = true;
+
+  try {
+    const result = await VocabStateManager.loadFromCloud();
+
+    if (result.success) {
+      showToast(result.message, 3000);
+      updateMainStats();
+      updateCloudStatus();
+    } else {
+      showToast(result.message, 3000);
+    }
+  } catch (e) {
+    console.error('[loadFromCloud] 失败:', e);
+    showToast('下载失败: ' + e.message, 3000);
+  } finally {
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+}
+
+/**
+ * 上传本地数据到云端
+ */
+async function syncToCloud() {
+  const btn = $('btn-sync-to-cloud');
+  const originalText = btn.textContent;
+  btn.textContent = '上传中...';
+  btn.disabled = true;
+
+  try {
+    const result = await VocabStateManager.syncToCloud();
+
+    if (result.success) {
+      showToast(result.message, 3000);
+      updateCloudStatus();
+    } else {
+      showToast(result.message, 3000);
+    }
+  } catch (e) {
+    console.error('[syncToCloud] 失败:', e);
+    showToast('上传失败: ' + e.message, 3000);
+  } finally {
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+}
+
+/**
+ * 更新云端连接状态显示
+ */
+function updateCloudStatus() {
+  const statusEl = $('cloud-status');
+  if (!statusEl) return;
+
+  const isConnected = VocabStateManager.checkCloudConnection();
+  statusEl.textContent = isConnected ? '✓ 已连接' : '✗ 未连接';
+  statusEl.style.color = isConnected ? '#4CAF50' : '#999';
+}
+
 // ========== 初始化 ==========
 async function init() {
   console.log('[Lumos Vocab] 开始初始化...');
@@ -907,52 +983,35 @@ async function init() {
   // 绑定所有事件
   setupEventListeners();
 
-  // 检查 localStorage 状态
-  const localData = localStorage.getItem('lumos:vocab:errors');
-  console.log('[Lumos Vocab] localStorage 状态:', localData ? '有数据' : '空');
-
-  // 确保数据已加载
+  // 确保数据已加载（离线优先，仅加载本地数据）
   await VocabStateManager.ensureInitialized();
 
   state.initialized = true;
+
+  // 更新主页统计
   updateMainStats();
+
+  // 更新云端连接状态
+  updateCloudStatus();
 
   // 验证数据是否加载成功
   const stats = VocabStateManager.getStats();
   console.log('[Lumos Vocab] 初始化完成，统计数据:', stats);
 
-  // 显示调试信息
-  const localDataAfter = localStorage.getItem('lumos:vocab:errors');
-  if (localDataAfter) {
-    const parsed = JSON.parse(localDataAfter);
-    console.log('[调试] localStorage 实际数据条数:', parsed.length);
-  }
-
   if (stats.total === 0) {
-    console.log('[Lumos Vocab] 数据加载失败，尝试手动加载...');
-    try {
-      const response = await fetch('data/errors.json');
-      const data = await response.json();
-      console.log('[手动加载] 获取到数据:', data.errors?.length, '条');
-      if (data.errors && data.errors.length > 0) {
-        VocabStateManager.addErrorsBatch(data.errors, 'debug-load');
-        updateMainStats();
-      }
-    } catch (e) {
-      console.error('[手动加载] 失败:', e);
-    }
+    console.log('[Lumos Vocab] 本地数据为空，可手动从云端下载或导入数据');
   }
 }
 
-// ========== 网络状态监听 ==========
+// ========== 网络状态监听（仅用于提示，不影响数据源）==========
 window.addEventListener('online', () => {
-  console.log('[Lumos Vocab] 网络已恢复，将使用云端同步');
-  showToast('🌐 网络已恢复');
+  console.log('[Lumos Vocab] 网络已恢复');
+  showToast('🌐 网络已恢复，可尝试云端同步');
 });
 
 window.addEventListener('offline', () => {
-  console.log('[Lumos Vocab] 网络已断开，将使用本地数据');
-  showToast('💾 已切换到离线模式');
+  console.log('[Lumos Vocab] 网络已断开');
+  showToast('💾 网络已断开，数据保存在本地');
 });
 
 // 启动
