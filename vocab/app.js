@@ -29,6 +29,9 @@ const state = {
     confusionMastered: 0,
     showConfusedWord: false,
     currentConfusionPair: null,
+    // 闪电战专用
+    flashWarOptions: [],
+    currentCorrectAnswer: null,
   },
 };
 
@@ -458,8 +461,25 @@ function startTraining(mode) {
   let modeName = '';
 
   if (mode === 'flash_war') {
+    // 词汇闪电战（选择题模式）
     errors = VocabStateManager.getPendingErrors();
     modeName = '⚡ 词汇闪电战';
+
+    if (errors.length === 0) {
+      showView('completion');
+      return;
+    }
+
+    resetTrainingState();
+    state.training.mode = 'flash_war';
+    state.training.correctWordIds = [];
+
+    showView('training');
+    elements.trainingTimer.textContent = modeName;
+    startTimer();
+    showFlashWarQuestion();
+    return;
+
   } else if (mode === 'confusion') {
     // 混淆词大作战：只获取未掌握的词对
     const total = VocabStateManager.getConfusionTotalCount();
@@ -562,6 +582,192 @@ function updateTimer() {
 
   // 警告（8分钟后）
   elements.trainingTimer.classList.toggle('warning', elapsed >= 480);
+}
+
+// ========== 词汇闪电战（选择题模式）==========
+function showFlashWarQuestion() {
+  // 获取下一个待训练词（排除已正确的）
+  const error = VocabStateManager.getNextPendingError(state.training.correctWordIds);
+
+  if (!error) {
+    showFlashWarComplete();
+    return;
+  }
+
+  state.training.currentError = error;
+  state.training.currentCorrectAnswer = error.word;
+
+  // 生成干扰选项
+  const allErrors = VocabStateManager.getAllErrors();
+  const options = generateFlashWarOptions(error, allErrors);
+  state.training.flashWarOptions = options;
+
+  // 更新界面
+  elements.wordMeaning.innerHTML = `
+    <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">
+      请选择正确的单词：
+    </div>
+    <div style="font-size: 16px; margin-bottom: 8px;">${error.meaning}</div>
+  `;
+  elements.wordPhonetic.textContent = error.phonetic ? `/${error.phonetic}/` : '';
+
+  // 显示选项按钮
+  const shuffledOptions = shuffleArray([...options]);
+  elements.confusionOptionsArea.innerHTML = `
+    <div class="confusion-options" style="grid-template-columns: 1fr 1fr;">
+      ${shuffledOptions.map(opt => `
+        <button class="btn btn-secondary" data-flash-choice="${opt}">${opt}</button>
+      `).join('')}
+    </div>
+  `;
+  elements.confusionOptionsArea.classList.remove('hidden');
+
+  // 隐藏输入框和提交按钮
+  elements.answerInput.style.display = 'none';
+  elements.btnSubmitAnswer.style.display = 'none';
+  elements.feedbackArea.classList.add('hidden');
+
+  // 更新进度
+  const stats = VocabStateManager.getStats();
+  const practiced = stats.total - (stats.pending + stats.practicing);
+  elements.trainingProgress.textContent = `进度: ${practiced}/${stats.total}`;
+}
+
+/**
+ * 生成闪电战的选项
+ * 1个正确答案 + 3个干扰项
+ */
+function generateFlashWarOptions(correctError, allErrors) {
+  const options = [correctError.word];
+  const otherErrors = allErrors.filter(e => e.id !== correctError.id);
+
+  // 打乱其他词
+  const shuffled = shuffleArray([...otherErrors]);
+
+  // 生成3个干扰项（优先选择长度相近的）
+  for (const e of shuffled) {
+    if (options.length >= 4) break;
+
+    // 过滤条件：不能太长或太短，且不能与已有选项完全相同
+    const len = e.word.length;
+    const correctLen = correctError.word.length;
+    const isSimilarLength = Math.abs(len - correctLen) <= 2;
+    const isNotDuplicate = !options.includes(e.word);
+
+    if (isNotDuplicate) {
+      // 如果长度相近优先选择，否则在找不到合适的后选择
+      if (isSimilarLength) {
+        options.push(e.word);
+      } else if (options.length < 4 && !options.find(o => Math.abs(o.length - correctLen) <= 2)) {
+        // 找不到合适长度时才放宽条件
+        options.push(e.word);
+      }
+    }
+  }
+
+  // 如果还是不够4个，随机补充
+  for (const e of shuffled) {
+    if (options.length >= 4) break;
+    if (!options.includes(e.word)) {
+      options.push(e.word);
+    }
+  }
+
+  return options.slice(0, 4); // 确保最多4个选项
+}
+
+/**
+ * 打乱数组顺序
+ */
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+/**
+ * 检查闪电战答案
+ */
+function checkFlashWarAnswer(answer) {
+  const error = state.training.currentError;
+  const isCorrect = answer === state.training.currentCorrectAnswer;
+
+  // 记录训练
+  VocabStateManager.saveTrainingRecord({
+    errorId: error.id,
+    mode: 'flash_war',
+    isCorrect,
+    responseTime: Date.now() - state.training.startTime,
+  });
+
+  state.training.sessionTotal++;
+
+  if (isCorrect) {
+    state.training.sessionCorrect++;
+    VocabStateManager.markCorrect(error.id, 'flash_war');
+    state.training.correctWordIds.push(error.id);
+
+    const stats = VocabStateManager.getStats();
+    const progressText = `<div class="correct-answer">今日已掌握: ${stats.mastered} 个词</div>`;
+
+    elements.feedbackArea.innerHTML = `
+      <div class="feedback correct">
+        <div class="feedback-emoji">🎉</div>
+        <div class="feedback-text">${getRandomFeedback('mastered')}</div>
+        <div class="correct-answer">${error.word} = ${error.meaning}</div>
+        ${progressText}
+      </div>
+      <button class="btn btn-primary" id="btn-next-flash">下一题 →</button>
+    `;
+  } else {
+    VocabStateManager.markIncorrect(error.id);
+
+    elements.feedbackArea.innerHTML = `
+      <div class="feedback incorrect">
+        <div class="feedback-emoji">😊</div>
+        <div class="feedback-text">${getRandomFeedback('wrong')}</div>
+        <div class="correct-answer">正确答案: ${state.training.currentCorrectAnswer}</div>
+        <div class="correct-answer" style="color: var(--text-secondary);">${error.meaning}</div>
+      </div>
+      <button class="btn btn-primary" id="btn-next-flash">继续 →</button>
+    `;
+  }
+
+  // 隐藏选项，显示反馈
+  elements.confusionOptionsArea.classList.add('hidden');
+  elements.feedbackArea.classList.remove('hidden');
+
+  // 绑定下一题按钮
+  $('btn-next-flash').onclick = () => {
+    showFlashWarQuestion();
+  };
+}
+
+/**
+ * 闪电战完成
+ */
+function showFlashWarComplete() {
+  state.training.active = false;
+  stopTimer();
+
+  const accuracy = state.training.sessionTotal > 0
+    ? Math.round(state.training.sessionCorrect / state.training.sessionTotal * 100)
+    : 0;
+
+  const modal = elements.timeLimitModal;
+  modal.querySelector('.modal-title').textContent = '🎉 词汇闪电战完成！';
+  modal.querySelector('.modal-text').innerHTML =
+    `正确率 ${accuracy}%！<br>` +
+    `${state.training.sessionCorrect}/${state.training.sessionTotal} 题答对！<br><br>` +
+    `太棒了！继续加油~`;
+  modal.querySelector('.btn-primary').textContent = '返回主页';
+  modal.querySelector('.btn-primary').onclick = () => {
+    modal.classList.remove('show');
+    showView('main');
+  };
+  modal.classList.add('show');
 }
 
 // ========== 混淆词大作战 ==========
@@ -888,11 +1094,20 @@ function setupEventListeners() {
   // 提交答案
   $('btn-submit-answer').onclick = checkAnswer;
 
-  // 混淆词选择
+  // 混淆词和闪电战选项选择
   elements.confusionOptionsArea.addEventListener('click', (e) => {
-    const choiceBtn = e.target.closest('[data-confusion-choice]');
-    if (choiceBtn) {
-      checkConfusionAnswer(choiceBtn.dataset.confusionChoice);
+    // 混淆词选项
+    const confusionBtn = e.target.closest('[data-confusion-choice]');
+    if (confusionBtn) {
+      checkConfusionAnswer(confusionBtn.dataset.confusionChoice);
+      return;
+    }
+
+    // 闪电战选项
+    const flashBtn = e.target.closest('[data-flash-choice]');
+    if (flashBtn) {
+      checkFlashWarAnswer(flashBtn.dataset.flashChoice);
+      return;
     }
   });
 

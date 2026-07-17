@@ -570,6 +570,17 @@ input:-webkit-autofill {
   justify-content: center;
 }
 
+/* 2x2 网格布局（闪电战选项） */
+.confusion-options[style*="grid-template-columns"] {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.confusion-options[style*="grid-template-columns"] .btn {
+  min-width: unset;
+}
+
 .confusion-options .btn {
   flex: 1;
   min-width: 120px;
