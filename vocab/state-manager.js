@@ -96,6 +96,38 @@ const VocabStateManager = (() => {
     { word: 'lost', meaning: 'adj.丢失的', confused: 'lose', confusedMeaning: 'v. 丢失' },
   ];
 
+  // 预置例句库（用于进阶模式）
+  // key 格式：word||confused（字母序）
+  const CONFUSION_EXAMPLES = {
+    'advice||advise': 'Can you give me some ___ on this problem?',
+    'affect||effect': 'The new policy will ___ our daily life.',
+    'beside||besides': 'The book is ___ the table. ___, it's very useful.',
+    'challeng||change': 'She decided to ___ her habits this year.',
+    'accept||except': '___ for Tom, everyone is here today.',
+    'expensive||cheap': 'This phone is too ___ for me.',
+    'height||high': 'The ___ of the building is 100 meters.',
+    'medium||middle': 'The ___ of the three options is the best.',
+    'principle||principal': 'It's a matter of ___.',
+    'quiet||quite': 'Please keep ___. The baby is sleeping.',
+    'quick||quite': 'She is ___ good at swimming.',
+    'raise||rise': 'Prices continue to ___ every year.',
+    'their||there||they': '___ house is on the hill.',
+    'through||though': '___ it was raining, we went out.',
+    'weather||whether': 'I don't know ___ to bring an umbrella.',
+    'which||witch': '___ one do you prefer?',
+    'where||wear': '___ did you ___ that dress?',
+    'whose||who': '___ book is this?',
+    'your||you': 'Is this ___ bag?',
+    'lose||loose': 'Don't ___ your keys.',
+    'past||passed': 'Time has ___ quickly.',
+    'piece||peace': 'I need a ___ of paper.',
+    'sit||set': 'Please ___ the table for dinner.',
+    'than||then': 'She is taller ___ her brother.',
+    'wear||where': '___ did you ___ your watch?',
+    'weather||whether': '___ the ___ is nice today?',
+    'write||right': 'Please ___ your name on the ___ side.',
+  };
+
   // 从数据中识别混淆词对
   function getConfusionPairsFromErrors() {
     const errors = getAllErrors();
@@ -149,6 +181,32 @@ const VocabStateManager = (() => {
     }
 
     return pairs;
+  }
+
+  /**
+   * 获取混淆词对的例句
+   * @param {Object} pair - 混淆词对对象 {word, confused}
+   * @returns {string} 例句，如果找不到则返回null
+   */
+  function getConfusionExample(pair) {
+    // 生成 key（字母序）
+    const key = [pair.word.toLowerCase(), pair.confused.toLowerCase()].sort().join('||');
+    return CONFUSION_EXAMPLES[key] || null;
+  }
+
+  /**
+   * 生成备用例句模板
+   * @param {Object} pair - 混淆词对对象
+   * @returns {string} 生成的例句
+   */
+  function generateConfusionExample(pair) {
+    const examples = [
+      `This is an important ___ for learning English.`,
+      `Can you help me understand this ___ better?`,
+      `I need to remember this ___ clearly.`,
+      `The teacher explained the difference between these words.`,
+    ];
+    return examples[Math.floor(Math.random() * examples.length)];
   }
 
   // ========== 内部工具函数 ==========
@@ -1139,6 +1197,8 @@ const VocabStateManager = (() => {
     markConfusionPairMastered,
     generateConfusionPairKey,
     resetConfusionMastered,
+    getConfusionExample,
+    generateConfusionExample,
     CONFUSION_PAIRS,
 
     // 从零学词

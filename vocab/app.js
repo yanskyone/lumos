@@ -13,6 +13,7 @@ const state = {
   currentVisibility: 'all',
   importVisibility: 'private',
   initialized: false,
+  difficulty: 'normal',  // 混淆词训练难度：'normal' 或 'advanced'
   training: {
     active: false,
     mode: null,
@@ -175,6 +176,99 @@ function showTrainingModeSelect() {
 
 function hideTrainingModeSelect() {
   elements.trainingModeSelect.classList.add('hidden');
+}
+
+// ========== 混淆词难度选择 ==========
+function showConfusionDifficultySelect() {
+  // 隐藏训练模式选择
+  hideTrainingModeSelect();
+
+  // 获取DOM元素（需要创建对应的HTML结构或使用现有的模式选择卡片）
+  const modeSelect = elements.trainingModeSelect;
+  if (!modeSelect) return;
+
+  // 显示难度选择界面（复用模式选择的UI结构）
+  modeSelect.innerHTML = '' +
+    '<div style="padding: 20px; text-align: center;">' +
+    '  <h3 style="margin-bottom: 20px;">选择混淆词训练难度</h3>' +
+    '  <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">' +
+    '    <div class="mode-card" data-difficulty="normal" style="cursor: pointer; padding: 20px; border: 2px solid #e0e0e0; border-radius: 12px; min-width: 140px;">' +
+    '      <div style="font-size: 32px; margin-bottom: 8px;">📝</div>' +
+    '      <div style="font-weight: bold;">普通模式</div>' +
+    '      <div style="font-size: 12px; color: #666; margin-top: 4px;">二选一</div>' +
+    '    </div>' +
+    '    <div class="mode-card" data-difficulty="advanced" style="cursor: pointer; padding: 20px; border: 2px solid #e0e0e0; border-radius: 12px; min-width: 140px;">' +
+    '      <div style="font-size: 32px; margin-bottom: 8px;">🎯</div>' +
+    '      <div style="font-weight: bold;">挑战模式</div>' +
+    '      <div style="font-size: 12px; color: #666; margin-top: 4px;">四选一</div>' +
+    '    </div>' +
+    '  </div>' +
+    '  <button class="btn btn-secondary" id="btn-cancel-difficulty" style="margin-top: 20px;">取消</button>' +
+    '</div>';
+
+  modeSelect.classList.remove('hidden');
+
+  // 绑定难度选择事件
+  modeSelect.querySelectorAll('[data-difficulty]').forEach(card => {
+    card.onclick = () => {
+      const difficulty = card.dataset.difficulty;
+      hideConfusionDifficultySelect();
+      startConfusionTraining(difficulty);
+    };
+  });
+
+  // 绑定取消按钮
+  const cancelBtn = $('btn-cancel-difficulty');
+  if (cancelBtn) {
+    cancelBtn.onclick = () => {
+      hideConfusionDifficultySelect();
+      showTrainingModeSelect();
+    };
+  }
+}
+
+function hideConfusionDifficultySelect() {
+  const modeSelect = elements.trainingModeSelect;
+  if (modeSelect) {
+    modeSelect.classList.add('hidden');
+  }
+}
+
+function startConfusionTraining(difficulty) {
+  // 设置难度
+  state.difficulty = difficulty;
+
+  // 混淆词大作战：只获取未掌握的词对
+  const total = VocabStateManager.getConfusionTotalCount();
+  const mastered = VocabStateManager.getConfusionMasteredCount();
+  const masteredPairs = VocabStateManager.getConfusionMasteredPairs();
+  const questions = VocabStateManager.getConfusionQuestionsForPractice();
+
+  console.log('[混淆词训练] 开始训练');
+  console.log('  难度:', difficulty);
+  console.log('  总词对数:', total);
+  console.log('  已掌握数:', mastered);
+  console.log('  已掌握词对keys:', masteredPairs);
+  console.log('  本次待练习:', questions.length);
+
+  if (questions.length === 0) {
+    showToast('🎉 太棒了！所有 ' + total + ' 个混淆词对都已掌握！');
+    return;
+  }
+
+  resetTrainingState();
+  state.training.mode = 'confusion';
+  state.training.confusionQuestions = questions;
+  state.training.confusionIndex = 0;
+  state.training.confusionTotal = total;
+  state.training.confusionMastered = mastered;
+
+  const difficultyText = difficulty === 'advanced' ? '🎯 挑战模式' : '📝 普通模式';
+
+  showView('training');
+  elements.trainingTimer.textContent = difficultyText + ' 混淆词大作战 (' + mastered + '/' + total + ' 已掌握)';
+  startTimer();
+  showConfusionQuestion();
 }
 
 // ========== 主页统计更新 ==========
@@ -481,34 +575,8 @@ function startTraining(mode) {
     return;
 
   } else if (mode === 'confusion') {
-    // 混淆词大作战：只获取未掌握的词对
-    const total = VocabStateManager.getConfusionTotalCount();
-    const mastered = VocabStateManager.getConfusionMasteredCount();
-    const masteredPairs = VocabStateManager.getConfusionMasteredPairs();
-    const questions = VocabStateManager.getConfusionQuestionsForPractice();
-
-    console.log('[混淆词训练] 开始训练');
-    console.log('  总词对数:', total);
-    console.log('  已掌握数:', mastered);
-    console.log('  已掌握词对keys:', masteredPairs);
-    console.log('  本次待练习:', questions.length);
-
-    if (questions.length === 0) {
-      showToast(`🎉 太棒了！所有 ${total} 个混淆词对都已掌握！`);
-      return;
-    }
-
-    resetTrainingState();
-    state.training.mode = 'confusion';
-    state.training.confusionQuestions = questions;
-    state.training.confusionIndex = 0;
-    state.training.confusionTotal = total;
-    state.training.confusionMastered = mastered;
-
-    showView('training');
-    elements.trainingTimer.textContent = `🔀 混淆词大作战 (${mastered}/${total} 已掌握)`;
-    startTimer();
-    showConfusionQuestion();
+    // 混淆词大作战：先显示难度选择
+    showConfusionDifficultySelect();
     return;
   }
 
@@ -536,6 +604,8 @@ function resetTrainingState() {
   // 保留混淆词的总数和已掌握数（这些是全局状态，不应重置）
   const confusionTotal = state.training.confusionTotal || 0;
   const confusionMastered = state.training.confusionMastered || 0;
+  // 保留难度设置
+  const difficulty = state.difficulty || 'normal';
 
   state.training = {
     active: true,
@@ -553,6 +623,9 @@ function resetTrainingState() {
     showConfusedWord: false,
     currentConfusionPair: null,
   };
+
+  // 恢复难度设置
+  state.difficulty = difficulty;
 }
 
 function startTimer() {
@@ -759,13 +832,15 @@ function showFlashWarComplete() {
   const modal = elements.timeLimitModal;
   modal.querySelector('.modal-title').textContent = '🎉 词汇闪电战完成！';
   modal.querySelector('.modal-text').innerHTML =
-    `正确率 ${accuracy}%！<br>` +
-    `${state.training.sessionCorrect}/${state.training.sessionTotal} 题答对！<br><br>` +
-    `太棒了！继续加油~`;
-  modal.querySelector('.btn-primary').textContent = '返回主页';
+    '正确率 ' + accuracy + '%！<br>' +
+    state.training.sessionCorrect + '/' + state.training.sessionTotal + ' 题答对！<br><br>' +
+    '太棒了！继续加油~';
+
+  // 添加再来一轮按钮
+  modal.querySelector('.btn-primary').textContent = '再来一轮';
   modal.querySelector('.btn-primary').onclick = () => {
     modal.classList.remove('show');
-    showView('main');
+    startTraining('flash_war');
   };
   modal.classList.add('show');
 }
@@ -781,6 +856,17 @@ function showConfusionQuestion() {
   }
 
   const pair = questions[idx];
+
+  // 根据难度调用不同的题目展示函数
+  if (state.difficulty === 'advanced') {
+    showAdvancedConfusionQuestion(pair);
+  } else {
+    showNormalConfusionQuestion(pair);
+  }
+}
+
+// 普通模式混淆词题目（二选一）
+function showNormalConfusionQuestion(pair) {
   const showFirst = Math.random() > 0.5;
   state.training.showConfusedWord = showFirst;
   state.training.currentConfusionPair = pair;
@@ -791,24 +877,22 @@ function showConfusionQuestion() {
   const confusedMeaning = showFirst ? pair.confusedMeaning : pair.meaning;
 
   // 更新界面
-  elements.wordMeaning.innerHTML = `
-    <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">
-      请选择正确的单词：
-    </div>
-    <div style="font-size: 16px; margin-bottom: 8px;">${mainMeaning}</div>
-    <div style="font-size: 14px; color: var(--text-secondary);">
-      哪个是"${mainMeaning}"？
-    </div>
-  `;
+  elements.wordMeaning.innerHTML = '' +
+    '<div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">' +
+    '  请选择正确的单词：' +
+    '</div>' +
+    '<div style="font-size: 16px; margin-bottom: 8px;">' + mainMeaning + '</div>' +
+    '<div style="font-size: 14px; color: var(--text-secondary);">' +
+    '  哪个是"' + mainMeaning + '"？' +
+    '</div>';
   elements.wordPhonetic.textContent = '';
 
   // 显示选项
-  elements.confusionOptionsArea.innerHTML = `
-    <div class="confusion-options">
-      <button class="btn btn-secondary" data-confusion-choice="${pair.word}">${pair.word}</button>
-      <button class="btn btn-secondary" data-confusion-choice="${pair.confused}">${pair.confused}</button>
-    </div>
-  `;
+  elements.confusionOptionsArea.innerHTML = '' +
+    '<div class="confusion-options">' +
+    '  <button class="btn btn-secondary" data-confusion-choice="' + pair.word + '">' + pair.word + '</button>' +
+    '  <button class="btn btn-secondary" data-confusion-choice="' + pair.confused + '">' + pair.confused + '</button>' +
+    '</div>';
   elements.confusionOptionsArea.classList.remove('hidden');
 
   // 隐藏输入框和提交按钮
@@ -819,18 +903,146 @@ function showConfusionQuestion() {
   // 更新进度（显示本次训练进度 + 总进度）
   const totalMastered = state.training.confusionMastered;
   const total = state.training.confusionTotal;
-  elements.trainingProgress.textContent = `本次: ${idx + 1}/${questions.length} | 已掌握: ${totalMastered}/${total}`;
+  const idx = state.training.confusionIndex;
+  const questions = state.training.confusionQuestions;
+  elements.trainingProgress.textContent = '本次: ' + (idx + 1) + '/' + questions.length + ' | 已掌握: ' + totalMastered + '/' + total;
+}
+
+// 挑战模式混淆词题目（四选一，显示例句）
+function showAdvancedConfusionQuestion(pair) {
+  const showFirst = Math.random() > 0.5;
+  state.training.showConfusedWord = showFirst;
+  state.training.currentConfusionPair = pair;
+
+  // 获取例句（优先使用存储的，必要时生成）
+  let example = VocabStateManager.getConfusionExample(pair);
+  if (!example) {
+    example = VocabStateManager.generateConfusionExample(pair);
+  }
+
+  // 生成选项
+  const options = generateAdvancedConfusionOptions(pair);
+
+  // 随机决定问中文还是英文
+  const askEnglish = Math.random() > 0.5;
+
+  if (askEnglish) {
+    // 显示中文释义，问英文
+    elements.wordMeaning.innerHTML = '' +
+      '<div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">' +
+      '  🎯 挑战模式：请选择正确的英文单词' +
+      '</div>' +
+      '<div style="font-size: 16px; margin-bottom: 8px;">' + pair.meaning + '</div>' +
+      '<div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">' +
+      '  例句：' + example +
+      '</div>';
+    state.training.currentAskEnglish = true;
+  } else {
+    // 显示英文单词，问中文
+    elements.wordMeaning.innerHTML = '' +
+      '<div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">' +
+      '  🎯 挑战模式：请选择正确的中文释义' +
+      '</div>' +
+      '<div style="font-size: 16px; margin-bottom: 8px;">' + pair.word + '</div>' +
+      '<div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">' +
+      '  例句：' + example +
+      '</div>';
+    state.training.currentAskEnglish = false;
+  }
+
+  elements.wordPhonetic.textContent = '';
+
+  // 显示4个选项按钮
+  elements.confusionOptionsArea.innerHTML = '' +
+    '<div class="confusion-options" style="grid-template-columns: 1fr 1fr;">' +
+    options.map(opt => {
+      const displayText = askEnglish ? opt.word : opt.meaning;
+      return '<button class="btn btn-secondary" data-confusion-choice="' + opt.word + '">' + displayText + '</button>';
+    }).join('') +
+    '</div>';
+  elements.confusionOptionsArea.classList.remove('hidden');
+
+  // 隐藏输入框和提交按钮
+  elements.answerInput.style.display = 'none';
+  elements.btnSubmitAnswer.style.display = 'none';
+  elements.feedbackArea.classList.add('hidden');
+
+  // 更新进度
+  const totalMastered = state.training.confusionMastered;
+  const total = state.training.confusionTotal;
+  const idx = state.training.confusionIndex;
+  const questions = state.training.confusionQuestions;
+  elements.trainingProgress.textContent = '本次: ' + (idx + 1) + '/' + questions.length + ' | 已掌握: ' + totalMastered + '/' + total;
+}
+
+// 生成挑战模式的4个选项（2个正确词 + 2个其他混淆词的词）
+function generateAdvancedConfusionOptions(pair) {
+  // 正确选项
+  const correctOptions = [
+    { word: pair.word, meaning: pair.meaning, isCorrect: true },
+    { word: pair.confused, meaning: pair.confusedMeaning, isCorrect: true }
+  ];
+
+  // 获取所有混淆词对
+  const allPairs = VocabStateManager.getConfusionQuestionsForPractice();
+
+  // 收集其他混淆词（每个词对只取一个词，避免重复）
+  const otherWords = [];
+  for (const p of allPairs) {
+    if (p.word !== pair.word || p.confused !== pair.confused) {
+      otherWords.push({ word: p.word, meaning: p.meaning });
+      otherWords.push({ word: p.confused, meaning: p.confusedMeaning });
+    }
+  }
+
+  // 打乱并选取2个作为干扰项
+  const shuffled = shuffleArray([...otherWords]);
+  const distractors = [];
+  for (const w of shuffled) {
+    if (distractors.length >= 2) break;
+    // 避免与正确词重复
+    if (!distractors.find(d => d.word === w.word) &&
+        w.word !== pair.word &&
+        w.word !== pair.confused) {
+      distractors.push({ word: w.word, meaning: w.meaning, isCorrect: false });
+    }
+  }
+
+  // 合并正确选项和干扰项
+  const allOptions = [...correctOptions, ...distractors];
+
+  // 如果干扰项不够，从所有错误词中补充
+  if (allOptions.length < 4) {
+    const allErrors = VocabStateManager.getAllErrors();
+    for (const e of shuffleArray([...allErrors])) {
+      if (allOptions.length >= 4) break;
+      if (!allOptions.find(o => o.word === e.word) &&
+          e.word !== pair.word &&
+          e.word !== pair.confused) {
+        allOptions.push({ word: e.word, meaning: e.meaning, isCorrect: false });
+      }
+    }
+  }
+
+  // 打乱最终选项顺序
+  return shuffleArray(allOptions.slice(0, 4));
 }
 
 function checkConfusionAnswer(answer) {
   const pair = state.training.currentConfusionPair;
-  const showFirst = state.training.showConfusedWord;
-  const mainWord = showFirst ? pair.word : pair.confused;
-  const mainMeaning = showFirst ? pair.meaning : pair.confusedMeaning;
-  const confusedWord = showFirst ? pair.confused : pair.word;
-  const confusedMeaning = showFirst ? pair.confusedMeaning : pair.meaning;
 
-  const isCorrect = answer === mainWord;
+  let isCorrect = false;
+
+  // 根据难度判断答案
+  if (state.difficulty === 'advanced') {
+    // 挑战模式：答案必须完全匹配当前显示的正确词
+    isCorrect = (answer === pair.word || answer === pair.confused);
+  } else {
+    // 普通模式：原始逻辑
+    const showFirst = state.training.showConfusedWord;
+    const mainWord = showFirst ? pair.word : pair.confused;
+    isCorrect = answer === mainWord;
+  }
 
   // 记录训练
   VocabStateManager.saveTrainingRecord({
@@ -861,25 +1073,61 @@ function checkConfusionAnswer(answer) {
   elements.feedbackArea.classList.remove('hidden');
 
   if (isCorrect) {
-    elements.feedbackArea.innerHTML = `
-      <div class="feedback correct">
-        <div class="feedback-emoji">🎉</div>
-        <div class="feedback-text">${getRandomFeedback('mastered')}</div>
-        <div class="correct-answer">${mainWord} = ${mainMeaning}</div>
-        <div class="correct-answer">${confusedWord} = ${confusedMeaning}</div>
-      </div>
-      <button class="btn btn-primary" id="btn-next-confusion">下一题 →</button>
-    `;
+    if (state.difficulty === 'advanced') {
+      // 挑战模式反馈
+      elements.feedbackArea.innerHTML = '' +
+        '<div class="feedback correct">' +
+        '  <div class="feedback-emoji">🎉</div>' +
+        '  <div class="feedback-text">' + getRandomFeedback('mastered') + '</div>' +
+        '  <div class="correct-answer">' + pair.word + ' = ' + pair.meaning + '</div>' +
+        '  <div class="correct-answer">' + pair.confused + ' = ' + pair.confusedMeaning + '</div>' +
+        '</div>' +
+        '<button class="btn btn-primary" id="btn-next-confusion">下一题 →</button>';
+    } else {
+      // 普通模式反馈
+      const showFirst = state.training.showConfusedWord;
+      const mainWord = showFirst ? pair.word : pair.confused;
+      const mainMeaning = showFirst ? pair.meaning : pair.confusedMeaning;
+      const confusedWord = showFirst ? pair.confused : pair.word;
+      const confusedMeaning = showFirst ? pair.confusedMeaning : pair.meaning;
+
+      elements.feedbackArea.innerHTML = '' +
+        '<div class="feedback correct">' +
+        '  <div class="feedback-emoji">🎉</div>' +
+        '  <div class="feedback-text">' + getRandomFeedback('mastered') + '</div>' +
+        '  <div class="correct-answer">' + mainWord + ' = ' + mainMeaning + '</div>' +
+        '  <div class="correct-answer">' + confusedWord + ' = ' + confusedMeaning + '</div>' +
+        '</div>' +
+        '<button class="btn btn-primary" id="btn-next-confusion">下一题 →</button>';
+    }
   } else {
-    elements.feedbackArea.innerHTML = `
-      <div class="feedback incorrect">
-        <div class="feedback-emoji">😊</div>
-        <div class="feedback-text">${getRandomFeedback('wrong')}</div>
-        <div class="correct-answer">${mainWord} = ${mainMeaning}</div>
-        <div class="correct-answer" style="color: var(--text-secondary);">${confusedWord} = ${confusedMeaning}</div>
-      </div>
-      <button class="btn btn-primary" id="btn-next-confusion">继续 →</button>
-    `;
+    if (state.difficulty === 'advanced') {
+      // 挑战模式错误反馈
+      elements.feedbackArea.innerHTML = '' +
+        '<div class="feedback incorrect">' +
+        '  <div class="feedback-emoji">😊</div>' +
+        '  <div class="feedback-text">' + getRandomFeedback('wrong') + '</div>' +
+        '  <div class="correct-answer">正确答案: ' + pair.word + ' = ' + pair.meaning + '</div>' +
+        '  <div class="correct-answer" style="color: var(--text-secondary);">' + pair.confused + ' = ' + pair.confusedMeaning + '</div>' +
+        '</div>' +
+        '<button class="btn btn-primary" id="btn-next-confusion">继续 →</button>';
+    } else {
+      // 普通模式错误反馈
+      const showFirst = state.training.showConfusedWord;
+      const mainWord = showFirst ? pair.word : pair.confused;
+      const mainMeaning = showFirst ? pair.meaning : pair.confusedMeaning;
+      const confusedWord = showFirst ? pair.confused : pair.word;
+      const confusedMeaning = showFirst ? pair.confusedMeaning : pair.meaning;
+
+      elements.feedbackArea.innerHTML = '' +
+        '<div class="feedback incorrect">' +
+        '  <div class="feedback-emoji">😊</div>' +
+        '  <div class="feedback-text">' + getRandomFeedback('wrong') + '</div>' +
+        '  <div class="correct-answer">' + mainWord + ' = ' + mainMeaning + '</div>' +
+        '  <div class="correct-answer" style="color: var(--text-secondary);">' + confusedWord + ' = ' + confusedMeaning + '</div>' +
+        '</div>' +
+        '<button class="btn btn-primary" id="btn-next-confusion">继续 →</button>';
+    }
   }
 
   // 绑定下一题按钮
@@ -902,14 +1150,20 @@ function showConfusionComplete() {
   const modal = elements.timeLimitModal;
   modal.querySelector('.modal-title').textContent = '🎉 混淆词练习完成！';
   modal.querySelector('.modal-text').innerHTML =
-    `正确率 ${accuracy}%！<br>` +
-    `${state.training.sessionCorrect}/${state.training.sessionTotal} 题答对！<br><br>` +
-    `太棒了！继续加油~`;
-  modal.querySelector('.btn-primary').textContent = '返回主页';
+    '正确率 ' + accuracy + '%！<br>' +
+    state.training.sessionCorrect + '/' + state.training.sessionTotal + ' 题答对！<br><br>' +
+    '太棒了！继续加油~';
+
+  // 添加再来一轮按钮
+  modal.querySelector('.btn-primary').textContent = '再来一轮';
   modal.querySelector('.btn-primary').onclick = () => {
     modal.classList.remove('show');
-    showView('main');
+    showConfusionDifficultySelect();
   };
+
+  // 如果有返回主页按钮的话，可以加一个
+  // 但原结构只有一个 primary 按钮，所以这里改为再来一轮
+
   modal.classList.add('show');
 }
 

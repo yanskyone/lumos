@@ -90,7 +90,7 @@
             </div>
           </div>
 
-          <div class="mode-card" data-mode="confusion">
+          <div class="mode-card" data-mode="confusion" onclick="showConfusionDifficultySelect()">
             <div class="mode-icon">🔀</div>
             <div class="mode-info">
               <div class="mode-title">混淆词大作战</div>
@@ -100,6 +100,33 @@
 
           <button class="btn btn-ghost" id="btn-cancel-mode" style="margin-top: 8px;">
             取消
+          </button>
+        </div>
+      </div>
+
+      <!-- Confusion Difficulty Selection -->
+      <div id="confusion-difficulty-select" class="hidden" style="margin-top: 16px;">
+        <div class="card">
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">🎯 选择难度</div>
+
+          <div class="mode-card" data-confusion-difficulty="normal" onclick="startConfusionTraining('normal')">
+            <div class="mode-icon">📖</div>
+            <div class="mode-info">
+              <div class="mode-title">普通模式</div>
+              <div class="mode-desc">显示释义，2个选项</div>
+            </div>
+          </div>
+
+          <div class="mode-card" data-confusion-difficulty="advanced" onclick="startConfusionTraining('advanced')">
+            <div class="mode-icon">🎓</div>
+            <div class="mode-info">
+              <div class="mode-title">进阶模式</div>
+              <div class="mode-desc">显示例句，4个选项，反向考察</div>
+            </div>
+          </div>
+
+          <button class="btn btn-ghost" id="btn-cancel-confusion-difficulty" style="margin-top: 8px;" onclick="hideConfusionDifficultySelect()">
+            返回
           </button>
         </div>
       </div>
